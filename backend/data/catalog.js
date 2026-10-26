@@ -1,0 +1,146 @@
+export const categories = [
+  {
+    slug: 'hot-rolled-steel',
+    title: 'Hot Rolled Steel',
+    description: 'HR coils, sheets, plates and checkered stock for fabrication, sheds and commercial structures.',
+    spec: 'IS 2062',
+    tag: 'Fast dispatch',
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Steel coils stored inside an industrial warehouse',
+    icon: '🔩',
+  },
+  {
+    slug: 'cold-rolled-steel',
+    title: 'Cold Rolled Steel',
+    description: 'Precision CRCA sheets and coils for appliances, furniture, panels, and industrial applications.',
+    spec: 'IS 513',
+    tag: 'High finish',
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Steel coils stored inside an industrial warehouse',
+    icon: '🛠️',
+  },
+  {
+    slug: 'tmt-bars',
+    title: 'TMT Rebars',
+    description: 'Fe 500D and Fe 550D rebars for RCC applications, residential and infrastructure projects.',
+    spec: 'IS 1786',
+    tag: 'High ductility',
+    image: '/images/rebar.jpg',
+    imageAlt: 'Ribbed reinforcing steel bars stacked together',
+    icon: '🏗️',
+  },
+  {
+    slug: 'structural-steel',
+    title: 'Structural Steel',
+    description: 'Angles, channels, beams, columns and section stock for industrial and commercial builds.',
+    spec: 'IS 2062 / IS 808',
+    tag: 'Custom lengths',
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Steel coils stored inside an industrial warehouse',
+    icon: '📐',
+  },
+  { slug: 'cement', title: 'Cement', description: 'OPC and PPC cement for foundations, concrete work and large-scale construction.', spec: 'OPC / PPC', tag: 'Project supply', image: '/images/cement-plant.jpg', imageAlt: 'Cement production plant and kiln', icon: '🧱' },
+  { slug: 'coated-steel', title: 'Coated Steel', description: 'GI and pre-painted coated sheets for roofing, cladding and corrosion-resistant applications.', spec: 'GI / PPGI', tag: 'Weather-ready', image: '/images/steel-coils.jpg', imageAlt: 'Steel coils stored inside an industrial warehouse', icon: '🏠' },
+  { slug: 'wire-rods', title: 'Wire Rods', description: 'Steel wire rod feedstock for drawing, fasteners, mesh and general engineering.', spec: 'IS 7887', tag: 'Mill supply', image: '/images/steel-coils.jpg', imageAlt: 'Coiled steel stock inside an industrial warehouse', icon: '🧵' },
+];
+
+export const topProducts = [
+  {
+    id: 'hr-sheets-e250',
+    name: 'IS 2062 E250 HR Sheets',
+    brand: 'Tata Steel',
+    brandSlug: 'tata-steel',
+    categorySlug: 'hot-rolled-steel',
+    size: '2.0 mm – 12.0 mm',
+    description: 'Hot rolled sheet stock ideal for industrial fabrication, sheds and component manufacturing.',
+    batch: 'Primary mill',
+    grade: 'E250',
+    price: '₹76,200 / MT',
+    priceValue: 76200,
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Hot-rolled steel coils in warehouse storage',
+  },
+  {
+    id: 'tmt-fe550d',
+    name: 'Fe 550D TMT Bar',
+    brand: 'SAIL',
+    brandSlug: 'sail',
+    categorySlug: 'tmt-bars',
+    size: '8 mm – 32 mm',
+    description: 'High-strength reinforcement bar for columns, slabs, and heavy-duty structural work.',
+    batch: 'BIS certified',
+    grade: 'Fe 550D',
+    price: '₹84,400 / MT',
+    priceValue: 84400,
+    image: '/images/rebar.jpg',
+    imageAlt: 'Ribbed reinforcement steel bars',
+  },
+  {
+    id: 'structural-beam-ismb',
+    name: 'MS Structural Beam',
+    brand: 'Jindal Steel',
+    brandSlug: 'jindal-steel',
+    categorySlug: 'structural-steel',
+    size: 'ISMB 150 – 500',
+    description: 'Flexible structural sections for sheds, mezzanines, industrial sheds and precast frames.',
+    batch: 'Custom lengths',
+    grade: 'ISMB',
+    price: '₹82,900 / MT',
+    priceValue: 82900,
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Steel stock in an industrial warehouse',
+  },
+  {
+    id: 'crca-coils-cr2',
+    name: 'CRCA Coils',
+    brand: 'AM/NS India',
+    brandSlug: 'amns-india',
+    categorySlug: 'cold-rolled-steel',
+    size: '0.40 mm – 2.50 mm',
+    description: 'Used in precision fabrication, machine parts, panels, and appliance manufacturing.',
+    batch: 'Mill direct',
+    grade: 'CR2/CR3',
+    price: '₹79,600 / MT',
+    priceValue: 79600,
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Cold-rolled steel coils in warehouse storage',
+  },
+];
+
+export const brands = [
+  { name: 'Tata Steel', slug: 'tata-steel', category: 'Steel', image: '/images/steel-coils.jpg', imageAlt: 'Steel coils in warehouse storage' },
+  { name: 'SAIL', slug: 'sail', category: 'Steel', image: '/images/rebar.jpg', imageAlt: 'Ribbed reinforcement steel bars' },
+  { name: 'Jindal Steel', slug: 'jindal-steel', category: 'Steel', image: '/images/steel-coils.jpg', imageAlt: 'Steel coils in warehouse storage' },
+  { name: 'AM/NS India', slug: 'amns-india', category: 'Steel', image: '/images/steel-coils.jpg', imageAlt: 'Steel coils in warehouse storage' },
+  { name: 'JSW Steel', slug: 'jsw-steel', category: 'Steel', image: '/images/steel-coils.jpg', imageAlt: 'Steel coils in warehouse storage' },
+  { name: 'UltraTech Cement', slug: 'ultratech-cement', category: 'Cement', image: '/images/cement-plant.jpg', imageAlt: 'Cement production plant' },
+  { name: 'ACC', slug: 'acc', category: 'Cement', image: '/images/cement-plant.jpg', imageAlt: 'Cement production plant' },
+  { name: 'Ambuja Cement', slug: 'ambuja-cement', category: 'Cement', image: '/images/cement-plant.jpg', imageAlt: 'Cement production plant' },
+];
+
+export const industries = [
+  { title: 'Infrastructure', text: 'Structural steel, TMT and fabrication support for bridges, tunnels and public works.', icon: '🏛️' },
+  { title: 'Industrial sheds', text: 'Heavy-duty HR sheets, beams and channels for PEB, warehouses and plant sheds.', icon: '🏭' },
+  { title: 'Construction', text: 'Reliable reinforcement materials, slabs and structural supply for residential and commercial builds.', icon: '🏢' },
+  { title: 'Manufacturing', text: 'Precision sheets, pipes and steel components for fabrication and machine shops.', icon: '⚙️' },
+];
+
+export const trustPoints = [
+  { title: 'Verified mill supply', text: 'Mill-backed sourcing with original certificates and lot-traceable dispatch.', icon: '✅' },
+  { title: 'Transparent pricing', text: 'Clear material grade pricing, dispatch terms and updated market benchmarks.', icon: '📊' },
+  { title: 'Fast dispatch', text: 'Streamlined logistics support for urgent project replenishment and scheduled orders.', icon: '🚚' },
+  { title: 'Business-first support', text: 'Dedicated procurement assistance for repeat buyers, contractors and dealers.', icon: '🤝' },
+];
+
+export const processSteps = [
+  { step: '01', title: 'Create account', text: 'Register your business profile and project requirements with our team.' },
+  { step: '02', title: 'Place an order', text: 'Choose steel grades, quantities, and delivery windows suited to your site.' },
+  { step: '03', title: 'Submit credit interest', text: 'Request business credit or dealer terms depending on order value and frequency.' },
+  { step: '04', title: 'Track dispatch', text: 'Receive steel dispatch updates, MTC, and logistical support with confidence.' },
+];
+
+export const insights = [
+  { tag: 'Buying guide', meta: 'Material planning', title: 'How to choose the right TMT bar for your project', summary: 'A quick breakdown of grade selection, yield strength and concrete performance requirements.' },
+  { tag: 'Procurement', meta: 'Operations', title: 'The simplest way to reduce steel wastage on site', summary: 'Practical sourcing and inventory habits that reduce over-ordering and improve delivery accuracy.' },
+  { tag: 'Industry', meta: 'Business growth', title: 'What MSMEs should look for in a steel supplier', summary: 'From MTC movement to logistics coordination, here are the essentials behind a reliable supplier relationship.' },
+];

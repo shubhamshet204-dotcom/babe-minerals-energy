@@ -1,0 +1,1021 @@
+---
+// Admin page – protected by Supabase Auth (email/password)
+// Only the logged-in owner can see this page.
+// Astro SSR is NOT required – auth is enforced client-side and by RLS.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – BME Steels</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --border: #e2e8f0;
+      --canvas: #ffffff;
+      --bg: #f8fafc;
+      --sidebar-bg: #0f172a;
+      --sidebar-text: #cbd5e1;
+      --sidebar-active: #3b82f6;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── Login screen ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    }
+
+    .login-card {
+      background: var(--canvas);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .login-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .login-logo-text { font-weight: 800; font-size: 18px; color: var(--ink); }
+    .login-logo-sub  { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .login-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .login-sub   { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+
+    input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--canvas);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+
+    .field { margin-bottom: 18px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .btn-primary  { background: var(--primary); color: white; width: 100%; padding: 12px; font-size: 15px; }
+    .btn-primary:hover  { background: #1d3fa3; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-danger   { background: #fee2e2; color: var(--danger); }
+    .btn-danger:hover   { background: #fecaca; }
+    .btn-outline  { background: transparent; border: 1.5px solid var(--border); color: var(--ink); }
+    .btn-outline:hover  { border-color: var(--ink); }
+    .btn-success  { background: #dcfce7; color: var(--success); }
+    .btn-success:hover  { background: #bbf7d0; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    .error-msg {
+      background: #fee2e2;
+      color: var(--danger);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ── Admin shell ── */
+    #admin-shell { display: none; min-height: 100vh; }
+
+    .shell-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-text { color: white; font-weight: 700; font-size: 15px; line-height: 1.2; }
+    .sidebar-logo-sub  { color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .nav-section { padding: 0 12px; margin-bottom: 8px; }
+    .nav-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; padding: 0 8px; margin-bottom: 6px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover    { background: rgba(255,255,255,0.06); color: white; }
+    .nav-item.active   { background: rgba(59,130,246,0.2); color: var(--sidebar-active); }
+    .nav-item svg      { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Main content ── */
+    .main { padding: 32px; overflow: hidden; }
+
+    .page-header { margin-bottom: 28px; }
+    .page-title { font-size: 26px; font-weight: 800; color: var(--ink); }
+    .page-sub   { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Stats row ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+
+    .stat-card {
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-value { font-size: 32px; font-weight: 800; color: var(--ink); margin-top: 6px; }
+
+    /* ── Product table ── */
+    .card {
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title { font-size: 15px; font-weight: 700; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--bg); }
+    th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafbfc; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+    .badge-green  { background: #dcfce7; color: #15803d; }
+    .badge-gray   { background: #f1f5f9; color: #64748b; }
+
+    .price-cell { font-weight: 700; color: var(--ink); }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--canvas);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--canvas);
+      z-index: 1;
+    }
+
+    .modal-title { font-size: 17px; font-weight: 700; }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      padding: 4px;
+      border-radius: 6px;
+    }
+    .modal-close:hover { background: var(--bg); }
+
+    .modal-body   { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast.success { background: #15803d; }
+    #toast.error   { background: #dc2626; }
+
+    /* ── Quotes table ── */
+    .quote-requirement { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── Loading ── */
+    .loader {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-row td { text-align: center; padding: 40px; color: var(--muted); }
+
+    /* ── Delete confirm ── */
+    .delete-confirm {
+      background: #fff5f5;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .delete-confirm p { font-size: 14px; color: #7f1d1d; line-height: 1.5; }
+
+    textarea { min-height: 80px; resize: vertical; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  LOGIN SCREEN                             -->
+<!-- ══════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">B</div>
+      <div>
+        <div class="login-logo-text">BME Steels</div>
+        <div class="login-logo-sub">Admin Portal</div>
+      </div>
+    </div>
+    <h1 class="login-title">Sign in</h1>
+    <p class="login-sub">Enter your admin credentials to continue.</p>
+    <div id="login-error" class="error-msg"></div>
+    <form id="login-form">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="admin@bmesteels.com" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••••" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-btn">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  ADMIN SHELL                              -->
+<!-- ══════════════════════════════════════════ -->
+<div id="admin-shell">
+  <div class="shell-grid">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">B</div>
+        <div>
+          <div class="sidebar-logo-text">BME Steels</div>
+          <div class="sidebar-logo-sub">Admin</div>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Manage</div>
+        <button class="nav-item active" data-panel="products" id="nav-products">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          Products
+        </button>
+        <button class="nav-item" data-panel="quotes" id="nav-quotes">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Quote Requests
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="nav-item" id="logout-btn">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Sign out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Products panel -->
+      <div class="panel active" id="panel-products">
+        <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between;">
+          <div>
+            <h1 class="page-title">Products</h1>
+            <p class="page-sub">Add, edit, or delete products shown on the storefront.</p>
+          </div>
+          <button class="btn btn-primary" id="add-product-btn" style="width:auto; margin-top:4px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Add product
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total products</div>
+            <div class="stat-value" id="stat-total">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Featured</div>
+            <div class="stat-value" id="stat-featured">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Categories</div>
+            <div class="stat-value" id="stat-categories">–</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">All Products</span>
+            <input type="search" id="product-search" placeholder="Search…" style="width:220px; padding:7px 12px; font-size:13px;" />
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Brand</th>
+                  <th>Price</th>
+                  <th>MOQ</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-tbody">
+                <tr class="loading-row"><td colspan="7">Loading products…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quotes panel -->
+      <div class="panel" id="panel-quotes">
+        <div class="page-header">
+          <h1 class="page-title">Quote Requests</h1>
+          <p class="page-sub">All enquiries submitted through the storefront quote form.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total quotes</div>
+            <div class="stat-value" id="stat-quotes">–</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Received Enquiries</span>
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Company</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Requirement</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="quotes-tbody">
+                <tr class="loading-row"><td colspan="7">Loading quote requests…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  PRODUCT MODAL (add / edit)               -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-backdrop" id="product-modal">
+  <div class="modal" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Add product</span>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">✕</button>
+    </div>
+    <form id="product-form">
+      <div class="modal-body">
+        <div id="modal-error" class="error-msg"></div>
+
+        <div class="field">
+          <label for="f-name">Product name *</label>
+          <input type="text" id="f-name" required placeholder="e.g. IS 2062 E250 HR Sheets" />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-brand">Brand *</label>
+            <input type="text" id="f-brand" required placeholder="e.g. Tata Steel" />
+          </div>
+          <div class="field">
+            <label for="f-brand-slug">Brand slug *</label>
+            <input type="text" id="f-brand-slug" required placeholder="e.g. tata-steel" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-category">Category *</label>
+            <select id="f-category" required>
+              <option value="">Select category</option>
+              <option value="steel">Steel</option>
+              <option value="hot-rolled-steel">MS Hot Rolled</option>
+              <option value="cold-rolled-steel">MS Cold Rolled</option>
+              <option value="tmt-bars">TMT Bars</option>
+              <option value="structural-steel">Structural Steel</option>
+              <option value="coated-steel">Coated Steel</option>
+              <option value="wire-rods">Wire Rods</option>
+              <option value="cement">Cement</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-grade">Grade</label>
+            <input type="text" id="f-grade" placeholder="e.g. E250 BR/C" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-price">Price (display) *</label>
+            <input type="text" id="f-price" required placeholder="e.g. ₹76,200 / MT" />
+          </div>
+          <div class="field">
+            <label for="f-price-value">Price value (number) *</label>
+            <input type="number" id="f-price-value" required placeholder="76200" min="0" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-size">Sizes available</label>
+            <input type="text" id="f-size" placeholder="e.g. 2.0 mm – 25.0 mm" />
+          </div>
+          <div class="field">
+            <label for="f-moq">MOQ</label>
+            <input type="text" id="f-moq" placeholder="e.g. 2.5 MT" />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-batch">Batch / supply</label>
+            <input type="text" id="f-batch" placeholder="e.g. Primary mill direct" />
+          </div>
+          <div class="field">
+            <label for="f-bis-code">BIS code</label>
+            <input type="text" id="f-bis-code" placeholder="e.g. IS 2062:2011" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-description">Description</label>
+          <textarea id="f-description" placeholder="Short product description shown on the storefront…"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="f-image">Image path</label>
+          <input type="text" id="f-image" placeholder="/images/hot rolled sheets.png" />
+        </div>
+
+        <div class="field">
+          <label for="f-image-alt">Image alt text</label>
+          <input type="text" id="f-image-alt" placeholder="Descriptive alt text for accessibility" />
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-display-order">Display order</label>
+            <input type="number" id="f-display-order" placeholder="1" min="0" />
+          </div>
+          <div class="field" style="display:flex; align-items:center; gap:10px; padding-top:22px;">
+            <input type="checkbox" id="f-featured" style="width:18px; height:18px; accent-color: var(--primary);" />
+            <label for="f-featured" style="margin:0; cursor:pointer;">Show as featured product</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="modal-cancel-btn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="modal-save-btn" style="width:auto;">
+          Save product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!--  DELETE CONFIRM MODAL                     -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <span class="modal-title">Delete product</span>
+      <button class="modal-close" id="delete-modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="delete-confirm">
+        <p>Are you sure you want to delete <strong id="delete-product-name"></strong>? This cannot be undone.</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" id="delete-cancel-btn">Cancel</button>
+      <button type="button" class="btn btn-danger" id="delete-confirm-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  // ── Config (replaced by .env at build time) ──
+  const SUPABASE_URL  = import.meta?.env?.PUBLIC_SUPABASE_URL  || window.__SUPABASE_URL__;
+  const SUPABASE_ANON = import.meta?.env?.PUBLIC_SUPABASE_ANON_KEY || window.__SUPABASE_ANON__;
+
+  if (!SUPABASE_URL || !SUPABASE_ANON) {
+    document.getElementById('login-error').textContent = 'Supabase is not configured yet. Add PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY to your .env file.';
+    document.getElementById('login-error').classList.add('visible');
+  }
+
+  const supabase = createClient(SUPABASE_URL || '', SUPABASE_ANON || '');
+
+  // ── State ──
+  let products = [];
+  let editingId = null;
+  let deleteId  = null;
+
+  // ── Auth check on load ──
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) showAdmin();
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    if (session) showAdmin(); else showLogin();
+  });
+
+  // ── Login ──
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn   = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+    errEl.classList.remove('visible');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loader"></span>';
+
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      errEl.textContent = error.message;
+      errEl.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+    }
+  });
+
+  // ── Logout ──
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+  });
+
+  function showLogin() {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-shell').style.display  = 'none';
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').style.display  = 'block';
+    loadProducts();
+    loadQuotes();
+  }
+
+  // ── Navigation ──
+  document.querySelectorAll('.nav-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  // ── Toast ──
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `show ${type}`;
+    setTimeout(() => { el.className = ''; }, 3000);
+  }
+
+  // ── Category label ──
+  const CAT_LABELS = {
+    'steel': 'Steel',
+    'hot-rolled-steel': 'MS Hot Rolled',
+    'cold-rolled-steel': 'MS Cold Rolled',
+    'tmt-bars': 'TMT Bars',
+    'structural-steel': 'Structural Steel',
+    'coated-steel': 'Coated Steel',
+    'wire-rods': 'Wire Rods',
+    'cement': 'Cement',
+  };
+
+  // ── Load Products ──
+  async function loadProducts() {
+    document.getElementById('products-tbody').innerHTML =
+      '<tr class="loading-row"><td colspan="7">Loading products…</td></tr>';
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      toast('Failed to load products: ' + error.message, 'error');
+      return;
+    }
+
+    products = data || [];
+    renderProducts(products);
+    updateStats();
+  }
+
+  function renderProducts(list) {
+    const tbody = document.getElementById('products-tbody');
+    if (!list.length) {
+      tbody.innerHTML = '<tr class="loading-row"><td colspan="7">No products yet. Click "Add product" to start.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td>
+          <div style="font-weight:600; color:var(--ink); max-width:240px;">${escHtml(p.name)}</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:2px;">${escHtml(p.grade || '')}</div>
+        </td>
+        <td><span class="badge badge-blue">${escHtml(CAT_LABELS[p.category_slug] || p.category_slug)}</span></td>
+        <td>${escHtml(p.brand)}</td>
+        <td class="price-cell">${escHtml(p.price)}</td>
+        <td>${escHtml(p.moq || '–')}</td>
+        <td>${p.is_featured ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-gray">No</span>'}</td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="openEditModal('${p.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${p.id}', '${escHtml(p.name).replace(/'/g, "\\'")}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function updateStats() {
+    document.getElementById('stat-total').textContent = products.length;
+    document.getElementById('stat-featured').textContent = products.filter(p => p.is_featured).length;
+    const cats = new Set(products.map(p => p.category_slug));
+    document.getElementById('stat-categories').textContent = cats.size;
+  }
+
+  // ── Product search ──
+  document.getElementById('product-search').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    renderProducts(q ? products.filter(p =>
+      (p.name + p.brand + p.grade + p.category_slug).toLowerCase().includes(q)
+    ) : products);
+  });
+
+  // ── Add product modal ──
+  document.getElementById('add-product-btn').addEventListener('click', () => openAddModal());
+
+  function openAddModal() {
+    editingId = null;
+    document.getElementById('modal-title').textContent = 'Add product';
+    document.getElementById('modal-save-btn').textContent = 'Add product';
+    document.getElementById('product-form').reset();
+    document.getElementById('modal-error').classList.remove('visible');
+    document.getElementById('product-modal').classList.add('open');
+  }
+
+  window.openEditModal = function(id) {
+    editingId = id;
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    document.getElementById('modal-title').textContent = 'Edit product';
+    document.getElementById('modal-save-btn').textContent = 'Save changes';
+    document.getElementById('modal-error').classList.remove('visible');
+
+    document.getElementById('f-name').value          = p.name || '';
+    document.getElementById('f-brand').value         = p.brand || '';
+    document.getElementById('f-brand-slug').value    = p.brand_slug || '';
+    document.getElementById('f-category').value      = p.category_slug || '';
+    document.getElementById('f-grade').value         = p.grade || '';
+    document.getElementById('f-price').value         = p.price || '';
+    document.getElementById('f-price-value').value   = p.price_value || '';
+    document.getElementById('f-size').value          = p.size || '';
+    document.getElementById('f-moq').value           = p.moq || '';
+    document.getElementById('f-batch').value         = p.batch || '';
+    document.getElementById('f-bis-code').value      = p.bis_code || '';
+    document.getElementById('f-description').value   = p.description || '';
+    document.getElementById('f-image').value         = p.image || '';
+    document.getElementById('f-image-alt').value     = p.image_alt || '';
+    document.getElementById('f-display-order').value = p.display_order || 0;
+    document.getElementById('f-featured').checked    = p.is_featured || false;
+
+    document.getElementById('product-modal').classList.add('open');
+  };
+
+  function closeProductModal() {
+    document.getElementById('product-modal').classList.remove('open');
+  }
+
+  document.getElementById('modal-close-btn').addEventListener('click', closeProductModal);
+  document.getElementById('modal-cancel-btn').addEventListener('click', closeProductModal);
+  document.getElementById('product-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('product-modal')) closeProductModal();
+  });
+
+  // ── Save product ──
+  document.getElementById('product-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const saveBtn = document.getElementById('modal-save-btn');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<span class="loader"></span> Saving…';
+
+    const payload = {
+      name:          document.getElementById('f-name').value.trim(),
+      brand:         document.getElementById('f-brand').value.trim(),
+      brand_slug:    document.getElementById('f-brand-slug').value.trim(),
+      category_slug: document.getElementById('f-category').value,
+      grade:         document.getElementById('f-grade').value.trim(),
+      price:         document.getElementById('f-price').value.trim(),
+      price_value:   Number(document.getElementById('f-price-value').value),
+      size:          document.getElementById('f-size').value.trim(),
+      moq:           document.getElementById('f-moq').value.trim() || null,
+      batch:         document.getElementById('f-batch').value.trim(),
+      bis_code:      document.getElementById('f-bis-code').value.trim() || null,
+      description:   document.getElementById('f-description').value.trim(),
+      image:         document.getElementById('f-image').value.trim() || '/images/steel-coils.jpg',
+      image_alt:     document.getElementById('f-image-alt').value.trim(),
+      display_order: Number(document.getElementById('f-display-order').value) || 0,
+      is_featured:   document.getElementById('f-featured').checked,
+    };
+
+    let error;
+    if (editingId) {
+      ({ error } = await supabase.from('products').update(payload).eq('id', editingId));
+    } else {
+      ({ error } = await supabase.from('products').insert(payload));
+    }
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = editingId ? 'Save changes' : 'Add product';
+
+    if (error) {
+      const errEl = document.getElementById('modal-error');
+      errEl.textContent = error.message;
+      errEl.classList.add('visible');
+      return;
+    }
+
+    toast(editingId ? 'Product updated!' : 'Product added!');
+    closeProductModal();
+    loadProducts();
+  });
+
+  // ── Delete ──
+  window.openDeleteModal = function(id, name) {
+    deleteId = id;
+    document.getElementById('delete-product-name').textContent = name;
+    document.getElementById('delete-modal').classList.add('open');
+  };
+
+  function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.remove('open');
+    deleteId = null;
+  }
+
+  document.getElementById('delete-modal-close').addEventListener('click', closeDeleteModal);
+  document.getElementById('delete-cancel-btn').addEventListener('click', closeDeleteModal);
+
+  document.getElementById('delete-confirm-btn').addEventListener('click', async () => {
+    if (!deleteId) return;
+    const btn = document.getElementById('delete-confirm-btn');
+    btn.disabled = true;
+    btn.textContent = 'Deleting…';
+
+    const { error } = await supabase.from('products').delete().eq('id', deleteId);
+    btn.disabled = false;
+    btn.textContent = 'Delete';
+
+    if (error) { toast('Delete failed: ' + error.message, 'error'); return; }
+    toast('Product deleted.', 'success');
+    closeDeleteModal();
+    loadProducts();
+  });
+
+  // ── Load Quotes ──
+  async function loadQuotes() {
+    const { data, error } = await supabase
+      .from('quote_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) { toast('Failed to load quotes', 'error'); return; }
+
+    const quotes = data || [];
+    document.getElementById('stat-quotes').textContent = quotes.length;
+
+    const tbody = document.getElementById('quotes-tbody');
+    if (!quotes.length) {
+      tbody.innerHTML = '<tr class="loading-row"><td colspan="7">No quote requests yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = quotes.map(q => `
+      <tr>
+        <td style="color:var(--muted); font-size:12px;">#${q.id}</td>
+        <td style="font-weight:600;">${escHtml(q.name)}</td>
+        <td>${escHtml(q.company)}</td>
+        <td><a href="mailto:${escHtml(q.email)}" style="color:var(--primary);">${escHtml(q.email)}</a></td>
+        <td>${escHtml(q.phone || '–')}</td>
+        <td class="quote-requirement" title="${escHtml(q.requirement)}">${escHtml(q.requirement)}</td>
+        <td style="white-space:nowrap; color:var(--muted); font-size:12px;">${new Date(q.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ── Helpers ──
+  function escHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

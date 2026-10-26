@@ -1,0 +1,191 @@
+---
+import Icon from '../ui/Icon.astro';
+
+const steelLinks = [
+  { label: 'Carbon & Alloy Steel', href: '/category/steel' },
+  { label: 'Tool & Die Steel (D2/H13/M2)', href: '/category/steel' },
+  { label: 'Stainless Steel (304/316L)', href: '/category/steel' },
+  { label: 'High-Tensile & Structural', href: '/category/steel' },
+  { label: 'Hot Rolled (HR) Coils & Plates', href: '/category/mild-steel/hot-rolled-steel' },
+];
+
+const structuralLinks = [
+  { label: 'MS Beams & Joists (ISMB 150-600)', href: '/products?category=structural-steel' },
+  { label: 'MS Channels (ISMC 75-400)', href: '/products?category=structural-steel' },
+  { label: 'Equal & Unequal Angles (ISA)', href: '/products?category=structural-steel' },
+  { label: 'Square & Rectangular Tubes (SHS/RHS)', href: '/products?category=structural-steel' },
+  { label: 'TMT Rebars (Fe 500D & 550D)', href: '/products?category=tmt-bars' },
+];
+
+const solutionsLinks = [
+  { label: 'Infrastructure & Highway Works', href: '/industries' },
+  { label: 'PEB & Warehouse Structures', href: '/industries' },
+  { label: 'Heavy Fabrication & Machinery', href: '/industries' },
+  { label: 'Transmission Towers & Solar', href: '/industries' },
+  { label: 'Automotive & Press Components', href: '/industries' },
+];
+
+const complianceStandards = [
+  { code: 'IS 2062:2011', desc: 'Hot Rolled Medium & High Tensile Structural Steel' },
+  { code: 'IS 1786:2008', desc: 'High Strength Deformed Steel Bars (TMT)' },
+  { code: 'IS 513:2016', desc: 'Cold Reduced Low Carbon Steel Sheets & Strips' },
+  { code: 'IS 4923:1997', desc: 'Hollow Steel Sections for Structural Use' },
+  { code: 'IS 277:2018', desc: 'Galvanized Steel Sheets (Plain & Corrugated)' },
+];
+---
+
+<footer class="mt-auto w-full border-t border-hairline bg-[#0d0d0d] text-white">
+  <!-- Top Trust & Service Strip -->
+  <div class="border-b border-white/10 bg-[#141414] py-8">
+    <div class="container-bme grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="flex items-center gap-3.5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+          <Icon name="shield-check" size={22} />
+        </div>
+        <div>
+          <p class="text-sm font-black text-white">100% BIS Certified</p>
+          <p class="text-xs text-white/60">IS 2062, IS 1786 & ISO certified mills</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3.5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+          <Icon name="file-text" size={22} />
+        </div>
+        <div>
+          <p class="text-sm font-black text-white">Original MTC Included</p>
+          <p class="text-xs text-white/60">Digital Mill Test Certificates per heat</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3.5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+          <Icon name="box" size={22} />
+        </div>
+        <div>
+          <p class="text-sm font-black text-white">Verified Electronic Weighment</p>
+          <p class="text-xs text-white/60">Weighbridge slips with every dispatch</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3.5">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+          <Icon name="phone" size={22} />
+        </div>
+        <div>
+          <p class="text-sm font-black text-white">Dedicated Steel Desk</p>
+          <p class="text-xs text-white/60">Key account manager for bulk orders</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Links & Corporate Columns -->
+  <div class="container-bme py-16">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+      <!-- Company Brand & Support -->
+      <div class="space-y-4 lg:col-span-2">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-xl font-black text-ink">
+            BME
+          </div>
+          <div>
+            <div class="text-[19px] font-black tracking-tight text-white">BME</div>
+            <div class="text-[11px] font-semibold text-white/60 uppercase tracking-wider">Bable Minerals & Energy Pvt Ltd</div>
+          </div>
+        </div>
+        <p class="max-w-sm text-sm leading-6 text-white/70">
+          Institutional steel and raw material procurement platform from Bable Minerals and Energy Private Limited (BME), connecting MSMEs, infrastructure builders, and fabricators directly to primary manufacturing mills.
+        </p>
+        
+        <div class="space-y-2.5 pt-2 text-xs text-white/80">
+          <div class="flex items-center gap-2.5">
+            <Icon name="map-pin" size={15} class="text-primary shrink-0" />
+            <span>Head Office & Hub: Belagavi, Karnataka, India</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <Icon name="phone" size={15} class="text-primary shrink-0" />
+            <span>Procurement Helpline: +91 1800 123 4567 (Mon - Sat, 9 AM - 7 PM)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <Icon name="mail" size={15} class="text-primary shrink-0" />
+            <span>rfq@bmesteels.com | orders@bmesteels.com</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Steel Directory -->
+      <div>
+        <h4 class="mb-4 text-xs font-black uppercase tracking-[0.16em] text-primary">Steel</h4>
+        <ul class="space-y-2.5">
+          {steelLinks.map((item) => (
+            <li>
+              <a href={item.href} class="text-xs text-white/70 transition-colors hover:text-primary">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Structural & Rebars -->
+      <div>
+        <h4 class="mb-4 text-xs font-black uppercase tracking-[0.16em] text-primary">Structural & Rebars</h4>
+        <ul class="space-y-2.5">
+          {structuralLinks.map((item) => (
+            <li>
+              <a href={item.href} class="text-xs text-white/70 transition-colors hover:text-primary">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Sectors & Tools -->
+      <div>
+        <h4 class="mb-4 text-xs font-black uppercase tracking-[0.16em] text-primary">MSME Solutions</h4>
+        <ul class="space-y-2.5">
+          {solutionsLinks.map((item) => (
+            <li>
+              <a href={item.href} class="text-xs text-white/70 transition-colors hover:text-primary">
+                {item.label}
+              </a>
+            </li>
+          ))}
+          <li><a href="#calculator" class="text-xs font-bold text-primary hover:underline">Steel Weight Calculator</a></li>
+          <li><a href="/quote" class="text-xs font-bold text-primary hover:underline">Submit Bulk RFQ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Technical BIS Standards Bar -->
+    <div class="mt-12 rounded-xl border border-white/10 bg-white/5 p-5">
+      <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary mb-3">
+        <Icon name="shield-check" size={16} />
+        <span>Quality Compliance Standards</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 text-[11px] text-white/70">
+        {complianceStandards.map((std) => (
+          <div class="border-l border-primary/40 pl-2.5">
+            <p class="font-bold text-white">{std.code}</p>
+            <p class="text-white/50 leading-tight mt-0.5">{std.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Legal Bar -->
+  <div class="border-t border-white/10 bg-black">
+    <div class="container-bme flex flex-col items-center justify-between gap-3 py-4 text-xs text-white/50 sm:flex-row">
+      <p>&copy; {new Date().getFullYear()} Bable Minerals and Energy Private Limited (BME). All rights reserved.</p>
+      <div class="flex items-center gap-5">
+        <a href="/image-credits" class="hover:text-white transition-colors">Attributions & Credits</a>
+        <a href="#privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="#terms" class="hover:text-white transition-colors">Supply Terms</a>
+        <a href="#mtc-verification" class="hover:text-white transition-colors">MTC Verification</a>
+      </div>
+    </div>
+  </div>
+</footer>

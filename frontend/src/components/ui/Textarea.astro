@@ -1,0 +1,81 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'textarea'> {
+  label?: string;
+  helperText?: string;
+  error?: string;
+  id?: string;
+  rows?: number;
+  class?: string;
+}
+
+const {
+  label,
+  helperText,
+  error,
+  id,
+  rows = 4,
+  class: className = '',
+  disabled = false,
+  required = false,
+  ...rest
+} = Astro.props;
+
+const textareaId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+---
+
+<div class={`w-full flex flex-col gap-1.5 ${className}`}>
+  {
+    label && (
+      <label
+        for={textareaId}
+        class="text-[14px] font-semibold text-ink flex items-center justify-between"
+      >
+        <span>
+          {label}
+          {required && <span class="text-accent-4 ml-0.5">*</span>}
+        </span>
+      </label>
+    )
+  }
+
+  <textarea
+    id={textareaId}
+    rows={rows}
+    disabled={disabled}
+    required={required}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={
+      error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined
+    }
+    class={`
+      w-full bg-canvas text-body placeholder:text-faint font-sans text-[16px] leading-[1.5]
+      border transition-colors duration-150 outline-none rounded-sm px-3.5 py-2.5 resize-y
+      ${
+        error
+          ? 'border-accent-4 focus:border-accent-4 focus:ring-2 focus:ring-accent-4/20'
+          : 'border-hairline hover:border-[#BDBDBD] focus:border-primary focus:ring-2 focus:ring-primary/20'
+      }
+      disabled:opacity-70 disabled:bg-neutral-1 disabled:cursor-not-allowed
+    `}
+    {...rest}
+  ></textarea>
+
+  {
+    error ? (
+      <p id={`${textareaId}-error`} class="text-[12px] font-medium text-accent-4 flex items-center gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+        <span>{error}</span>
+      </p>
+    ) : helperText ? (
+      <p id={`${textareaId}-helper`} class="text-[12px] text-muted">
+        {helperText}
+      </p>
+    ) : null
+  }
+</div>

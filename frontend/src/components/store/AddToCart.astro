@@ -1,0 +1,31 @@
+---
+interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  size: string;
+  price: string;
+  priceValue: number;
+}
+
+interface Props {
+  product: Product;
+  class?: string;
+}
+
+const { product, class: className = '' } = Astro.props;
+---
+
+<button
+  type="button"
+  data-add-to-cart
+  data-product-id={product.id}
+  data-product-name={product.name}
+  data-product-brand={product.brand}
+  data-product-size={product.size}
+  data-product-price={product.price}
+  data-product-price-value={product.priceValue}
+  class={`inline-flex h-9 items-center justify-center rounded-xs bg-primary px-4 text-sm font-bold text-ink transition-colors hover:bg-primary-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${className}`}
+>
+  Add to cart
+</button>

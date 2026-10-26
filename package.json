@@ -1,17 +1,21 @@
 {
-  "name": "",
+  "name": "bme-steels",
+  "private": true,
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "node": ">=22.12.0"
   },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^7.3.8"
+    "dev": "npm run dev --workspace @bme-steels/frontend",
+    "build": "npm run build --workspace @bme-steels/frontend",
+    "preview": "npm run preview --workspace @bme-steels/frontend",
+    "astro": "npm run astro --workspace @bme-steels/frontend --",
+    "server": "npm run server --workspace @bme-steels/backend",
+    "check": "npm run astro --workspace @bme-steels/frontend -- check && npm run check --workspace @bme-steels/backend"
   }
 }

@@ -1,0 +1,40 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  color?: 'primary' | 'canvas' | 'muted';
+  label?: string;
+  class?: string;
+}
+
+const {
+  size = 'md',
+  color = 'primary',
+  label = 'Loading...',
+  class: className = '',
+} = Astro.props;
+
+const sizeClasses: Record<string, string> = {
+  sm: 'w-4 h-4 border-2',
+  md: 'w-6 h-6 border-2',
+  lg: 'w-10 h-10 border-3',
+};
+
+const colorClasses: Record<string, string> = {
+  primary: 'border-hairline border-t-primary',
+  canvas: 'border-white/30 border-t-white',
+  muted: 'border-hairline border-t-muted',
+};
+---
+
+<div
+  class={`inline-flex items-center gap-2.5 ${className}`}
+  role="status"
+  aria-label={label}
+>
+  <div
+    class={`animate-spin rounded-full ${sizeClasses[size]} ${colorClasses[color]}`}
+    aria-hidden="true"
+  >
+  </div>
+  {label && <span class="text-[14px] text-muted font-medium sr-only">{label}</span>}
+</div>

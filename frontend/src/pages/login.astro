@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sign in or Create an Account | BME Steels" description="Access your BME Steels procurement account.">
+  <section class="bg-surface-soft py-14 lg:py-20">
+    <div class="container-bme">
+      <div class="mx-auto grid max-w-5xl overflow-hidden border border-hairline bg-canvas lg:grid-cols-[0.85fr_1.15fr]">
+        <div class="bg-[#111111] p-8 text-white lg:p-10">
+          <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">BME buyer account</p>
+          <h1 class="mt-4 text-4xl font-black tracking-tight text-white">Procurement starts here.</h1>
+          <p class="mt-4 text-base leading-7 text-white/75">Keep your quote requests and business details together for a smoother sourcing process.</p>
+          <div class="mt-8 space-y-4 border-t border-white/15 pt-6 text-sm text-white/75">
+            <p>Manage your company profile</p>
+            <p>Review submitted quote requests</p>
+            <p>Build a cart before signing in</p>
+          </div>
+        </div>
+
+        <div class="p-6 sm:p-10">
+          <div class="mb-7 grid grid-cols-2 border-b border-hairline" role="group" aria-label="Account access">
+            <button type="button" data-auth-mode="login" aria-pressed="true" class="border-b-2 border-ink py-3 text-sm font-bold text-ink">Sign in</button>
+            <button type="button" data-auth-mode="register" aria-pressed="false" class="border-b-2 border-transparent py-3 text-sm font-semibold text-muted">Create account</button>
+          </div>
+
+          <div id="google-signin" data-client-id={import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || ''} class="mb-5">
+            <p id="google-signin-status" class="mb-3 text-sm text-muted">Continue with Google</p>
+            <div id="google-button"></div>
+          </div>
+          <div class="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.1em] text-muted">
+            <span class="h-px flex-1 bg-hairline"></span><span>or use email</span><span class="h-px flex-1 bg-hairline"></span>
+          </div>
+
+          <form id="auth-form" class="space-y-4">
+            <label data-register-only hidden class="block text-sm font-semibold text-ink">Full name
+              <input name="name" autocomplete="name" minlength="2" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label data-register-only hidden class="block text-sm font-semibold text-ink">Company name
+              <input name="company" autocomplete="organization" minlength="2" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label class="block text-sm font-semibold text-ink">Business email
+              <input name="email" type="email" autocomplete="email" required class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label class="block text-sm font-semibold text-ink">Password
+              <input name="password" type="password" autocomplete="current-password" minlength="10" required class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <span data-password-hint hidden class="mt-1 block text-xs font-normal text-muted">Use at least 10 characters.</span>
+            </label>
+            <button id="auth-submit" type="submit" class="inline-flex h-12 w-full items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink transition-colors hover:bg-primary-deep">Sign in</button>
+            <p id="auth-status" class="min-h-6 text-sm text-muted" aria-live="polite"></p>
+            <button id="resend-verification" type="button" hidden class="text-sm font-semibold text-ink underline decoration-primary decoration-2 underline-offset-4">Resend verification email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    type GoogleIdentityApi = {
+      accounts: {
+        id: {
+          initialize: (options: { client_id: string; callback: (response: { credential: string }) => void }) => void;
+          renderButton: (target: HTMLElement, options: Record<string, string>) => void;
+        };
+      };
+    };
+
+    const apiBase = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+    const form = document.getElementById('auth-form') as HTMLFormElement | null;
+    const status = document.getElementById('auth-status');
+    const submit = document.getElementById('auth-submit') as HTMLButtonElement | null;
+    const modeButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-auth-mode]')];
+    const registerFields = [...document.querySelectorAll<HTMLElement>('[data-register-only]')];
+    const passwordHint = document.querySelector<HTMLElement>('[data-password-hint]');
+    const resendButton = document.getElementById('resend-verification') as HTMLButtonElement | null;
+    const googleRoot = document.getElementById('google-signin');
+    const googleStatus = document.getElementById('google-signin-status');
+    let mode: 'login' | 'register' = 'login';
+    let resendEmail = '';
+
+    function setMode(nextMode: 'login' | 'register') {
+      mode = nextMode;
+      for (const button of modeButtons) {
+        const active = button.dataset.authMode === mode;
+        button.setAttribute('aria-pressed', String(active));
+        button.classList.toggle('border-ink', active);
+        button.classList.toggle('text-ink', active);
+        button.classList.toggle('font-bold', active);
+        button.classList.toggle('border-transparent', !active);
+        button.classList.toggle('text-muted', !active);
+        button.classList.toggle('font-semibold', !active);
+      }
+      for (const field of registerFields) {
+        field.hidden = mode !== 'register';
+        const input = field.querySelector('input');
+        if (input) input.required = mode === 'register';
+      }
+      const passwordInput = form?.elements.namedItem('password') as HTMLInputElement | null;
+      if (passwordInput) passwordInput.autocomplete = mode === 'register' ? 'new-password' : 'current-password';
+      if (passwordHint) passwordHint.hidden = mode !== 'register';
+      if (submit) submit.textContent = mode === 'register' ? 'Create account' : 'Sign in';
+      if (status) status.textContent = '';
+      if (resendButton) resendButton.hidden = true;
+    }
+
+    modeButtons.forEach((button) => button.addEventListener('click', () => {
+      if (button.dataset.authMode === 'login' || button.dataset.authMode === 'register') setMode(button.dataset.authMode);
+    }));
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status || !submit) return;
+      const payload = Object.fromEntries(new FormData(form).entries());
+      submit.disabled = true;
+      status.textContent = mode === 'register' ? 'Creating your account…' : 'Signing you in…';
+      try {
+        const response = await fetch(`${apiBase}/api/auth/${mode}`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to access your account.');
+        if (mode === 'register' && result.verificationRequired) {
+          resendEmail = String(payload.email || '');
+          status.textContent = result.message;
+          if (resendButton) resendButton.hidden = false;
+          if (result.verificationUrl) {
+            const link = document.createElement('a');
+            link.href = result.verificationUrl;
+            link.textContent = ' Open the local verification link';
+            link.className = 'font-semibold text-ink underline underline-offset-4';
+            status.append(link);
+          }
+          return;
+        }
+        window.location.assign('/account');
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'Unable to access your account right now.';
+        resendEmail = String(new FormData(form).get('email') || '');
+        if (error instanceof Error && (error.message.toLowerCase().includes('verify your email') || error.message.toLowerCase().includes('verification email'))) {
+          if (resendButton) resendButton.hidden = false;
+        }
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    resendButton?.addEventListener('click', async () => {
+      if (!status || !resendEmail) return;
+      resendButton.disabled = true;
+      status.textContent = 'Sending a new verification link…';
+      try {
+        const response = await fetch(`${apiBase}/api/auth/resend-verification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: resendEmail }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to resend verification email.');
+        status.textContent = result.message;
+        if (result.verificationUrl) {
+          const link = document.createElement('a');
+          link.href = result.verificationUrl;
+          link.textContent = ' Open the local verification link';
+          link.className = 'font-semibold text-ink underline underline-offset-4';
+          status.append(link);
+        }
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'Unable to resend verification email.';
+      } finally {
+        resendButton.disabled = false;
+      }
+    });
+
+    const googleClientId = googleRoot?.dataset.clientId;
+    if (googleClientId) {
+      const googleScript = document.createElement('script');
+      googleScript.src = 'https://accounts.google.com/gsi/client';
+      googleScript.async = true;
+      googleScript.defer = true;
+      googleScript.onload = () => {
+        const google = (window as unknown as { google?: GoogleIdentityApi }).google;
+        const button = document.getElementById('google-button');
+        if (!google || !button) return;
+        google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: async ({ credential }) => {
+            if (googleStatus) googleStatus.textContent = 'Signing you in with Google…';
+            try {
+              const response = await fetch(`${apiBase}/api/auth/google`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential }),
+              });
+              const result = await response.json();
+              if (!response.ok) throw new Error(result.message || 'Google sign-in failed.');
+              window.location.assign('/account');
+            } catch (error) {
+              if (googleStatus) googleStatus.textContent = error instanceof Error ? error.message : 'Google sign-in failed.';
+            }
+          },
+        });
+        google.accounts.id.renderButton(button, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', width: '320' });
+      };
+      googleScript.onerror = () => { if (googleStatus) googleStatus.textContent = 'Google sign-in could not load. Use email instead.'; };
+      document.head.append(googleScript);
+    } else if (googleStatus) {
+      googleStatus.textContent = 'Google sign-in is ready once GOOGLE_CLIENT_ID is configured.';
+    }
+
+    fetch(`${apiBase}/api/auth/me`, { credentials: 'include' })
+      .then((response) => { if (response.ok) window.location.assign('/account'); })
+      .catch(() => {});
+  </script>
+</Layout>

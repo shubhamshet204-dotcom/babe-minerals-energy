@@ -1,0 +1,524 @@
+---
+import Icon from '../ui/Icon.astro';
+
+interface SubCategory {
+  title: string;
+  href: string;
+  desc?: string;
+  badge?: string;
+}
+
+interface CategoryMenu {
+  title: string;
+  href: string;
+  items: SubCategory[];
+}
+
+const megaCategories: CategoryMenu[] = [
+  {
+    title: 'Steel',
+    href: '/category/steel',
+    items: [
+      { title: 'Carbon & Alloy Steel', href: '/category/steel', desc: 'AISI 1018/1045, EN19 & EN24 bars & plates', badge: 'High Stock' },
+      { title: 'Tool & Die Steel', href: '/category/steel', desc: 'AISI D2, H13, OHNS, M2 die blocks', badge: 'Tooling' },
+      { title: 'Stainless Steel', href: '/category/steel', desc: 'SS 304 & 316L coils, sheets & rounds' },
+      { title: 'HR Coils & Sheets', href: '/category/mild-steel/hot-rolled-steel', desc: 'IS 2062 E250 / E350 grade' },
+    ],
+  },
+  {
+    title: 'Structural Steel',
+    href: '/products?category=structural-steel',
+    items: [
+      { title: 'MS Beams & Columns', href: '/products?category=structural-steel', desc: 'ISMB 150 – 600, NPB sections', badge: 'Primary Mills' },
+      { title: 'MS Channels (ISMC)', href: '/products?category=structural-steel', desc: 'ISMC 75 – 400 for fabrication' },
+      { title: 'Equal & Unequal Angles', href: '/products?category=structural-steel', desc: 'ISA 25x25 to 200x200 mm' },
+      { title: 'Plates & Flats', href: '/products?category=hot-rolled-steel', desc: 'High tensile plate stock' },
+    ],
+  },
+  {
+    title: 'TMT & Construction',
+    href: '/products?category=tmt-bars',
+    items: [
+      { title: 'TMT Rebars Fe 550D', href: '/products?category=tmt-bars', desc: 'IS 1786 earthquake resistant', badge: 'BIS Certified' },
+      { title: 'TMT Rebars Fe 500D', href: '/products?category=tmt-bars', desc: 'High ductility construction bars' },
+      { title: 'Corrosion Resistant (CRS)', href: '/products?category=tmt-bars', desc: 'Coastal & industrial foundations' },
+      { title: 'OPC & PPC Cement', href: '/products?category=cement', desc: 'UltraTech, ACC, Ambuja bags' },
+    ],
+  },
+  {
+    title: 'Pipes & Tubes',
+    href: '/products?category=structural-steel',
+    items: [
+      { title: 'Square Hollow Sections (SHS)', href: '/products?category=structural-steel', desc: 'IS 4923 YSt 210/310' },
+      { title: 'Rectangular Hollow Sections (RHS)', href: '/products?category=structural-steel', desc: 'Heavy structural tube stock' },
+      { title: 'Round MS & GI Pipes', href: '/products?category=structural-steel', desc: 'Class A, B, C scaffolding & water' },
+    ],
+  },
+];
+---
+
+<header class="sticky top-0 z-40 w-full border-b border-hairline bg-canvas/98 shadow-sm backdrop-blur-md" id="bme-header">
+  <!-- Main Navigation Row -->
+  <div class="container-bme">
+    <div class="flex h-[74px] items-center justify-between gap-4 lg:gap-6">
+      <!-- Brand Logo -->
+      <a href="/" class="flex shrink-0 items-center gap-3 group">
+        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[19px] font-black text-ink shadow-sm transition-transform group-hover:scale-105">
+          BME
+        </div>
+        <div class="leading-none">
+          <div class="flex items-center gap-2 text-[19px] font-black tracking-[-0.05em] text-ink">
+            BME
+            <span class="rounded-full border border-ink/20 bg-primary px-1.5 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] text-ink">
+              MSME B2B
+            </span>
+          </div>
+          <div class="mt-1 text-[11px] font-semibold tracking-wide text-muted">
+            Bable Minerals and Energy Pvt Ltd
+          </div>
+        </div>
+      </a>
+
+      <!-- Delivery Location Trigger -->
+      <button
+        type="button"
+        id="location-picker-btn"
+        class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-hairline bg-surface-soft px-3 py-1.5 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer shrink-0"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+      >
+        <Icon name="map-pin" size={15} class="text-primary-deep shrink-0" />
+        <div class="leading-tight text-left">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-muted">Deliver to</div>
+          <div id="current-location-text" class="text-xs font-bold text-ink truncate max-w-[120px] lg:max-w-[160px]">
+            Belagavi, Karnataka (590001)
+          </div>
+        </div>
+        <Icon name="chevron-down" size={11} class="text-muted shrink-0" />
+      </button>
+
+      <!-- Search Bar with Rotating Placeholder & Instant Suggestions -->
+      <div class="relative hidden flex-1 max-w-xl md:block">
+        <form action="/products" method="get" class="relative w-full" id="navbar-search-form">
+          <div class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">
+            <Icon name="search" size={17} />
+          </div>
+          <input
+            type="search"
+            id="nav-search-input"
+            name="q"
+            autocomplete="off"
+            placeholder="Search 'TMT Fe 550D', 'IS 2062 HR Plates', 'MS Beams'..."
+            class="h-11 w-full rounded-lg border border-hairline bg-surface-soft pl-10 pr-24 text-sm font-medium text-ink placeholder:text-muted/80 transition-all focus:border-ink focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-primary/40"
+          />
+          <button
+            type="submit"
+            class="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 rounded-md bg-ink px-3 text-xs font-bold text-white transition-colors hover:bg-primary hover:text-ink cursor-pointer"
+          >
+            Search
+          </button>
+        </form>
+
+        <!-- Quick Search Dropdown Suggestions (hidden by default) -->
+        <div id="search-suggestions-box" class="absolute left-0 top-full mt-1.5 w-full rounded-xl border border-hairline bg-canvas p-3 shadow-xl hidden z-50">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-muted px-2 pb-1.5 border-b border-hairline">Popular Steel Searches</div>
+          <div class="mt-2 space-y-1 text-sm">
+            <a href="/products?q=Fe+550D" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+              <span>Fe 550D TMT Bars (IS 1786)</span>
+              <span class="text-xs text-muted">TMT Rebars</span>
+            </a>
+            <a href="/products?q=IS+2062" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+              <span>IS 2062 E250 HR Plates & Coils</span>
+              <span class="text-xs text-muted">Hot Rolled</span>
+            </a>
+            <a href="/products?q=ISMB" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+              <span>MS Structural Beams (ISMB 150-500)</span>
+              <span class="text-xs text-muted">Structural</span>
+            </a>
+            <a href="/products?q=CRCA" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+              <span>CRCA Precision Sheets (IS 513)</span>
+              <span class="text-xs text-muted">Cold Rolled</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Account -->
+      <div class="flex items-center gap-3 lg:gap-4">
+        <!-- Cart Link -->
+        <a
+          href="/cart"
+          class="relative inline-flex h-11 items-center gap-2 rounded-lg border border-hairline bg-surface-soft px-3.5 text-sm font-bold text-ink transition-all hover:border-ink hover:bg-canvas"
+          aria-label="Procurement cart"
+        >
+          <Icon name="box" size={18} class="text-ink" />
+          <span class="hidden sm:inline">Cart</span>
+          <span data-cart-count class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-black text-ink">
+            0
+          </span>
+        </a>
+
+        <!-- Sign in / Account -->
+        <a
+          href="/login"
+          data-auth-link
+          class="hidden sm:inline-flex h-11 items-center rounded-lg border border-hairline bg-canvas px-4 text-sm font-bold text-ink transition-colors hover:border-ink hover:bg-surface-soft"
+        >
+          Sign In
+        </a>
+
+        <!-- Quote Action -->
+        <a
+          href="/quote"
+          class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-4 text-sm font-black text-ink shadow-sm transition-all hover:bg-primary-deep hover:shadow-md cursor-pointer"
+        >
+          Request Quote
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button
+          type="button"
+          id="bme-mobile-menu-toggle"
+          class="flex h-11 w-11 items-center justify-center rounded-lg border border-hairline bg-surface-soft text-ink lg:hidden cursor-pointer"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <span id="menu-icon-open"><Icon name="menu" size={22} /></span>
+          <span id="menu-icon-close" class="hidden"><Icon name="x" size={22} /></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Categories Mega-Menu Bar -->
+  <div class="hidden border-t border-hairline bg-surface-soft lg:block">
+    <div class="container-bme flex h-11 items-center justify-between">
+      <nav class="flex items-center gap-6 xl:gap-7 text-sm font-bold text-body" aria-label="Mega Categories">
+        <a href="/products" class="inline-flex items-center gap-1.5 text-ink hover:text-primary-deep transition-colors py-2 whitespace-nowrap shrink-0">
+          <Icon name="layers" size={15} class="text-primary-deep" />
+          <span>All Products</span>
+        </a>
+
+        {megaCategories.map((cat) => (
+          <div class="group relative py-2 shrink-0">
+            <a href={cat.href} class="inline-flex items-center gap-1 hover:text-ink transition-colors whitespace-nowrap">
+              <span>{cat.title}</span>
+              <Icon name="chevron-down" size={13} class="text-muted transition-transform group-hover:rotate-180" />
+            </a>
+
+            <!-- Mega Dropdown Panel -->
+            <div class="invisible absolute left-0 top-full z-50 pt-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+              <div class="w-80 overflow-hidden rounded-xl border border-hairline bg-canvas p-2 shadow-2xl">
+                <div class="space-y-1">
+                  {cat.items.map((item) => (
+                    <a
+                      href={item.href}
+                      class="flex flex-col rounded-lg p-2.5 transition-colors hover:bg-surface-soft group/item"
+                    >
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-ink group-hover/item:text-primary-deep">{item.title}</span>
+                        {item.badge && (
+                          <span class="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-black uppercase text-ink">
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                      {item.desc && <span class="text-xs text-muted mt-0.5">{item.desc}</span>}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        <a href="/brands" class="hover:text-ink transition-colors py-2 whitespace-nowrap shrink-0">Brands Directory</a>
+        <a href="/industries" class="hover:text-ink transition-colors py-2 whitespace-nowrap shrink-0">Industries</a>
+      </nav>
+
+      <div class="flex items-center text-xs font-semibold shrink-0">
+        <!-- Helpline -->
+        <a href="tel:+9118001234567" class="inline-flex items-center gap-1.5 font-bold text-ink hover:text-primary-deep transition-colors whitespace-nowrap">
+          <Icon name="phone" size={13} class="text-primary-deep" />
+          <span>Helpline: 1800-BME-STEEL</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Location Modal / Drawer -->
+  <div id="location-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-2xl border border-hairline bg-canvas p-6 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-hairline pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-ink">
+            <Icon name="map-pin" size={18} />
+          </div>
+          <div>
+            <h3 class="text-lg font-black text-ink">Select Delivery Destination</h3>
+            <p class="text-xs text-muted">Get accurate freight, MOQ, and lead time estimates</p>
+          </div>
+        </div>
+        <button type="button" id="close-location-modal-btn" class="text-muted hover:text-ink cursor-pointer p-1">
+          <Icon name="x" size={20} />
+        </button>
+      </div>
+
+      <div class="mt-5 space-y-4">
+        <div>
+          <label for="pincode-input" class="block text-xs font-bold uppercase tracking-wider text-muted mb-1">Enter 6-Digit Delivery Pincode</label>
+          <div class="flex gap-2">
+            <input
+              type="text"
+              id="pincode-input"
+              maxlength="6"
+              placeholder="e.g. 400001, 560001, 110001"
+              class="h-11 flex-1 rounded-lg border border-hairline bg-surface-soft px-3.5 text-sm font-semibold text-ink focus:border-ink focus:outline-none"
+            />
+            <button
+              type="button"
+              id="apply-pincode-btn"
+              class="h-11 rounded-lg bg-primary px-4 text-xs font-black uppercase tracking-wider text-ink hover:bg-primary-deep cursor-pointer"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-muted mb-2">Or Select Major Industrial Hub</label>
+          <div class="grid grid-cols-2 gap-2" id="city-pills-container">
+            <button type="button" data-city="Belagavi, Karnataka" data-pin="590001" class="city-pill rounded-lg border border-primary bg-primary/10 p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Belagavi (590001)
+            </button>
+            <button type="button" data-city="Bengaluru" data-pin="560001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Bengaluru (560001)
+            </button>
+            <button type="button" data-city="Mumbai" data-pin="400001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Mumbai (400001)
+            </button>
+            <button type="button" data-city="Pune" data-pin="411001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Pune (411001)
+            </button>
+            <button type="button" data-city="Hyderabad" data-pin="500001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Hyderabad (500001)
+            </button>
+            <button type="button" data-city="Chennai" data-pin="600001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+              Chennai (600001)
+            </button>
+          </div>
+        </div>
+
+        <div class="rounded-lg bg-surface-soft p-3 border border-hairline text-xs text-muted flex items-start gap-2">
+          <Icon name="info" size={16} class="shrink-0 text-primary-deep mt-0.5" />
+          <span>Bable Minerals and Energy Private Limited (BME) operates regional steel supply from Belagavi, Karnataka, ensuring rapid 24-48 hr dispatch across western and southern corridors.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div id="bme-mobile-menu-drawer" class="hidden border-t border-hairline bg-canvas lg:hidden">
+    <div class="container-bme py-5 space-y-4 max-h-[80vh] overflow-y-auto">
+      <!-- Mobile Location Trigger -->
+      <button
+        type="button"
+        id="mobile-location-picker-btn"
+        class="flex w-full items-center justify-between rounded-lg border border-hairline bg-surface-soft p-3 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer"
+      >
+        <div class="flex items-center gap-2.5">
+          <Icon name="map-pin" size={18} class="text-primary-deep shrink-0" />
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-muted">Deliver to</div>
+            <div id="mobile-current-location-text" class="text-xs font-bold text-ink">
+              Belagavi, Karnataka (590001)
+            </div>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-primary-deep underline">Change</span>
+      </button>
+
+
+
+      <form action="/products" method="get" class="relative">
+        <div class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+          <Icon name="search" size={17} />
+        </div>
+        <input
+          type="search"
+          name="q"
+          placeholder="Search grades, TMT, Plates..."
+          class="h-11 w-full rounded-lg border border-hairline bg-surface-soft pl-10 pr-4 text-sm font-medium text-ink focus:border-ink focus:outline-none"
+        />
+      </form>
+
+      <div class="space-y-3">
+        <div class="text-xs font-bold uppercase tracking-wider text-muted">Catalog Categories</div>
+        {megaCategories.map((cat) => (
+          <div class="rounded-xl border border-hairline bg-surface-soft p-3">
+            <p class="font-bold text-ink text-sm mb-2">{cat.title}</p>
+            <div class="space-y-1.5 pl-2 border-l-2 border-primary">
+              {cat.items.map((sub) => (
+                <a href={sub.href} class="block text-xs font-medium text-body hover:text-ink py-1">
+                  {sub.title}
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="space-y-2 pt-2 border-t border-hairline">
+        <a href="tel:+9118001234567" class="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-hairline bg-surface-soft text-sm font-bold text-ink">
+          <Icon name="phone" size={16} class="text-primary-deep" />
+          <span>Helpline: 1800-BME-STEEL</span>
+        </a>
+        <a href="/quote" class="flex h-11 w-full items-center justify-center rounded-lg bg-primary text-sm font-black text-ink">
+          Request Quote
+        </a>
+        <a href="/cart" class="flex h-11 w-full items-center justify-center rounded-lg border border-hairline bg-surface-soft text-sm font-bold text-ink">
+          View Cart (<span data-cart-count>0</span>)
+        </a>
+        <a href="/login" data-auth-link class="flex h-11 w-full items-center justify-center rounded-lg border border-hairline text-sm font-bold text-ink">
+          Sign In / Create Account
+        </a>
+        <div class="pt-2 text-center">
+          <a href="/image-credits" class="text-xs text-muted hover:text-ink underline">Attributions & Image Credits</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  function setupNavbar() {
+    // Mobile Drawer Toggle
+    const toggleBtn = document.getElementById('bme-mobile-menu-toggle');
+    const drawer = document.getElementById('bme-mobile-menu-drawer');
+    const openIcon = document.getElementById('menu-icon-open');
+    const closeIcon = document.getElementById('menu-icon-close');
+
+    if (toggleBtn && drawer && openIcon && closeIcon) {
+      toggleBtn.onclick = () => {
+        const isOpen = !drawer.classList.contains('hidden');
+        if (isOpen) {
+          drawer.classList.add('hidden');
+          openIcon.classList.remove('hidden');
+          closeIcon.classList.add('hidden');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          drawer.classList.remove('hidden');
+          openIcon.classList.add('hidden');
+          closeIcon.classList.remove('hidden');
+          toggleBtn.setAttribute('aria-expanded', 'true');
+        }
+      };
+    }
+
+    // Location Modal Logic
+    const locBtn = document.getElementById('location-picker-btn');
+    const mobileLocBtn = document.getElementById('mobile-location-picker-btn');
+    const locModal = document.getElementById('location-modal');
+    const closeLocBtn = document.getElementById('close-location-modal-btn');
+    const locText = document.getElementById('current-location-text');
+    const mobileLocText = document.getElementById('mobile-current-location-text');
+    const pincodeInput = document.getElementById('pincode-input') as HTMLInputElement | null;
+    const applyPinBtn = document.getElementById('apply-pincode-btn');
+
+    const defaultLocation = 'Belagavi, Karnataka (590001)';
+    const savedLocation = localStorage.getItem('bme-delivery-location') || defaultLocation;
+    if (locText) {
+      locText.textContent = savedLocation;
+    }
+    if (mobileLocText) {
+      mobileLocText.textContent = savedLocation;
+    }
+
+    function openModal() {
+      if (locModal) {
+        locModal.classList.remove('hidden');
+        locModal.classList.add('flex');
+      }
+    }
+
+    function closeModal() {
+      if (locModal) {
+        locModal.classList.add('hidden');
+        locModal.classList.remove('flex');
+      }
+    }
+
+    if (locBtn) locBtn.onclick = openModal;
+    if (mobileLocBtn) mobileLocBtn.onclick = openModal;
+    if (closeLocBtn) closeLocBtn.onclick = closeModal;
+
+    if (locModal) {
+      locModal.onclick = (e) => {
+        if (e.target === locModal) closeModal();
+      };
+    }
+
+    function setLocation(city: string, pin: string) {
+      const locStr = `${city} (${pin})`;
+      localStorage.setItem('bme-delivery-city', city);
+      localStorage.setItem('bme-delivery-pin', pin);
+      localStorage.setItem('bme-delivery-location', locStr);
+      if (locText) locText.textContent = locStr;
+      if (mobileLocText) mobileLocText.textContent = locStr;
+      closeModal();
+    }
+
+    document.querySelectorAll('.city-pill').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const city = btn.getAttribute('data-city') || 'Belagavi, Karnataka';
+        const pin = btn.getAttribute('data-pin') || '590001';
+        setLocation(city, pin);
+      });
+    });
+
+    if (applyPinBtn && pincodeInput) {
+      applyPinBtn.onclick = () => {
+        const pin = pincodeInput.value.trim();
+        if (pin.length === 6 && /^\d+$/.test(pin)) {
+          setLocation('Verified Hub', pin);
+        } else {
+          alert('Please enter a valid 6-digit postal pincode.');
+        }
+      };
+    }
+
+    // Search input focus & suggestions
+    const searchInput = document.getElementById('nav-search-input');
+    const suggestionsBox = document.getElementById('search-suggestions-box');
+    if (searchInput && suggestionsBox) {
+      searchInput.addEventListener('focus', () => {
+        suggestionsBox.classList.remove('hidden');
+      });
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target as Node) && !suggestionsBox.contains(e.target as Node)) {
+          suggestionsBox.classList.add('hidden');
+        }
+      });
+    }
+
+    // Rotating search placeholder text
+    const placeholders = [
+      "Search 'TMT Fe 550D Rebars'...",
+      "Search 'IS 2062 E250 HR Plates'...",
+      "Search 'CRCA Precision Coils 0.8mm'...",
+      "Search 'MS Structural Beams ISMB 200'...",
+      "Search 'SAIL Equal Angles 75x75'...",
+      "Search 'Zinc Coated GP Sheets'..."
+    ];
+    let pIdx = 0;
+    setInterval(() => {
+      if (searchInput && document.activeElement !== searchInput) {
+        pIdx = (pIdx + 1) % placeholders.length;
+        searchInput.setAttribute('placeholder', placeholders[pIdx]);
+      }
+    }, 3500);
+  }
+
+  setupNavbar();
+  document.addEventListener('astro:page-load', setupNavbar);
+</script>

@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Button from '../../components/ui/Button.astro';
+import AddToCart from '../../components/store/AddToCart.astro';
+import { categories, allProducts } from '../../data/catalog';
+
+export function getStaticPaths() {
+  return allProducts.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+const { product } = Astro.props;
+const category = categories.find((item) => item.slug === product.categorySlug);
+---
+
+<Layout title={`${product.name} | BME Steels`} description={product.description}>
+  <section class="bg-surface-soft py-12 lg:py-16">
+    <div class="container-bme">
+      <nav aria-label="Breadcrumb" class="mb-8 text-sm text-muted">
+        <a href="/" class="hover:text-ink">Home</a><span class="px-2">/</span>
+        <a href="/products" class="hover:text-ink">Products</a><span class="px-2">/</span>
+        {category && (
+          <>
+            <a href={category.slug === 'steel' ? '/category/steel' : category.slug === 'hot-rolled-steel' ? '/category/mild-steel/hot-rolled-steel' : `/products?category=${category.slug}`} class="hover:text-ink">{category.title}</a>
+            <span class="px-2">/</span>
+          </>
+        )}
+        <span class="text-ink">{product.name}</span>
+      </nav>
+
+      <div class="grid gap-8 lg:grid-cols-[1fr_420px]">
+        <article class="border border-hairline bg-canvas p-6 sm:p-8">
+          <img src={product.image} alt={product.imageAlt} class="mb-6 h-64 w-full object-cover" />
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="bg-primary px-2.5 py-1 text-[11px] font-bold uppercase text-ink">{product.batch}</span>
+            <span class="border border-hairline px-2.5 py-1 text-[11px] font-semibold uppercase text-muted">{product.grade}</span>
+            {product.moq && <span class="bg-gray-100 border border-gray-200 px-2.5 py-1 text-[11px] font-semibold text-ink">MOQ: {product.moq}</span>}
+          </div>
+          <p class="mt-6 text-sm font-semibold text-muted">{product.brand}</p>
+          <h1 class="mt-2 max-w-3xl text-4xl font-black tracking-tight text-ink">{product.name}</h1>
+          <p class="mt-5 max-w-3xl text-base leading-7 text-muted">{product.description}</p>
+
+          <dl class="mt-8 grid gap-4 border-t border-hairline pt-6 sm:grid-cols-2">
+            <div><dt class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Category</dt><dd class="mt-1 font-bold text-ink"><a href={category?.slug === 'steel' ? '/category/steel' : `/products?category=${category?.slug}`} class="hover:underline">{category?.title || 'Steel materials'}</a></dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Grade / standard</dt><dd class="mt-1 font-bold text-ink">{product.grade} {product.bisCode ? `· ${product.bisCode}` : (category?.spec ? `· ${category.spec}` : '')}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Available range</dt><dd class="mt-1 font-bold text-ink">{product.size}</dd></div>
+            <div><dt class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Documentation</dt><dd class="mt-1 font-bold text-ink">Mill Test Certificate (MTC) & Weighbridge Slip</dd></div>
+          </dl>
+        </article>
+
+        <aside class="h-fit border border-hairline bg-canvas p-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Indicative starting price</p>
+          <p class="mt-2 text-3xl font-black text-ink">{product.price}</p>
+          <p class="mt-3 text-sm leading-6 text-muted">Price and availability vary by quantity, location and delivery window. Confirm with our procurement team.</p>
+          <div class="mt-6 grid gap-3">
+            <AddToCart product={product} class="h-12 w-full" />
+            <Button variant="outline" size="md" fullWidth href="/quote">Request a formal quote</Button>
+          </div>
+          <a href="/contact" class="mt-5 block text-center text-sm font-semibold text-ink underline underline-offset-4">Talk to a material specialist</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Layout>

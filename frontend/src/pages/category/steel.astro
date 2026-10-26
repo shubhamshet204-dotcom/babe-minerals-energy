@@ -1,0 +1,635 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AddToCart from '../../components/store/AddToCart.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { steelProducts } from '../../data/steelProducts';
+
+// Distinct filter options
+const allSteelTypes = [
+  'Carbon Steel',
+  'Alloy Steel',
+  'Speciality Steel',
+  'Stainless Steel',
+  'Tool Steel',
+  'High-Speed Steel',
+  'Bearing Steel',
+  'Spring Steel',
+  'High-Tensile Steel',
+  'Heat-Resistant Steel',
+  'Electrical Steel',
+  'Creep-Resistant Steel',
+  'Wear-Resistant Steel',
+  'Case-Hardening Steel',
+  'Forging Steel',
+  'Maraging Steel',
+  'Pressure-Vessel Steel',
+  'Automotive Steel',
+  'Structural Steel',
+  'Rail Steel',
+];
+
+const allBrands = ['Tata Steel', 'SAIL', 'JSW Steel', 'Jindal Steel', 'AM/NS India'];
+const allStandards = [
+  'IS 2062:2011',
+  'IS 5517:1993',
+  'ASTM A240 / IS 6911',
+  'IS 3749 / DIN 1.2379',
+  'ASTM A600 / IS 7291',
+  'IS 4398 / ASTM A295',
+  'IS 3431 / IS 4454',
+  'ASTM A387 / IS 2002',
+  'IS 3024 / IEC 60404',
+  'IS 1875 / IS 2830',
+  'IRS T-12 / EN 13674-1',
+];
+---
+
+<Layout
+  title="Steel Products & Specialty Grades (20 Categories) | BME Steels"
+  description="Explore primary mill certified carbon steel, alloy steel, tool steel, stainless, high-tensile, and specialty engineering steel grades at Bable Minerals and Energy."
+>
+  <!-- Breadcrumbs -->
+  <section class="border-b border-gray-200 bg-white py-4">
+    <div class="container-bme">
+      <nav aria-label="Breadcrumbs" class="flex items-center gap-2 text-xs text-muted">
+        <a href="/" class="hover:text-ink transition-colors">Home</a>
+        <Icon name="chevron-right" size={12} />
+        <a href="/products" class="hover:text-ink transition-colors">Products</a>
+        <Icon name="chevron-right" size={12} />
+        <span class="font-semibold text-ink">Steel</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Category Title & Quick Filter Chips Strip -->
+  <section class="border-b border-gray-100 bg-[#f8f9fb] py-6">
+    <div class="container-bme">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">Steel</h1>
+            <span id="total-count-badge" class="rounded-full bg-primary/20 px-3 py-0.5 text-xs font-bold text-ink border border-primary/40">
+              {steelProducts.length} Product Grades
+            </span>
+          </div>
+          <p class="mt-1 text-xs sm:text-sm text-muted">
+            Primary mill certified carbon, alloy, tool, stainless, high-tensile and heavy engineering steel with Mill Test Certificates (MTC).
+          </p>
+        </div>
+
+        <!-- Search input and Sort select -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative min-w-[240px] sm:min-w-[280px]">
+            <input
+              id="category-search"
+              type="search"
+              placeholder="Search grade, standard or brand..."
+              class="h-10 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-xs text-ink placeholder-gray-400 focus:border-ink focus:outline-none shadow-xs"
+            />
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="sort-select" class="text-xs font-semibold text-muted shrink-0 hidden sm:inline">Sort by:</label>
+            <select
+              id="sort-select"
+              class="h-10 rounded-lg border border-gray-300 bg-white px-3 text-xs font-medium text-ink focus:border-ink focus:outline-none shadow-xs"
+            >
+              <option value="featured">Featured / Category Order</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Grade Name: A to Z</option>
+            </select>
+
+            <!-- Mobile Filter Drawer Toggle Button -->
+            <button
+              id="mobile-filter-btn"
+              type="button"
+              class="lg:hidden flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-xs font-bold text-ink shadow-xs"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <span>Filters</span>
+              <span id="active-filter-badge" class="hidden h-4 w-4 rounded-full bg-ink text-[10px] text-white flex items-center justify-center">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Subcategory Pills -->
+      <div class="mt-5 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <button
+          type="button"
+          data-type-pill="ALL"
+          class="type-pill shrink-0 rounded-full border border-ink bg-ink px-3.5 py-1.5 text-xs font-bold text-white transition-all shadow-xs cursor-pointer"
+        >
+          All Steel Grades ({steelProducts.length})
+        </button>
+        {allSteelTypes.map((st) => {
+          const count = steelProducts.filter((p) => p.steelType === st).length;
+          return (
+            <button
+              type="button"
+              data-type-pill={st}
+              class="type-pill shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-medium text-ink hover:border-ink hover:bg-gray-50 transition-all shadow-xs cursor-pointer"
+            >
+              {st} ({count})
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Category Content -->
+  <section class="bg-[#f4f5f8] py-8">
+    <div class="container-bme">
+      <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
+        
+        <!-- Left Sidebar Filter Accordion -->
+        <aside
+          id="filter-sidebar"
+          class="fixed inset-y-0 left-0 z-50 w-80 bg-white p-6 shadow-2xl transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:z-auto lg:w-full lg:p-0 lg:shadow-none lg:bg-transparent"
+        >
+          <!-- Mobile Drawer Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-gray-200 lg:hidden">
+            <h2 class="text-base font-bold text-ink">Filter Steel Products</h2>
+            <button id="close-filter-btn" class="p-2 text-muted hover:text-ink cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-xs space-y-6 max-h-[calc(100vh-100px)] overflow-y-auto lg:max-h-none lg:overflow-visible">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+              <span class="text-sm font-bold text-ink">Filters</span>
+              <button id="clear-all-filters" type="button" class="text-xs font-semibold text-primary-deep hover:underline cursor-pointer">
+                Clear all
+              </button>
+            </div>
+
+            <!-- Filter: Steel Category / Type -->
+            <div class="filter-section">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Steel Classification</p>
+              <div class="space-y-2 max-h-56 overflow-y-auto pr-1 scrollbar-thin">
+                {allSteelTypes.map((st) => {
+                  const count = steelProducts.filter((p) => p.steelType === st).length;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary-deep transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-type"
+                          value={st}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{st}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: Brand / Primary Mill -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Primary Mill / Brand</p>
+              <div class="space-y-2">
+                {allBrands.map((brandName) => {
+                  const count = steelProducts.filter((p) => p.brand === brandName).length;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary-deep transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-brand"
+                          value={brandName}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{brandName}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: Standards & BIS Codes -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Material Standards</p>
+              <div class="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+                {allStandards.map((std) => {
+                  const count = steelProducts.filter((p) => (p.bisCode || '').includes(std) || (p.standards || '').includes(std)).length;
+                  if (count === 0) return null;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary-deep transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-standard"
+                          value={std}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span class="truncate max-w-[170px]">{std}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Trust badge inside sidebar -->
+            <div class="rounded-lg bg-[#fffbe6] border border-[#ffe58f] p-3 text-[11px] leading-relaxed text-[#595959]">
+              <span class="font-bold text-ink block mb-0.5">Primary Mill Authenticity</span>
+              All steel consignments include original manufacturer heat numbers, chemical analysis and mechanical Mill Test Certificates (MTC).
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Product Grid Area -->
+        <main class="space-y-6">
+          
+          <!-- Active Filter Tags Bar -->
+          <div id="active-tags-container" class="hidden flex-wrap items-center gap-2 rounded-lg bg-white p-3 border border-gray-200">
+            <span class="text-xs font-semibold text-muted">Active Filters:</span>
+            <div id="active-tags-list" class="flex flex-wrap items-center gap-1.5"></div>
+            <button id="clear-tags-btn" class="ml-auto text-xs font-bold text-primary-deep hover:underline cursor-pointer">Clear all</button>
+          </div>
+
+          <!-- Live Result Count Banner -->
+          <div class="flex items-center justify-between">
+            <p id="live-results-summary" class="text-xs sm:text-sm font-semibold text-ink">
+              Showing <span id="current-total">{steelProducts.length}</span> of {steelProducts.length} Steel Products
+            </p>
+            <div class="text-xs text-muted">
+              Live Mill Index Pricing • Belagavi Dispatch Yard
+            </div>
+          </div>
+
+          <!-- Product Card Grid -->
+          <div
+            id="products-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-5"
+          >
+            {steelProducts.map((p, idx) => (
+              <article
+                data-product-card
+                data-index={idx}
+                data-id={p.id}
+                data-name={p.name.toLowerCase()}
+                data-brand={p.brand}
+                data-type={p.steelType}
+                data-grade={p.grade}
+                data-standard={p.bisCode || p.standards || ''}
+                data-price={p.priceValue}
+                class="group flex flex-col justify-between overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs hover:border-gray-400 hover:shadow-md transition-all duration-200"
+              >
+                <div>
+                  <!-- Image Container with Clean Light Gray Fill -->
+                  <div class="relative flex h-[160px] sm:h-[180px] w-full items-center justify-center bg-[#f0f2f5] p-3 overflow-hidden">
+                    <img
+                      src={p.image}
+                      alt={p.imageAlt}
+                      loading="lazy"
+                      class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <!-- Brand Badge -->
+                    <span class="absolute left-2.5 top-2.5 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-ink shadow-xs backdrop-blur-xs">
+                      {p.brand}
+                    </span>
+                    <!-- Grade Badge -->
+                    <span class="absolute right-2.5 top-2.5 rounded bg-ink px-2 py-0.5 text-[10px] font-bold text-white">
+                      {p.grade}
+                    </span>
+                  </div>
+
+                  <!-- Product Body Info -->
+                  <div class="p-4 sm:p-5">
+                    <div class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
+                      {p.bisCode} • {p.steelType}
+                    </div>
+                    <h2 class="text-sm sm:text-base font-bold text-ink leading-snug line-clamp-2 group-hover:text-primary-deep transition-colors">
+                      <a href={`/product/${p.id}`} class="hover:underline">
+                        {p.name}
+                      </a>
+                    </h2>
+                    <p class="mt-2 text-xs text-muted line-clamp-2">
+                      {p.description}
+                    </p>
+
+                    <!-- Spec Strip -->
+                    <div class="mt-3.5 rounded-md bg-gray-50 p-2.5 text-[11px] text-muted space-y-1 border border-gray-100">
+                      <div class="flex justify-between">
+                        <span>Range / Size:</span>
+                        <span class="font-semibold text-ink text-right truncate max-w-[200px]">{p.size}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>Standard / Spec:</span>
+                        <span class="font-semibold text-ink">{p.standards || p.bisCode}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>Min Order (MOQ):</span>
+                        <span class="font-semibold text-ink">{p.moq || '2.0 MT'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Footer & CTAs -->
+                <div class="border-t border-gray-100 p-4 bg-gray-50/50">
+                  <div class="flex items-baseline justify-between mb-3">
+                    <div>
+                      <span class="text-base sm:text-lg font-extrabold text-ink">{p.price}</span>
+                      <span class="block text-[10px] text-muted font-medium">Ex-yard + GST • Mill Certified</span>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                      In Stock
+                    </span>
+                  </div>
+
+                  <!-- Action Buttons matching DESIGN.md rounded.xs (2px) -->
+                  <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                    <AddToCart product={p} class="w-full text-xs rounded-[2px]" />
+                    <a
+                      href={`/quote?product=${p.id}`}
+                      class="inline-flex h-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white px-4 text-xs font-bold text-ink hover:border-ink hover:bg-gray-50 transition-colors shadow-xs"
+                    >
+                      RFQ
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <!-- Empty State -->
+          <div id="no-products-msg" class="hidden rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center">
+            <p class="text-sm font-bold text-ink">No steel products match your filter criteria.</p>
+            <p class="mt-1 text-xs text-muted">Try adjusting your search terms or clearing selected filters.</p>
+            <button
+              id="reset-empty-btn"
+              type="button"
+              class="mt-4 inline-flex h-9 items-center justify-center rounded-[2px] bg-primary px-4 text-xs font-bold text-ink hover:bg-primary-deep transition-colors"
+            >
+              Reset All Filters
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Standards & Compliance Guide (DESIGN.md strict styling) -->
+  <section class="border-t border-gray-200 bg-white py-12">
+    <div class="container-bme">
+      <div class="max-w-3xl mb-8">
+        <span class="text-[11px] font-bold uppercase tracking-widest text-primary-deep">Quality Assurance & Compliance</span>
+        <h2 class="mt-1 text-2xl sm:text-3xl font-black text-ink">Steel Material Standards & Certification</h2>
+        <p class="mt-2 text-xs sm:text-sm text-muted">
+          Every steel grade supplied through BME originates directly from certified primary steel producers with digital traceability matching physical stenciling.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+          <h3 class="text-sm font-bold text-ink">100% Primary Mill Direct</h3>
+          <p class="mt-2 text-xs text-muted leading-relaxed">
+            Consignments sourced exclusively from Tata Steel, SAIL, JSW Steel, and Jindal Steel with original Mill Test Certificates (MTC).
+          </p>
+        </div>
+        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+          <h3 class="text-sm font-bold text-ink">Full BIS & International Codes</h3>
+          <p class="mt-2 text-xs text-muted leading-relaxed">
+            Compliant with IS 2062, IS 5517, IS 3749, ASTM A240, ASTM A516, and EN 10025 with complete chemical & mechanical test documentation.
+          </p>
+        </div>
+        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+          <h3 class="text-sm font-bold text-ink">Transparent Index Pricing</h3>
+          <p class="mt-2 text-xs text-muted leading-relaxed">
+            Direct ex-yard pricing per MT with digital weighbridge receipts and flexible credit terms for verified GST-registered MSMEs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Client-side Script for Filtering & Sorting -->
+  <script>
+    const searchInput = document.getElementById('category-search') as HTMLInputElement | null;
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement | null;
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-product-card]')];
+    const currentTotalEl = document.getElementById('current-total');
+    const noProductsMsg = document.getElementById('no-products-msg');
+    const productsGrid = document.getElementById('products-grid');
+    const typePills = [...document.querySelectorAll<HTMLButtonElement>('[data-type-pill]')];
+    const typeCheckboxes = [...document.querySelectorAll<HTMLInputElement>('input[name="filter-type"]')];
+    const brandCheckboxes = [...document.querySelectorAll<HTMLInputElement>('input[name="filter-brand"]')];
+    const standardCheckboxes = [...document.querySelectorAll<HTMLInputElement>('input[name="filter-standard"]')];
+    const clearAllBtn = document.getElementById('clear-all-filters');
+    const resetEmptyBtn = document.getElementById('reset-empty-btn');
+    const clearTagsBtn = document.getElementById('clear-tags-btn');
+    const activeTagsContainer = document.getElementById('active-tags-container');
+    const activeTagsList = document.getElementById('active-tags-list');
+    const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+    const closeFilterBtn = document.getElementById('close-filter-btn');
+    const filterSidebar = document.getElementById('filter-sidebar');
+    const activeFilterBadge = document.getElementById('active-filter-badge');
+
+    let selectedPillType: string = 'ALL';
+
+    const filterProducts = () => {
+      const query = (searchInput?.value || '').trim().toLowerCase();
+      const selectedTypes = typeCheckboxes.filter(c => c.checked).map(c => c.value);
+      const selectedBrands = brandCheckboxes.filter(c => c.checked).map(c => c.value);
+      const selectedStandards = standardCheckboxes.filter(c => c.checked).map(c => c.value);
+
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const name = card.dataset.name || '';
+        const brand = card.dataset.brand || '';
+        const type = card.dataset.type || '';
+        const standard = card.dataset.standard || '';
+
+        const matchesQuery = !query || name.includes(query) || brand.toLowerCase().includes(query) || standard.toLowerCase().includes(query);
+        const matchesPill = selectedPillType === 'ALL' || type === selectedPillType;
+        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(type);
+        const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(brand);
+        const matchesStandard = selectedStandards.length === 0 || selectedStandards.some(s => standard.includes(s));
+
+        const isVisible = matchesQuery && matchesPill && matchesType && matchesBrand && matchesStandard;
+        card.style.display = isVisible ? '' : 'none';
+        if (isVisible) visibleCount++;
+      });
+
+      // Update counters
+      if (currentTotalEl) currentTotalEl.textContent = visibleCount.toString();
+      if (noProductsMsg && productsGrid) {
+        if (visibleCount === 0) {
+          noProductsMsg.classList.remove('hidden');
+          productsGrid.classList.add('hidden');
+        } else {
+          noProductsMsg.classList.add('hidden');
+          productsGrid.classList.remove('hidden');
+        }
+      }
+
+      // Update active tags bar
+      const totalActiveFilters = (selectedPillType !== 'ALL' ? 1 : 0) + selectedTypes.length + selectedBrands.length + selectedStandards.length + (query ? 1 : 0);
+      if (activeFilterBadge) {
+        if (totalActiveFilters > 0) {
+          activeFilterBadge.textContent = totalActiveFilters.toString();
+          activeFilterBadge.classList.remove('hidden');
+        } else {
+          activeFilterBadge.classList.add('hidden');
+        }
+      }
+
+      if (activeTagsContainer && activeTagsList) {
+        if (totalActiveFilters > 0) {
+          activeTagsContainer.classList.remove('hidden');
+          activeTagsContainer.classList.add('flex');
+          activeTagsList.innerHTML = '';
+
+          if (query) {
+            appendTag(`Search: "${query}"`, () => {
+              if (searchInput) searchInput.value = '';
+              filterProducts();
+            });
+          }
+          if (selectedPillType !== 'ALL') {
+            appendTag(`Type: ${selectedPillType}`, () => {
+              setPillActive('ALL');
+              filterProducts();
+            });
+          }
+          selectedTypes.forEach(t => {
+            appendTag(`Type: ${t}`, () => {
+              const cb = typeCheckboxes.find(c => c.value === t);
+              if (cb) cb.checked = false;
+              filterProducts();
+            });
+          });
+          selectedBrands.forEach(b => {
+            appendTag(`Brand: ${b}`, () => {
+              const cb = brandCheckboxes.find(c => c.value === b);
+              if (cb) cb.checked = false;
+              filterProducts();
+            });
+          });
+          selectedStandards.forEach(s => {
+            appendTag(`Std: ${s}`, () => {
+              const cb = standardCheckboxes.find(c => c.value === s);
+              if (cb) cb.checked = false;
+              filterProducts();
+            });
+          });
+        } else {
+          activeTagsContainer.classList.add('hidden');
+          activeTagsContainer.classList.remove('flex');
+        }
+      }
+    };
+
+    const appendTag = (text: string, onRemove: () => void) => {
+      const tag = document.createElement('span');
+      tag.className = 'inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-ink';
+      tag.innerHTML = `<span>${text}</span><button type="button" class="ml-1 text-muted hover:text-ink cursor-pointer">&times;</button>`;
+      tag.querySelector('button')?.addEventListener('click', onRemove);
+      activeTagsList?.appendChild(tag);
+    };
+
+    const setPillActive = (val: string) => {
+      selectedPillType = val;
+      typePills.forEach(p => {
+        if (p.dataset.typePill === val) {
+          p.classList.remove('border-gray-300', 'bg-white', 'text-ink');
+          p.classList.add('border-ink', 'bg-ink', 'text-white');
+        } else {
+          p.classList.remove('border-ink', 'bg-ink', 'text-white');
+          p.classList.add('border-gray-300', 'bg-white', 'text-ink');
+        }
+      });
+    };
+
+    // Sort products
+    const sortProducts = () => {
+      if (!productsGrid) return;
+      const sortVal = sortSelect?.value || 'featured';
+      const sortedCards = [...cards];
+
+      if (sortVal === 'price-asc') {
+        sortedCards.sort((a, b) => Number(a.dataset.price || 0) - Number(b.dataset.price || 0));
+      } else if (sortVal === 'price-desc') {
+        sortedCards.sort((a, b) => Number(b.dataset.price || 0) - Number(a.dataset.price || 0));
+      } else if (sortVal === 'name-asc') {
+        sortedCards.sort((a, b) => (a.dataset.name || '').localeCompare(b.dataset.name || ''));
+      } else {
+        sortedCards.sort((a, b) => Number(a.dataset.index || 0) - Number(b.dataset.index || 0));
+      }
+
+      sortedCards.forEach(c => productsGrid.appendChild(c));
+    };
+
+    // Event listeners
+    searchInput?.addEventListener('input', filterProducts);
+    sortSelect?.addEventListener('change', () => {
+      sortProducts();
+      filterProducts();
+    });
+
+    typePills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const val = pill.dataset.typePill || 'ALL';
+        setPillActive(val);
+        filterProducts();
+      });
+    });
+
+    [...typeCheckboxes, ...brandCheckboxes, ...standardCheckboxes].forEach(cb => {
+      cb.addEventListener('change', filterProducts);
+    });
+
+    const resetAll = () => {
+      if (searchInput) searchInput.value = '';
+      if (sortSelect) sortSelect.value = 'featured';
+      setPillActive('ALL');
+      [...typeCheckboxes, ...brandCheckboxes, ...standardCheckboxes].forEach(cb => {
+        cb.checked = false;
+      });
+      sortProducts();
+      filterProducts();
+    };
+
+    clearAllBtn?.addEventListener('click', resetAll);
+    resetEmptyBtn?.addEventListener('click', resetAll);
+    clearTagsBtn?.addEventListener('click', resetAll);
+
+    // Mobile drawer toggle
+    mobileFilterBtn?.addEventListener('click', () => {
+      filterSidebar?.classList.remove('-translate-x-full');
+    });
+
+    closeFilterBtn?.addEventListener('click', () => {
+      filterSidebar?.classList.add('-translate-x-full');
+    });
+
+    // Check URL parameters on mount
+    const params = new URLSearchParams(window.location.search);
+    const urlType = params.get('type');
+    const urlBrand = params.get('brand');
+    const urlQuery = params.get('q');
+
+    if (urlQuery && searchInput) searchInput.value = urlQuery;
+    if (urlType) setPillActive(urlType);
+    if (urlBrand) {
+      const matchBrandCb = brandCheckboxes.find(c => c.value.toLowerCase() === urlBrand.toLowerCase());
+      if (matchBrandCb) matchBrandCb.checked = true;
+    }
+
+    filterProducts();
+  </script>
+</Layout>

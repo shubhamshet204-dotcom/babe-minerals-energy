@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  message: string;
+  variant?: 'inline' | 'card' | 'banner';
+  class?: string;
+}
+
+const {
+  title = 'Something went wrong',
+  message,
+  variant = 'card',
+  class: className = '',
+} = Astro.props;
+---
+
+{
+  variant === 'banner' && (
+    <div
+      role="alert"
+      class={`w-full bg-accent-4/5 border-l-4 border-accent-4 p-4 rounded-r-sm flex items-start gap-3 ${className}`}
+    >
+      <div class="text-accent-4 shrink-0 mt-0.5">
+        <Icon name="alert-circle" size={20} />
+      </div>
+      <div class="flex-1">
+        {title && (
+          <h4 class="text-[14px] font-bold text-ink leading-tight mb-0.5">
+            {title}
+          </h4>
+        )}
+        <p class="text-[14px] text-body leading-[1.45]">{message}</p>
+      </div>
+      {Astro.slots.has('default') && (
+        <div class="shrink-0 flex items-center gap-2">
+          <slot />
+        </div>
+      )}
+    </div>
+  )
+}
+
+{
+  variant === 'card' && (
+    <div
+      role="alert"
+      class={`flex flex-col items-center justify-center text-center p-8 sm:p-10 border border-hairline rounded-lg bg-canvas shadow-xs ${className}`}
+    >
+      <div class="w-12 h-12 rounded-full bg-accent-4/10 text-accent-4 flex items-center justify-center mb-4">
+        <Icon name="alert-triangle" size={24} />
+      </div>
+      <h3 class="text-[18px] font-semibold text-ink leading-[1.33] max-w-md">
+        {title}
+      </h3>
+      <p class="text-[14px] text-muted leading-[1.45] max-w-sm mt-1.5 mb-6">
+        {message}
+      </p>
+      {Astro.slots.has('default') && (
+        <div class="flex items-center gap-3 flex-wrap justify-center">
+          <slot />
+        </div>
+      )}
+    </div>
+  )
+}
+
+{
+  variant === 'inline' && (
+    <div
+      role="alert"
+      class={`inline-flex items-center gap-2 text-accent-4 text-[14px] leading-[1.45] font-medium ${className}`}
+    >
+      <Icon name="alert-circle" size={16} />
+      <span>{message}</span>
+    </div>
+  )
+}

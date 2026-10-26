@@ -1,0 +1,149 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Your Cart | BME Steels" description="Review selected steel materials and send a quote request to BME Steels.">
+  <section class="bg-surface-soft py-14 lg:py-20">
+    <div class="container-bme">
+      <div class="mb-8">
+        <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Procurement list</p>
+        <h1 class="mt-2 text-4xl font-black tracking-tight text-ink">Your cart</h1>
+      </div>
+
+      <div class="grid items-start gap-8 lg:grid-cols-[1fr_360px]">
+        <div class="border border-hairline bg-canvas">
+          <div class="flex items-center justify-between border-b border-hairline px-5 py-4">
+            <h2 class="text-lg font-bold text-ink">Selected materials</h2>
+            <span id="cart-item-count" class="text-sm text-muted">0 items</span>
+          </div>
+          <div id="cart-items" class="divide-y divide-hairline p-5" aria-live="polite">
+            <p class="py-8 text-center text-sm text-muted">Loading your cart…</p>
+          </div>
+        </div>
+
+        <aside class="border border-hairline bg-canvas p-5">
+          <h2 class="text-lg font-bold text-ink">Request pricing</h2>
+          <p class="mt-2 text-sm leading-6 text-muted">Send these items to our procurement team. Final pricing and availability are confirmed by our sales desk.</p>
+          <div class="mt-5 flex items-center justify-between border-t border-hairline pt-4 text-sm">
+            <span class="text-muted">Indicative total</span>
+            <strong id="cart-total" class="text-lg text-ink">₹0</strong>
+          </div>
+          <form id="cart-checkout" class="mt-5 space-y-4">
+            <input type="hidden" name="deliveryLocation" data-delivery-location-field />
+            <label class="block text-sm font-medium text-ink">Full name
+              <input name="name" type="text" required autocomplete="name" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label class="block text-sm font-medium text-ink">Business email
+              <input name="email" type="email" required autocomplete="email" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label class="block text-sm font-medium text-ink">Company
+              <input name="company" type="text" required autocomplete="organization" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <label class="block text-sm font-medium text-ink">Phone (optional)
+              <input name="phone" type="tel" autocomplete="tel" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+            </label>
+            <button id="cart-submit" type="submit" class="inline-flex h-12 w-full items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink transition-colors hover:bg-primary-deep disabled:cursor-not-allowed disabled:opacity-50">Send quote request</button>
+            <p id="cart-status" class="min-h-5 text-sm text-muted" aria-live="polite"></p>
+          </form>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { getCart, removeCartItem, updateCartItem, clearCart } from '../scripts/cart';
+
+    const cartContainer = document.getElementById('cart-items');
+    const countElement = document.getElementById('cart-item-count');
+    const totalElement = document.getElementById('cart-total');
+    const checkoutForm = document.getElementById('cart-checkout') as HTMLFormElement | null;
+    const checkoutButton = document.getElementById('cart-submit') as HTMLButtonElement | null;
+    const statusElement = document.getElementById('cart-status');
+    const apiBase = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+    const money = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+    const escapeHTML = (value: string) => value.replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character] || character);
+
+    function renderCart() {
+      if (!cartContainer || !countElement || !totalElement || !checkoutButton) return;
+      const items = getCart();
+      const quantity = items.reduce((total, item) => total + item.quantity, 0);
+      countElement.textContent = `${quantity} item${quantity === 1 ? '' : 's'}`;
+      totalElement.textContent = money.format(items.reduce((total, item) => total + item.priceValue * item.quantity, 0));
+      checkoutButton.disabled = items.length === 0;
+
+      if (!items.length) {
+        cartContainer.innerHTML = '<div class="py-10 text-center"><p class="text-base font-bold text-ink">Your cart is empty</p><p class="mt-2 text-sm text-muted">Add materials from the catalog to build a quote request.</p><a href="/products" class="mt-5 inline-flex h-10 items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink">Browse products</a></div>';
+        return;
+      }
+
+      cartContainer.innerHTML = items.map((item) => `
+        <article class="grid gap-4 py-4 first:pt-0 last:pb-0 sm:grid-cols-[1fr_auto] sm:items-center">
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">${escapeHTML(item.brand)}</p>
+            <h3 class="mt-1 font-bold text-ink">${escapeHTML(item.name)}</h3>
+            <p class="mt-1 text-sm text-muted">${escapeHTML(item.size)} · ${escapeHTML(item.price)}</p>
+          </div>
+          <div class="flex items-center justify-between gap-4 sm:justify-end">
+            <div class="flex items-center border border-hairline">
+              <button type="button" data-quantity="${escapeHTML(item.id)}" data-change="-1" class="h-9 w-9 text-lg text-ink hover:bg-surface-soft" aria-label="Decrease quantity">−</button>
+              <span class="min-w-9 text-center text-sm font-semibold text-ink">${item.quantity}</span>
+              <button type="button" data-quantity="${escapeHTML(item.id)}" data-change="1" class="h-9 w-9 text-lg text-ink hover:bg-surface-soft" aria-label="Increase quantity">+</button>
+            </div>
+            <button type="button" data-remove="${escapeHTML(item.id)}" class="text-sm font-semibold text-muted underline underline-offset-4 hover:text-ink">Remove</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    cartContainer?.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const removeButton = target.closest<HTMLButtonElement>('[data-remove]');
+      if (removeButton?.dataset.remove) {
+        removeCartItem(removeButton.dataset.remove);
+        renderCart();
+        return;
+      }
+      const quantityButton = target.closest<HTMLButtonElement>('[data-quantity]');
+      if (quantityButton?.dataset.quantity) {
+        const item = getCart().find((entry) => entry.id === quantityButton.dataset.quantity);
+        if (item) updateCartItem(item.id, item.quantity + Number(quantityButton.dataset.change));
+        renderCart();
+      }
+    });
+
+    window.addEventListener('bme:cart-updated', renderCart);
+    renderCart();
+
+    checkoutForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!statusElement || !checkoutButton) return;
+      const items = getCart();
+      if (!items.length) return;
+      const formData = new FormData(checkoutForm);
+      const details = items.map((item) => `${item.quantity} × ${item.name} (${item.brand}, ${item.size}) at ${item.price}`).join('\n');
+      const payload = Object.fromEntries(formData.entries());
+      payload.requirement = `Please quote the following cart items:\n${details}`;
+      statusElement.textContent = 'Sending your request…';
+      checkoutButton.disabled = true;
+
+      try {
+        const response = await fetch(`${apiBase}/api/quote`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to send the quote request.');
+        clearCart();
+        statusElement.textContent = 'Quote request sent. Our procurement team will follow up shortly.';
+        renderCart();
+      } catch (error) {
+        statusElement.textContent = error instanceof Error ? error.message : 'Unable to send the quote request.';
+      } finally {
+        checkoutButton.disabled = getCart().length === 0;
+      }
+    });
+  </script>
+</Layout>

@@ -1,0 +1,739 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import AddToCart from '../../../components/store/AddToCart.astro';
+import Icon from '../../../components/ui/Icon.astro';
+import { hotRolledProducts } from '../../../data/hotRolledProducts';
+
+// Distinct filter options
+const allSubTypes = ['Hot Rolled Sheets', 'Hot Rolled Coils', 'Hot Rolled Plates', 'Chequered Sheets', 'HRPO Coils & Sheets'];
+const allBrands = ['One Helix', 'JSW Steel', 'NMDC', 'Tata Steel', 'SAIL', 'AM/NS India', 'Jindal Steel'];
+const allGrades = ['E250BR', 'E250A', 'E250B', 'E250C', 'E350BR', 'E410', 'E450BR', 'IS 10748 GR1', 'IS 10748 GR2', 'IS 10748 GR3', 'IS 3502 / E250', 'E250BR / HRPO'];
+const allThicknesses = [1.6, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 20.0, 25.0, 32.0, 40.0, 50.0, 63.0, 80.0, 100.0];
+const allWidths = [1000, 1200, 1250, 1500, 1800, 2000, 2500];
+---
+
+<Layout
+  title="Steel - Hot Rolled Steel Products (124 Items) | BME Steels"
+  description="Browse 124 verified Hot Rolled Steel sheets, plates, coils, chequered and HRPO products from Tata Steel, JSW Steel, NMDC, SAIL, and One Helix at wholesale prices."
+>
+  <!-- Breadcrumb and Page Header -->
+  <section class="border-b border-gray-200 bg-white py-4">
+    <div class="container-bme">
+      <nav aria-label="Breadcrumbs" class="flex items-center gap-2 text-xs text-muted">
+        <a href="/" class="hover:text-ink transition-colors">Home</a>
+        <Icon name="chevron-right" size={12} />
+        <a href="/category/steel" class="hover:text-ink transition-colors">Steel</a>
+        <Icon name="chevron-right" size={12} />
+        <span class="font-semibold text-ink">Hot Rolled Steel</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Category Title & Quick Filter Chips Strip -->
+  <section class="border-b border-gray-100 bg-[#f8f9fb] py-6">
+    <div class="container-bme">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">Hot Rolled Steel</h1>
+            <span id="total-count-badge" class="rounded-full bg-primary/15 px-3 py-0.5 text-xs font-bold text-ink border border-primary/20">
+              {hotRolledProducts.length} Products
+            </span>
+          </div>
+          <p class="mt-1 text-xs sm:text-sm text-muted">
+            Primary mill certified HR sheets, structural plates, standard coils, chequered flooring, and pickled coils with MTC.
+          </p>
+        </div>
+
+        <!-- Search input and Sort select -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative min-w-[240px] sm:min-w-[280px]">
+            <input
+              id="category-search"
+              type="search"
+              placeholder="Search grade, size or brand..."
+              class="h-10 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-xs text-ink placeholder-gray-400 focus:border-ink focus:outline-none shadow-xs"
+            />
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="sort-select" class="text-xs font-semibold text-muted shrink-0 hidden sm:inline">Sort by:</label>
+            <select
+              id="sort-select"
+              class="h-10 rounded-lg border border-gray-300 bg-white px-3 text-xs font-medium text-ink focus:border-ink focus:outline-none shadow-xs"
+            >
+              <option value="relevance">Relevance / Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="thickness-asc">Thickness: Light to Heavy</option>
+              <option value="thickness-desc">Thickness: Heavy to Light</option>
+            </select>
+
+            <!-- Mobile Filter Drawer Toggle Button -->
+            <button
+              id="mobile-filter-btn"
+              type="button"
+              class="lg:hidden flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-xs font-bold text-ink shadow-xs"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <span>Filters</span>
+              <span id="active-filter-badge" class="hidden h-4 w-4 rounded-full bg-ink text-[10px] text-white flex items-center justify-center">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Subcategory Pills -->
+      <div class="mt-5 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <button
+          type="button"
+          data-subtype-pill="ALL"
+          class="subtype-pill shrink-0 rounded-full border border-ink bg-ink px-3.5 py-1.5 text-xs font-bold text-white transition-all shadow-xs"
+        >
+          All ({hotRolledProducts.length})
+        </button>
+        {allSubTypes.map((st) => {
+          const count = hotRolledProducts.filter((p) => p.subType === st).length;
+          return (
+            <button
+              type="button"
+              data-subtype-pill={st}
+              class="subtype-pill shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-medium text-ink hover:border-ink hover:bg-gray-50 transition-all shadow-xs"
+            >
+              {st} ({count})
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Category Content (2-Column Desktop: Sticky Filters Sidebar + 3-Column Product Grid) -->
+  <section class="bg-[#f4f5f8] py-8">
+    <div class="container-bme">
+      <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
+        
+        <!-- Left Sidebar Filter Accordion (Desktop + Mobile Sheet) -->
+        <aside
+          id="filter-sidebar"
+          class="fixed inset-y-0 left-0 z-50 w-80 bg-white p-6 shadow-2xl transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:z-auto lg:w-full lg:p-0 lg:shadow-none lg:bg-transparent"
+        >
+          <!-- Mobile Drawer Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-gray-200 lg:hidden">
+            <h2 class="text-base font-bold text-ink">Filter Products</h2>
+            <button id="close-filter-btn" class="p-2 text-muted hover:text-ink">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-xs space-y-6 max-h-[calc(100vh-100px)] overflow-y-auto lg:max-h-none lg:overflow-visible">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+              <span class="text-sm font-bold text-ink">Filters</span>
+              <button id="clear-all-filters" type="button" class="text-xs font-semibold text-primary hover:underline">
+                Clear all
+              </button>
+            </div>
+
+            <!-- Filter: Product Sub-Type -->
+            <div class="filter-section">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Product Type</p>
+              <div class="space-y-2">
+                {allSubTypes.map((st) => {
+                  const count = hotRolledProducts.filter((p) => p.subType === st).length;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-subtype"
+                          value={st}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{st}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: Brand -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Brand</p>
+              <div class="space-y-2">
+                {allBrands.map((brandName) => {
+                  const count = hotRolledProducts.filter((p) => p.brand === brandName).length;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-brand"
+                          value={brandName}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{brandName}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: IS Steel Grade -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Steel Grade / Spec</p>
+              <div class="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+                {allGrades.map((grade) => {
+                  const count = hotRolledProducts.filter((p) => p.grade === grade).length;
+                  if (count === 0) return null;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-grade"
+                          value={grade}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{grade}</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: Thickness -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Thickness (mm)</p>
+              <div class="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
+                {allThicknesses.map((th) => {
+                  const count = hotRolledProducts.filter((p) => p.thicknessMm === th).length;
+                  if (count === 0) return null;
+                  return (
+                    <label class="flex items-center gap-2 text-xs text-ink cursor-pointer hover:text-primary transition-colors">
+                      <input
+                        type="checkbox"
+                        name="filter-thickness"
+                        value={th.toString()}
+                        class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                      />
+                      <span>{th} mm <span class="text-[10px] text-muted">({count})</span></span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <!-- Filter: Width -->
+            <div class="filter-section border-t border-gray-100 pt-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Width (mm)</p>
+              <div class="space-y-2">
+                {allWidths.map((w) => {
+                  const count = hotRolledProducts.filter((p) => p.widthMm === w).length;
+                  if (count === 0) return null;
+                  return (
+                    <label class="flex items-center justify-between text-xs text-ink cursor-pointer hover:text-primary transition-colors">
+                      <div class="flex items-center gap-2.5">
+                        <input
+                          type="checkbox"
+                          name="filter-width"
+                          value={w.toString()}
+                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                        />
+                        <span>{w} mm</span>
+                      </div>
+                      <span class="text-[11px] text-muted">({count})</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Product Grid Area (3 Cols on Desktop, 2 Cols on Mobile) -->
+        <main class="space-y-6">
+          
+          <!-- Active Filter Tags Bar -->
+          <div id="active-tags-container" class="hidden flex-wrap items-center gap-2 rounded-lg bg-white p-3 border border-gray-200">
+            <span class="text-xs font-semibold text-muted">Active Filters:</span>
+            <div id="active-tags-list" class="flex flex-wrap items-center gap-1.5"></div>
+            <button id="clear-tags-btn" class="ml-auto text-xs font-bold text-primary hover:underline">Clear all</button>
+          </div>
+
+          <!-- Live Result Count Banner -->
+          <div class="flex items-center justify-between">
+            <p id="live-results-summary" class="text-xs sm:text-sm font-semibold text-ink">
+              Showing <span id="current-range">1–12</span> of <span id="current-total">{hotRolledProducts.length}</span> results
+            </p>
+            <div class="text-xs text-muted">
+              Prices updated daily • Direct Primary Mills
+            </div>
+          </div>
+
+          <!-- Product Card Grid (Clean JSW One Style 3-Column Desktop / 2-Column Mobile) -->
+          <div
+            id="products-grid"
+            class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-5"
+          >
+            {hotRolledProducts.map((p, idx) => (
+              <article
+                data-product-card
+                data-index={idx}
+                data-id={p.id}
+                data-name={p.name.toLowerCase()}
+                data-brand={p.brand}
+                data-subtype={p.subType}
+                data-grade={p.grade}
+                data-thickness={p.thicknessMm}
+                data-width={p.widthMm}
+                data-price={p.priceValue}
+                class="group flex flex-col justify-between overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs hover:border-gray-400 hover:shadow-md transition-all duration-200"
+              >
+                <div>
+                  <!-- Image Container with Clean Light Gray Fill -->
+                  <div class="relative flex h-[140px] sm:h-[160px] w-full items-center justify-center bg-[#f0f2f5] p-3 overflow-hidden">
+                    <img
+                      src={p.image}
+                      alt={p.imageAlt}
+                      loading="lazy"
+                      class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <!-- Brand Badge -->
+                    <span class="absolute left-2.5 top-2.5 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-ink shadow-xs backdrop-blur-xs">
+                      {p.brand}
+                    </span>
+                    <!-- Grade Badge -->
+                    <span class="absolute right-2.5 top-2.5 rounded bg-ink px-2 py-0.5 text-[10px] font-bold text-white">
+                      {p.grade}
+                    </span>
+                  </div>
+
+                  <!-- Product Body Info -->
+                  <div class="p-3 sm:p-4">
+                    <div class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted">
+                      {p.bisCode} • {p.subType}
+                    </div>
+                    <h2 class="text-xs sm:text-sm font-bold text-ink leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                      <a href={`/product/${p.id}`}>
+                        {p.name}
+                      </a>
+                    </h2>
+
+                    <!-- Spec Strip -->
+                    <div class="mt-2.5 rounded-md bg-gray-50 p-2 text-[11px] text-muted space-y-0.5 border border-gray-100">
+                      <div class="flex justify-between">
+                        <span>Dimensions:</span>
+                        <span class="font-semibold text-ink">{p.size}</span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>Min Order:</span>
+                        <span class="font-semibold text-ink">{p.moq || '2.5 MT'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Footer & CTAs -->
+                <div class="border-t border-gray-100 p-3 sm:p-4 bg-gray-50/40">
+                  <div class="flex items-baseline justify-between mb-2.5">
+                    <div>
+                      <span class="text-sm sm:text-base font-extrabold text-ink">{p.price}</span>
+                      <span class="block text-[9px] text-muted font-medium">Ex-yard + GST</span>
+                    </div>
+                    <span class="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      In Stock
+                    </span>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
+                    <AddToCart product={p} class="w-full text-xs" />
+                    <a
+                      href={`/quote?product=${p.id}`}
+                      class="inline-flex h-9 items-center justify-center rounded-lg border border-gray-300 bg-white px-3 text-xs font-bold text-ink hover:border-ink transition-colors"
+                      title="Request formal commercial quote"
+                    >
+                      Quote
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <!-- Empty State (when 0 products match filters) -->
+          <div id="no-products-state" class="hidden rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-muted mb-4">
+              <Icon name="search" size={24} />
+            </div>
+            <h3 class="text-lg font-bold text-ink">No matching products found</h3>
+            <p class="mt-1 text-xs text-muted max-w-md mx-auto">
+              We couldn't find any products matching your current combination of filters. Try clearing some filters or searching for different specifications.
+            </p>
+            <button
+              id="reset-filters-btn"
+              type="button"
+              class="mt-5 inline-flex h-10 items-center justify-center rounded-lg bg-ink px-5 text-xs font-bold text-white hover:bg-gray-800 transition-colors"
+            >
+              Reset all filters
+            </button>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div id="pagination-container" class="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-xs">
+            <p id="pagination-info" class="text-xs text-muted">
+              Page <span id="current-page-num" class="font-bold text-ink">1</span> of <span id="total-pages-num" class="font-bold text-ink">11</span>
+            </p>
+            <div class="flex items-center gap-1.5" id="pagination-buttons">
+              <!-- Dynamically rendered page buttons -->
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- Backdrop overlay for mobile filter drawer -->
+  <div id="mobile-backdrop" class="fixed inset-0 z-40 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+
+  <!-- Client-Side Engine for Live Instant Filtering, Sorting & Pagination -->
+  <script is:inline>
+    (function () {
+      const PAGE_SIZE = 12;
+      let currentPage = 1;
+
+      // DOM Elements
+      const searchInput = document.getElementById('category-search');
+      const sortSelect = document.getElementById('sort-select');
+      const cards = Array.from(document.querySelectorAll('[data-product-card]'));
+      const subtypePills = Array.from(document.querySelectorAll('.subtype-pill'));
+      const clearAllBtn = document.getElementById('clear-all-filters');
+      const clearTagsBtn = document.getElementById('clear-tags-btn');
+      const resetBtn = document.getElementById('reset-filters-btn');
+      const activeTagsContainer = document.getElementById('active-tags-container');
+      const activeTagsList = document.getElementById('active-tags-list');
+      const liveResultsSummary = document.getElementById('live-results-summary');
+      const currentRangeEl = document.getElementById('current-range');
+      const currentTotalEl = document.getElementById('current-total');
+      const totalCountBadge = document.getElementById('total-count-badge');
+      const noProductsState = document.getElementById('no-products-state');
+      const paginationContainer = document.getElementById('pagination-container');
+      const paginationButtons = document.getElementById('pagination-buttons');
+      const currentPageNumEl = document.getElementById('current-page-num');
+      const totalPagesNumEl = document.getElementById('total-pages-num');
+
+      // Mobile Drawer Elements
+      const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+      const closeFilterBtn = document.getElementById('close-filter-btn');
+      const filterSidebar = document.getElementById('filter-sidebar');
+      const mobileBackdrop = document.getElementById('mobile-backdrop');
+      const activeFilterBadge = document.getElementById('active-filter-badge');
+
+      let selectedSubtype = 'ALL';
+
+      function getCheckedValues(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map((cb) => cb.value);
+      }
+
+      function uncheckAll() {
+        document.querySelectorAll('input[type="checkbox"]').forEach((cb) => (cb.checked = false));
+        selectedSubtype = 'ALL';
+        updatePillsUI();
+        if (searchInput) searchInput.value = '';
+        currentPage = 1;
+        applyFilters();
+      }
+
+      function updatePillsUI() {
+        subtypePills.forEach((pill) => {
+          const val = pill.getAttribute('data-subtype-pill');
+          if (val === selectedSubtype) {
+            pill.className = 'subtype-pill shrink-0 rounded-full border border-ink bg-ink px-3.5 py-1.5 text-xs font-bold text-white transition-all shadow-xs';
+          } else {
+            pill.className = 'subtype-pill shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-medium text-ink hover:border-ink hover:bg-gray-50 transition-all shadow-xs';
+          }
+        });
+      }
+
+      function applyFilters() {
+        const query = (searchInput?.value || '').trim().toLowerCase();
+        const selectedBrands = getCheckedValues('filter-brand');
+        const selectedSubtypes = getCheckedValues('filter-subtype');
+        const selectedGrades = getCheckedValues('filter-grade');
+        const selectedThicknesses = getCheckedValues('filter-thickness').map(Number);
+        const selectedWidths = getCheckedValues('filter-width').map(Number);
+        const sortVal = sortSelect ? sortSelect.value : 'relevance';
+
+        // Filter cards
+        const matchingCards = cards.filter((card) => {
+          const name = card.dataset.name || '';
+          const brand = card.dataset.brand || '';
+          const subtype = card.dataset.subtype || '';
+          const grade = card.dataset.grade || '';
+          const thickness = parseFloat(card.dataset.thickness || '0');
+          const width = parseFloat(card.dataset.width || '0');
+
+          // Query matching
+          const matchesQuery = !query || name.includes(query) || brand.toLowerCase().includes(query) || grade.toLowerCase().includes(query);
+          
+          // Pill subtype matching
+          const matchesPillSubtype = selectedSubtype === 'ALL' || subtype === selectedSubtype;
+
+          // Checkbox matching
+          const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(brand);
+          const matchesSubtype = selectedSubtypes.length === 0 || selectedSubtypes.includes(subtype);
+          const matchesGrade = selectedGrades.length === 0 || selectedGrades.includes(grade);
+          const matchesThickness = selectedThicknesses.length === 0 || selectedThicknesses.includes(thickness);
+          const matchesWidth = selectedWidths.length === 0 || selectedWidths.includes(width);
+
+          return matchesQuery && matchesPillSubtype && matchesBrand && matchesSubtype && matchesGrade && matchesThickness && matchesWidth;
+        });
+
+        // Sort matching cards
+        matchingCards.sort((a, b) => {
+          const priceA = parseFloat(a.dataset.price || '0');
+          const priceB = parseFloat(b.dataset.price || '0');
+          const thickA = parseFloat(a.dataset.thickness || '0');
+          const thickB = parseFloat(b.dataset.thickness || '0');
+          const idxA = parseInt(a.dataset.index || '0');
+          const idxB = parseInt(b.dataset.index || '0');
+
+          if (sortVal === 'price-asc') return priceA - priceB;
+          if (sortVal === 'price-desc') return priceB - priceA;
+          if (sortVal === 'thickness-asc') return thickA - thickB;
+          if (sortVal === 'thickness-desc') return thickB - thickA;
+          return idxA - idxB;
+        });
+
+        const totalMatching = matchingCards.length;
+        const totalPages = Math.max(1, Math.ceil(totalMatching / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = 1;
+
+        // Render visibility according to pagination
+        const startIndex = (currentPage - 1) * PAGE_SIZE;
+        const endIndex = Math.min(startIndex + PAGE_SIZE, totalMatching);
+
+        // Hide all cards first
+        cards.forEach((card) => {
+          card.style.display = 'none';
+        });
+
+        // Show slice and append to container in sorted order
+        const grid = document.getElementById('products-grid');
+        for (let i = startIndex; i < endIndex; i++) {
+          const card = matchingCards[i];
+          card.style.display = 'flex';
+          grid.appendChild(card);
+        }
+
+        // Update counts and empty state
+        if (totalCountBadge) totalCountBadge.textContent = `${totalMatching} Products`;
+        if (currentTotalEl) currentTotalEl.textContent = totalMatching.toString();
+        if (currentRangeEl) {
+          currentRangeEl.textContent = totalMatching === 0 ? '0' : `${startIndex + 1}–${endIndex}`;
+        }
+
+        if (totalMatching === 0) {
+          noProductsState?.classList.remove('hidden');
+          paginationContainer?.classList.add('hidden');
+        } else {
+          noProductsState?.classList.add('hidden');
+          paginationContainer?.classList.remove('hidden');
+        }
+
+        // Update pagination UI
+        renderPagination(totalPages);
+
+        // Update Active Tags Strip
+        renderActiveTags(selectedBrands, selectedSubtypes, selectedGrades, selectedThicknesses, selectedWidths, query);
+      }
+
+      function renderActiveTags(brands, subtypes, grades, thicknesses, widths, query) {
+        const totalActive = brands.length + subtypes.length + grades.length + thicknesses.length + widths.length + (selectedSubtype !== 'ALL' ? 1 : 0) + (query ? 1 : 0);
+
+        if (activeFilterBadge) {
+          if (totalActive > 0) {
+            activeFilterBadge.textContent = totalActive.toString();
+            activeFilterBadge.classList.remove('hidden');
+          } else {
+            activeFilterBadge.classList.add('hidden');
+          }
+        }
+
+        if (!activeTagsContainer || !activeTagsList) return;
+
+        if (totalActive === 0) {
+          activeTagsContainer.classList.add('hidden');
+          activeTagsList.innerHTML = '';
+          return;
+        }
+
+        activeTagsContainer.classList.remove('hidden');
+        activeTagsList.innerHTML = '';
+
+        const tags = [
+          ...brands.map((b) => ({ label: `Brand: ${b}`, type: 'brand', val: b })),
+          ...subtypes.map((s) => ({ label: `Type: ${s}`, type: 'subtype', val: s })),
+          ...grades.map((g) => ({ label: `Grade: ${g}`, type: 'grade', val: g })),
+          ...thicknesses.map((t) => ({ label: `${t} mm`, type: 'thickness', val: t.toString() })),
+          ...widths.map((w) => ({ label: `Width: ${w}mm`, type: 'width', val: w.toString() })),
+        ];
+
+        if (selectedSubtype !== 'ALL') {
+          tags.unshift({ label: selectedSubtype, type: 'pill', val: selectedSubtype });
+        }
+        if (query) {
+          tags.unshift({ label: `"${query}"`, type: 'query', val: '' });
+        }
+
+        tags.forEach((tag) => {
+          const chip = document.createElement('span');
+          chip.className = 'inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-ink';
+          chip.innerHTML = `<span>${tag.label}</span><button type="button" class="text-muted hover:text-ink">✕</button>`;
+          chip.querySelector('button')?.addEventListener('click', () => {
+            if (tag.type === 'pill') {
+              selectedSubtype = 'ALL';
+              updatePillsUI();
+            } else if (tag.type === 'query') {
+              if (searchInput) searchInput.value = '';
+            } else {
+              const cb = document.querySelector(`input[name="filter-${tag.type}"][value="${tag.val}"]`);
+              if (cb) cb.checked = false;
+            }
+            currentPage = 1;
+            applyFilters();
+          });
+          activeTagsList.appendChild(chip);
+        });
+      }
+
+      function renderPagination(totalPages) {
+        if (!paginationButtons || !currentPageNumEl || !totalPagesNumEl) return;
+        currentPageNumEl.textContent = currentPage.toString();
+        totalPagesNumEl.textContent = totalPages.toString();
+        paginationButtons.innerHTML = '';
+
+        // Previous Button
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.disabled = currentPage <= 1;
+        prevBtn.className = `flex h-8 items-center justify-center rounded-lg border px-3 text-xs font-semibold ${
+          currentPage <= 1 ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-ink hover:bg-gray-50'
+        }`;
+        prevBtn.innerHTML = '&larr; Prev';
+        prevBtn.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            applyFilters();
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+          }
+        });
+        paginationButtons.appendChild(prevBtn);
+
+        // Page Number Buttons
+        for (let p = 1; p <= totalPages; p++) {
+          if (totalPages > 7 && Math.abs(p - currentPage) > 2 && p !== 1 && p !== totalPages) {
+            if (p === 2 || p === totalPages - 1) {
+              const dots = document.createElement('span');
+              dots.className = 'px-1 text-xs text-muted';
+              dots.textContent = '...';
+              paginationButtons.appendChild(dots);
+            }
+            continue;
+          }
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = p.toString();
+          btn.className = `flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-colors ${
+            p === currentPage ? 'bg-ink text-white' : 'border border-gray-300 text-ink hover:bg-gray-50'
+          }`;
+          btn.addEventListener('click', () => {
+            currentPage = p;
+            applyFilters();
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+          });
+          paginationButtons.appendChild(btn);
+        }
+
+        // Next Button
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.disabled = currentPage >= totalPages;
+        nextBtn.className = `flex h-8 items-center justify-center rounded-lg border px-3 text-xs font-semibold ${
+          currentPage >= totalPages ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-300 text-ink hover:bg-gray-50'
+        }`;
+        nextBtn.innerHTML = 'Next &rarr;';
+        nextBtn.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            applyFilters();
+            window.scrollTo({ top: 180, behavior: 'smooth' });
+          }
+        });
+        paginationButtons.appendChild(nextBtn);
+      }
+
+      // Event Listeners
+      searchInput?.addEventListener('input', () => {
+        currentPage = 1;
+        applyFilters();
+      });
+
+      sortSelect?.addEventListener('change', () => {
+        currentPage = 1;
+        applyFilters();
+      });
+
+      document.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+        cb.addEventListener('change', () => {
+          currentPage = 1;
+          applyFilters();
+        });
+      });
+
+      subtypePills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          selectedSubtype = pill.getAttribute('data-subtype-pill') || 'ALL';
+          updatePillsUI();
+          currentPage = 1;
+          applyFilters();
+        });
+      });
+
+      clearAllBtn?.addEventListener('click', uncheckAll);
+      clearTagsBtn?.addEventListener('click', uncheckAll);
+      resetBtn?.addEventListener('click', uncheckAll);
+
+      // Mobile Drawer Handling
+      function toggleMobileDrawer(open) {
+        if (!filterSidebar || !mobileBackdrop) return;
+        if (open) {
+          filterSidebar.classList.remove('-translate-x-full');
+          mobileBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = 'hidden';
+        } else {
+          filterSidebar.classList.add('-translate-x-full');
+          mobileBackdrop.classList.add('opacity-0', 'pointer-events-none');
+          document.body.style.overflow = '';
+        }
+      }
+
+      mobileFilterBtn?.addEventListener('click', () => toggleMobileDrawer(true));
+      closeFilterBtn?.addEventListener('click', () => toggleMobileDrawer(false));
+      mobileBackdrop?.addEventListener('click', () => toggleMobileDrawer(false));
+
+      // Initial run
+      applyFilters();
+    })();
+  </script>
+</Layout>

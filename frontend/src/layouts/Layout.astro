@@ -1,0 +1,45 @@
+---
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'BME | Bable Minerals and Energy Private Limited (BME)',
+  description = 'Institutional steel and raw material marketplace from Bable Minerals and Energy Private Limited (BME), Belagavi, Karnataka. Primary structural steel, HR/CR coils, TMT rebars, and industrial supplies with verified mill test certificates.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Google Fonts: Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col bg-canvas text-body antialiased selection:bg-primary selection:text-ink">
+    <Navbar />
+    <main id="main-content" class="flex-1 w-full">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/storefront';
+    </script>
+  </body>
+</html>

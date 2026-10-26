@@ -1,0 +1,60 @@
+---
+interface Props {
+  id?: string;
+  title?: string;
+  subtitle?: string;
+  spacing?: 'section' | 'band' | 'none' | 'sm';
+  background?: 'canvas' | 'neutral' | 'dark' | 'gradient';
+  container?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  title,
+  subtitle,
+  spacing = 'section',
+  background = 'canvas',
+  container = true,
+  class: className = '',
+} = Astro.props;
+
+const spacingClasses: Record<string, string> = {
+  section: 'py-[68px]',
+  band: 'py-[80px]',
+  sm: 'py-[40px]',
+  none: 'py-0',
+};
+
+const bgClasses: Record<string, string> = {
+  canvas: 'bg-canvas text-body',
+  neutral: 'bg-surface-soft text-body',
+  dark: 'bg-surface-dark text-on-dark',
+  gradient: 'bg-gradient-to-b from-surface-soft to-canvas text-body',
+};
+---
+
+<section
+  id={id}
+  class={`w-full ${spacingClasses[spacing]} ${bgClasses[background]} ${className}`}
+>
+  <div class={container ? 'container-bme' : ''}>
+    {
+      (title || subtitle) && (
+        <div class="mb-10 max-w-3xl">
+          {title && (
+            <h2 class="text-[24px] font-bold text-ink leading-[1.33] tracking-normal">
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <p class="text-[16px] text-muted font-normal leading-[1.5] mt-2">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>

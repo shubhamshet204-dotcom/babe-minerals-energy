@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+---
+
+<Layout
+  title="Contact BME | Procurement Support"
+  description="Speak with the BME procurement team for steel supply, bulk order support and mill-backed sourcing."
+>
+  <section class="bg-[linear-gradient(180deg,#f7f9fc_0%,#ffffff_100%)] py-20">
+    <div class="container-bme">
+      <div class="mb-10 max-w-2xl">
+        <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Contact sales</p>
+        <h1 class="mt-2 text-4xl font-black tracking-tight text-ink">Talk to a BME specialist</h1>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div class="space-y-6 rounded-3xl border border-hairline bg-neutral-1 p-6">
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Registered Head Office</p>
+            <p class="mt-1 text-base font-bold text-ink">Bable Minerals and Energy Private Limited (BME)</p>
+            <p class="mt-0.5 text-xs text-muted">Belagavi, Karnataka, India</p>
+          </div>
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Call</p>
+            <p class="mt-2 text-xl font-bold text-ink">+91 1800 123 4567</p>
+          </div>
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Email</p>
+            <p class="mt-2 text-xl font-bold text-ink">procurement@bmesteels.com</p>
+          </div>
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Office hours</p>
+            <p class="mt-2 text-xl font-bold text-ink">Mon – Sat, 9:00 AM to 7:00 PM</p>
+          </div>
+        </div>
+
+        <div class="rounded-3xl border border-hairline bg-canvas p-6 shadow-sm">
+          <h2 class="text-2xl font-black text-ink">Need help with an order?</h2>
+          <p class="mt-3 text-sm leading-6 text-muted">Share your material requirement and we will connect you with the right procurement executive for custom quotations and dispatch support.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <Button variant="primary" href="/quote">Request a quote</Button>
+            <Button variant="outline" href="mailto:procurement@bmesteels.com">Email the team</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

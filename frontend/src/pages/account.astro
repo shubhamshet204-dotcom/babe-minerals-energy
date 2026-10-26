@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Your Account | BME Steels" description="Manage your BME Steels buyer account and review quote requests.">
+  <section class="bg-surface-soft py-14 lg:py-20">
+    <div class="container-bme">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Buyer account</p>
+          <h1 class="mt-2 text-4xl font-black tracking-tight text-ink">Your account</h1>
+        </div>
+        <button id="sign-out" type="button" class="inline-flex h-10 items-center justify-center rounded-xs border border-hairline bg-canvas px-4 text-sm font-semibold text-ink hover:border-ink">Sign out</button>
+      </div>
+
+      <p id="account-status" class="mb-5 text-sm text-muted" aria-live="polite">Loading your account…</p>
+      <div id="account-content" hidden class="grid items-start gap-6 lg:grid-cols-[340px_1fr]">
+        <section class="border border-hairline bg-canvas p-5">
+          <h2 class="text-lg font-bold text-ink">Business profile</h2>
+          <dl class="mt-5 space-y-4 text-sm">
+            <div><dt class="text-muted">Name</dt><dd id="account-name" class="mt-1 font-semibold text-ink"></dd></div>
+            <div><dt class="text-muted">Email</dt><dd id="account-email" class="mt-1 break-all font-semibold text-ink"></dd></div>
+            <div><dt class="text-muted">Company</dt><dd id="account-company" class="mt-1 font-semibold text-ink"></dd></div>
+          </dl>
+          <a href="/products" class="mt-6 inline-flex text-sm font-bold text-ink underline decoration-primary decoration-2 underline-offset-4">Browse materials</a>
+        </section>
+
+        <section class="border border-hairline bg-canvas">
+          <div class="flex items-center justify-between border-b border-hairline px-5 py-4">
+            <h2 class="text-lg font-bold text-ink">Quote requests</h2>
+            <a href="/quote" class="text-sm font-semibold text-ink underline underline-offset-4">New request</a>
+          </div>
+          <div id="quote-history" class="divide-y divide-hairline px-5" aria-live="polite"></div>
+        </section>
+      </div>
+      <div id="account-signin" hidden class="border border-hairline bg-canvas p-6">
+        <p class="font-semibold text-ink">Sign in to view your business account.</p>
+        <a href="/login" class="mt-4 inline-flex h-10 items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink">Sign in</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const apiBase = import.meta.env.PUBLIC_API_URL || 'http://localhost:4000';
+    const status = document.getElementById('account-status');
+    const content = document.getElementById('account-content');
+    const signin = document.getElementById('account-signin');
+    const history = document.getElementById('quote-history');
+    const escapeHTML = (value: string) => value.replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character] || character);
+
+    async function loadAccount() {
+      if (!status || !content || !signin || !history) return;
+      try {
+        const response = await fetch(`${apiBase}/api/auth/me`, { credentials: 'include' });
+        if (response.status === 401) {
+          status.hidden = true;
+          signin.hidden = false;
+          return;
+        }
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to load account.');
+        document.getElementById('account-name')!.textContent = result.user.name;
+        document.getElementById('account-email')!.textContent = result.user.email;
+        document.getElementById('account-company')!.textContent = result.user.company;
+
+        const quoteResponse = await fetch(`${apiBase}/api/account/quotes`, { credentials: 'include' });
+        const quoteResult = await quoteResponse.json();
+        if (quoteResponse.ok && quoteResult.quotes.length) {
+          history.innerHTML = quoteResult.quotes.map((quote: { company: string; requirement: string; submittedAt: string }) => `
+            <article class="py-5">
+              <div class="flex flex-wrap justify-between gap-2">
+                <h3 class="font-bold text-ink">${escapeHTML(quote.company)}</h3>
+                <time class="text-xs text-muted">${new Date(quote.submittedAt).toLocaleDateString('en-IN')}</time>
+              </div>
+              <p class="mt-2 whitespace-pre-line text-sm leading-6 text-muted">${escapeHTML(quote.requirement)}</p>
+            </article>
+          `).join('');
+        } else {
+          history.innerHTML = '<p class="py-8 text-sm text-muted">No quote requests yet. Your submitted requests will appear here.</p>';
+        }
+        status.hidden = true;
+        content.hidden = false;
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'Unable to load account right now.';
+      }
+    }
+
+    document.getElementById('sign-out')?.addEventListener('click', async () => {
+      await fetch(`${apiBase}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+      window.location.assign('/login');
+    });
+
+    loadAccount();
+  </script>
+</Layout>

@@ -1,0 +1,764 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AddToCart from '../components/store/AddToCart.astro';
+import Icon from '../components/ui/Icon.astro';
+
+import { categories, brands, topProducts, industries, trustPoints, processSteps, faqList } from '../data/catalog';
+
+// Category product rows – JSW One style
+const getCategoryHref = (slug: string) => {
+  if (slug === 'steel') return '/category/steel';
+  if (slug === 'hot-rolled-steel') return '/category/mild-steel/hot-rolled-steel';
+  return `/products?category=${slug}`;
+};
+
+const categoryRows = [
+  {
+    slug: 'steel',
+    title: 'Steel',
+    image: '/images/categories/MS hot rolled.png',
+    products: [
+      { name: 'Carbon Steel Plates & Bars IS 2062', brand: 'Tata Steel', image: '/images/hot rolled sheets.png', href: '/product/carbon-steel' },
+      { name: 'Alloy Steel Rounds EN19 / EN24', brand: 'JSW Steel', image: '/images/steel-coils.jpg', href: '/product/alloy-steel' },
+      { name: 'Stainless Steel Sheets SS 304/316L', brand: 'Jindal Steel', image: '/images/hot rolled sheets.png', href: '/product/stainless-steel' },
+      { name: 'Tool Steel D2 & H13 Die Blocks', brand: 'SAIL', image: '/images/steel-coils.jpg', href: '/product/tool-steel' },
+      { name: 'High-Tensile Q&T Plates E550', brand: 'JSW Steel', image: '/images/hot rolled sheets.png', href: '/product/high-tensile-steel' },
+    ],
+  },
+  {
+    slug: 'hot-rolled-steel',
+    title: 'MS Hot rolled',
+    image: '/images/categories/MS hot rolled.png',
+    products: [
+      { name: 'One Helix Hot Rolled Sheets IS 2062:2011 E250BR', brand: 'One Helix', image: '/images/hot rolled sheets.png', href: '/category/mild-steel/hot-rolled-steel' },
+      { name: 'JSW Steel Hot Rolled Sheets IS 2062:2011 E250A', brand: 'JSW Steel', image: '/images/hot rolled sheets.png', href: '/category/mild-steel/hot-rolled-steel' },
+      { name: 'JSW Steel Hot Rolled Coils IS 10748:2004 GR1', brand: 'JSW Steel', image: '/images/categories/MS hot rolled.png', href: '/category/mild-steel/hot-rolled-steel' },
+      { name: 'NMDC Hot Rolled Sheets IS 2062:2011 E350BR', brand: 'NMDC', image: '/images/hot rolled sheets.png', href: '/category/mild-steel/hot-rolled-steel' },
+      { name: 'JSW Steel Hot Rolled Coils IS 2062:2011 E250A', brand: 'JSW Steel', image: '/images/categories/MS hot rolled.png', href: '/category/mild-steel/hot-rolled-steel' },
+    ],
+  },
+  {
+    slug: 'cold-rolled-steel',
+    title: 'MS Cold Rolled',
+    image: '/images/categories/ms cold rolled.png',
+    products: [
+      { name: 'CRCA Precision Coils IS 513 CR2', brand: 'Tata Steel', image: '/images/categories/ms cold rolled.png' },
+      { name: 'AMNS Cold Rolled Sheets CR2', brand: 'AM/NS India', image: '/images/categories/ms cold rolled.png' },
+      { name: 'JSW Cold Rolled Coils CR4', brand: 'JSW Steel', image: '/images/categories/ms cold rolled.png' },
+      { name: 'Cold Rolled Sheets IS 513 CR2', brand: 'SAIL', image: '/images/categories/ms cold rolled.png' },
+      { name: 'CRCA Sheets IS 513 CR4', brand: 'Tata Steel', image: '/images/categories/ms cold rolled.png' },
+    ],
+  },
+  {
+    slug: 'tmt-bars',
+    title: 'TMT Bars',
+    image: '/images/categories/tmt.png',
+    products: [
+      { name: 'Fe 550D TMT Bars IS 1786', brand: 'SAIL', image: '/images/categories/tmt.png' },
+      { name: 'Fe 500D TMT Rebars', brand: 'JSW Steel', image: '/images/categories/tmt.png' },
+      { name: 'Fe 550D High-Ductility TMT', brand: 'Tata Tiscon', image: '/images/categories/tmt.png' },
+      { name: 'Fe 500 TMT Bars IS 1786', brand: 'Jindal Steel', image: '/images/categories/tmt.png' },
+      { name: 'CRS Fe 500D Corrosion Resistant TMT', brand: 'SAIL', image: '/images/categories/tmt.png' },
+    ],
+  },
+  {
+    slug: 'structural-steel',
+    title: 'Structural Steel',
+    image: '/images/categories/structural steel.png',
+    products: [
+      { name: 'MS Structural Joist / Beam (ISMB)', brand: 'Jindal Steel', image: '/images/categories/structural steel.png' },
+      { name: 'MS Structural Channels (ISMC)', brand: 'JSW Steel', image: '/images/categories/structural steel.png' },
+      { name: 'Equal & Unequal MS Angles (ISA)', brand: 'SAIL', image: '/images/categories/structural steel.png' },
+      { name: 'MS Flat Bars IS 2062', brand: 'Tata Steel', image: '/images/categories/structural steel.png' },
+      { name: 'MS Square / Round Bars', brand: 'JSW Steel', image: '/images/categories/structural steel.png' },
+    ],
+  },
+  {
+    slug: 'coated-steel',
+    title: 'Coated Steel',
+    image: '/images/categories/coated steel.png',
+    products: [
+      { name: 'Pre-Painted GI Roofing (PPGI)', brand: 'Tata Steel', image: '/images/categories/coated steel.png' },
+      { name: 'Galvanized Plain Sheets (GP)', brand: 'JSW Steel', image: '/images/categories/coated steel.png' },
+      { name: 'Colour Coated Profile Sheets', brand: 'AM/NS India', image: '/images/categories/coated steel.png' },
+      { name: 'GI Corrugated Roofing Sheets', brand: 'SAIL', image: '/images/categories/coated steel.png' },
+      { name: 'Aluzinc Coated Sheets', brand: 'Tata Steel', image: '/images/categories/coated steel.png' },
+    ],
+  },
+  {
+    slug: 'wire-rods',
+    title: 'Wire Rods',
+    image: '/images/categories/wire rods.png',
+    products: [
+      { name: 'MS Wire Rods IS 7887 GrI', brand: 'JSW Steel', image: '/images/categories/wire rods.png' },
+      { name: 'High Carbon Wire Rods', brand: 'SAIL', image: '/images/categories/wire rods.png' },
+      { name: 'Low Carbon Wire Rods', brand: 'Tata Steel', image: '/images/categories/wire rods.png' },
+      { name: 'Wire Rod Coils for Fasteners', brand: 'Jindal Steel', image: '/images/categories/wire rods.png' },
+      { name: 'Mesh Wire Rod GrII IS 7887', brand: 'JSW Steel', image: '/images/categories/wire rods.png' },
+    ],
+  },
+  {
+    slug: 'cement',
+    title: 'Cement',
+    image: '/images/categories/cement.png',
+    products: [
+      { name: 'UltraTech OPC 53 Grade Cement', brand: 'UltraTech', image: '/images/categories/cement.png' },
+      { name: 'JSW PPC Blended Cement', brand: 'JSW Cement', image: '/images/categories/cement.png' },
+      { name: 'Ambuja Plus OPC 53 Cement', brand: 'Ambuja', image: '/images/categories/cement.png' },
+      { name: 'Shree Ultra OPC 53 Cement', brand: 'Shree Cement', image: '/images/categories/cement.png' },
+      { name: 'Zuari PPC Cement', brand: 'Zuari', image: '/images/categories/cement.png' },
+    ],
+  },
+];
+
+const testimonials = [
+  {
+    quote: 'Sourcing 45 MT of structural beams for our PEB project in Pune was seamless. Mill test certificates were provided prior to dispatch and weighment matched to the kilogram.',
+    author: 'Rajesh Kulkarni',
+    role: 'Managing Director, Apex Pre-Engineered Structures',
+    badge: 'Verified Buyer • 120 MT/yr',
+  },
+  {
+    quote: 'BME’s transparent rate index and prompt 48-hour delivery helped us avoid fabrication downtime on our metro sub-contract in Bengaluru.',
+    author: 'S. Venkatachalam',
+    role: 'Head of Procurement, Kaveri Infrastructure',
+    badge: 'Verified Buyer • 350 MT/yr',
+  },
+  {
+    quote: 'The steel weight calculator makes estimating plate and rebar tonnage effortless during initial project estimation.',
+    author: 'Anand Mehta',
+    role: 'Chief Engineer, Precision Engineering & Tooling',
+    badge: 'Verified Buyer • 80 MT/yr',
+  },
+];
+
+const heroSlides = [
+  {
+    image: '/images/steel-coils.jpg',
+    imageAlt: 'Industrial hot rolled and cold rolled steel coils in warehouse storage',
+    tag: 'Hot & Cold Rolled Coils',
+    title: 'Primary Mill Direct Steel Coils & Plates',
+    description: 'IS 2062 & IS 513 certified steel sourced directly from Tata Steel, SAIL, and JSW with original Mill Test Certificates (MTC).',
+    primaryCta: { label: 'Explore Flat Steel', href: '/category/mild-steel/hot-rolled-steel' },
+    secondaryCta: { label: 'Request Quote', href: '/quote?category=hot-rolled-steel' },
+    specs: [
+      { label: 'Standard', val: 'IS 2062 / IS 513' },
+      { label: 'Dispatch', val: '24–48h Doorstep' },
+      { label: 'Compliance', val: '100% BIS Certified' },
+    ],
+  },
+  {
+    image: '/images/rebar.jpg',
+    imageAlt: 'Ribbed reinforcement steel rebar stock',
+    tag: 'TMT Reinforcement Bars',
+    title: 'High-Ductility TMT Rebars for Civil Infrastructure',
+    description: 'Earthquake-resistant Fe 500D & Fe 550D rebars with verified elongation and yield strength for heavy civil slabs, bridges, and metro works.',
+    primaryCta: { label: 'Explore TMT Bars', href: '/products?category=tmt-bars' },
+    secondaryCta: { label: 'Request Quote', href: '/quote?category=tmt-bars' },
+    specs: [
+      { label: 'Standard', val: 'IS 1786:2008' },
+      { label: 'Grade', val: 'Fe 500D / Fe 550D' },
+      { label: 'Traceability', val: 'Original Mill MTC' },
+    ],
+  },
+  {
+    image: '/images/cement-plant.jpg',
+    imageAlt: 'Industrial cement plant and bulk distribution silos',
+    tag: 'Institutional Cement',
+    title: 'Institutional Grade Cement & Bulk Foundation Materials',
+    description: 'Direct depot dispatch of fresh 53-grade OPC and blended PPC cement from UltraTech, JSW, and Ambuja for infrastructure projects.',
+    primaryCta: { label: 'Explore Cement', href: '/products?category=cement' },
+    secondaryCta: { label: 'Request Quote', href: '/quote?category=cement' },
+    specs: [
+      { label: 'Grades', val: 'OPC 53 & PPC' },
+      { label: 'Brands', val: 'UltraTech • JSW • Ambuja' },
+      { label: 'Logistics', val: 'Direct Site Unloading' },
+    ],
+  },
+];
+---
+
+<Layout
+  title="BME | Primary Steel & Construction Materials Marketplace"
+  description="Buy hot rolled steel, cold rolled coils, structural beams, TMT bars, and industrial construction materials with verified BIS test certificates and express delivery."
+>
+  <!-- Hero Section: Dynamic Photo Album Slider -->
+  <section class="w-full bg-white pt-3 pb-6 sm:py-6" id="hero-slider-section">
+    <div class="container-bme">
+      <div
+        id="hero-carousel"
+        class="group relative overflow-hidden rounded-2xl bg-[#0c0e12] shadow-lg min-h-[380px] sm:min-h-[440px] lg:min-h-[460px]"
+        aria-roledescription="carousel"
+        aria-label="Primary Material Highlights"
+      >
+        <!-- Horizontal Sliding Track -->
+        <div
+          id="hero-slider-track"
+          class="flex w-full transition-transform duration-700 ease-out"
+          style="transform: translateX(0%);"
+        >
+          {heroSlides.map((slide, index) => (
+            <div
+              class="hero-slide relative min-w-full w-full flex-shrink-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-between min-h-[380px] sm:min-h-[440px] lg:min-h-[460px] overflow-hidden"
+              data-slide-index={index}
+            >
+              <!-- Background Real Photo -->
+              <img
+                src={slide.image}
+                alt={slide.imageAlt}
+                class="absolute inset-0 h-full w-full object-cover object-center"
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+
+              <!-- High-Legibility Cinematic Gradient Overlay -->
+              <div class="absolute inset-0 bg-gradient-to-r from-[#0c0e12]/95 via-[#0c0e12]/80 to-[#0c0e12]/40 lg:to-transparent"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0c0e12]/90 via-transparent to-transparent sm:hidden"></div>
+
+              <!-- Top Row: Division & Status Badges -->
+              <div class="relative z-10 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                  <span class="rounded-md border border-white/20 bg-black/40 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-primary backdrop-blur-md">
+                    {slide.tag}
+                  </span>
+                  <span class="hidden sm:inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/10 px-2.5 py-1 text-[11px] font-semibold text-white/90 backdrop-blur-md">
+                    <Icon name="shield-check" size={13} class="text-success" />
+                    <span>Primary Mill Direct</span>
+                  </span>
+                </div>
+
+                <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-white/70">
+                  <span class="font-bold text-white">BME</span>
+                  <span>•</span>
+                  <span>Belagavi Dispatch Hub</span>
+                </div>
+              </div>
+
+              <!-- Middle: Main Content -->
+              <div class="relative z-10 my-4 max-w-xl lg:max-w-2xl space-y-3.5">
+                <h1 class="text-2xl sm:text-4xl lg:text-[42px] font-black tracking-tight text-white leading-tight">
+                  {slide.title}
+                </h1>
+                <p class="text-xs sm:text-sm text-white/85 leading-relaxed max-w-lg">
+                  {slide.description}
+                </p>
+
+                <!-- Specs Pill Row (clean text badges with borders, NO EMOJIS) -->
+                <div class="grid grid-cols-3 gap-2 pt-2 max-w-md">
+                  {slide.specs.map((spec) => (
+                    <div class="rounded-lg border border-white/15 bg-black/30 p-2 backdrop-blur-sm">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-white/60">{spec.label}</div>
+                      <div class="text-xs font-bold text-white truncate mt-0.5">{spec.val}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Bottom Row: Action Buttons -->
+              <div class="relative z-10 flex items-center justify-between gap-4 pt-2">
+                <div class="flex items-center gap-3">
+                  <a
+                    href={slide.primaryCta.href}
+                    class="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-xs font-black uppercase tracking-wider text-ink transition-all hover:bg-primary-deep shadow-md cursor-pointer"
+                  >
+                    {slide.primaryCta.label}
+                  </a>
+                  <a
+                    href={slide.secondaryCta.href}
+                    class="inline-flex h-10 items-center justify-center rounded-lg border border-white/30 bg-white/10 px-4 text-xs font-bold text-white backdrop-blur-sm transition-all hover:bg-white hover:text-ink cursor-pointer"
+                  >
+                    {slide.secondaryCta.label}
+                  </a>
+                </div>
+
+                <div class="text-xs font-bold text-white/60 tracking-widest hidden sm:block">
+                  0{index + 1} / 0{heroSlides.length}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Carousel Bottom Dots Indicator -->
+        <div class="absolute bottom-6 right-6 sm:right-12 z-20 flex items-center gap-2">
+          {heroSlides.map((_, dotIdx) => (
+            <button
+              type="button"
+              class={`hero-dot h-2 transition-all duration-300 rounded-full cursor-pointer ${
+                dotIdx === 0 ? 'w-6 bg-primary' : 'w-2 bg-white/40 hover:bg-white/70'
+              }`}
+              data-target-index={dotIdx}
+              aria-label={`Go to slide ${dotIdx + 1}`}
+            />
+          ))}
+        </div>
+
+        <!-- Navigation Arrows (subtle & elegant) -->
+        <button
+          type="button"
+          id="hero-prev-btn"
+          class="absolute left-3 top-1/2 -translate-y-1/2 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition-all hover:bg-primary hover:text-ink hover:border-primary cursor-pointer"
+          aria-label="Previous slide"
+        >
+          <Icon name="chevron-left" size={18} />
+        </button>
+        <button
+          type="button"
+          id="hero-next-btn"
+          class="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-md transition-all hover:bg-primary hover:text-ink hover:border-primary cursor-pointer"
+          aria-label="Next slide"
+        >
+          <Icon name="chevron-right" size={18} />
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 4-Pillar Trust Strip (Clean, Horizontal Bar directly below Hero, NO EMOJIS) -->
+  <section class="border-y border-gray-200 bg-white py-4 sm:py-5">
+    <div class="container-bme">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
+        {trustPoints.map((point) => (
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-soft border border-gray-200 text-ink">
+              <Icon name={point.iconName as any} size={18} class="text-primary-deep" />
+            </div>
+            <div>
+              <p class="text-xs font-bold text-ink">{point.title}</p>
+              <p class="text-[11px] text-muted line-clamp-1">{point.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse by categories (Matching Reference Screenshot) -->
+  <section id="categories" class="bg-white py-8 sm:py-10">
+    <div class="container-bme">
+      <div class="mb-4 sm:mb-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-ink">Browse by categories</h2>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+        {categories.map((cat) => (
+          <a
+            href={getCategoryHref(cat.slug)}
+            class="flex flex-col items-center justify-center rounded-xl bg-[#f4f6f8] p-4 text-center transition-all duration-200 hover:bg-white hover:shadow-md hover:ring-1 hover:ring-gray-200 group min-h-[120px] sm:min-h-[136px]"
+          >
+            <div class="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center mb-2">
+              <img
+                src={cat.image}
+                alt={cat.imageAlt || cat.title}
+                loading="lazy"
+                class="max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-105"
+              />
+            </div>
+            <span class="text-xs sm:text-sm font-semibold text-ink group-hover:text-primary-deep transition-colors">
+              {cat.title}
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Products Showcase -->
+  <section id="trending-products" class="bg-surface-soft/60 py-12 border-y border-gray-100">
+    <div class="container-bme">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink">Trending Products</h2>
+          <p class="text-xs text-muted mt-0.5">Verified mill-direct stock available for immediate dispatch</p>
+        </div>
+        <a href="/products" class="text-xs font-bold text-ink hover:text-primary-deep flex items-center gap-1">
+          <span>View all products</span>
+          <Icon name="chevron-right" size={14} />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {topProducts.slice(0, 4).map((product) => (
+          <article class="flex flex-col justify-between overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs transition-all hover:border-gray-400 hover:shadow-md">
+            <div>
+              <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <img
+                  src={product.image}
+                  alt={product.imageAlt}
+                  loading="lazy"
+                  class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+                <span class="absolute left-3 top-3 rounded bg-white/90 px-2 py-0.5 text-[10px] font-bold text-ink shadow-xs backdrop-blur-xs">
+                  {product.brand}
+                </span>
+                <span class="absolute right-3 top-3 rounded bg-ink px-2 py-0.5 text-[10px] font-bold text-white">
+                  {product.grade}
+                </span>
+              </div>
+
+              <div class="p-4">
+                <h3 class="text-sm font-bold text-ink line-clamp-1">
+                  <a href={`/product/${product.id}`} class="hover:underline">
+                    {product.name}
+                  </a>
+                </h3>
+                <p class="mt-1 text-xs text-muted line-clamp-2">
+                  {product.description}
+                </p>
+                <div class="mt-2 text-[11px] text-muted font-medium">
+                  Size: <span class="font-semibold text-ink">{product.size}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 p-4 bg-gray-50/50">
+              <div class="flex items-baseline justify-between mb-3">
+                <span class="text-base font-extrabold text-ink">{product.price}</span>
+                <span class="text-[10px] font-semibold text-muted">MOQ: {product.moq || '1 MT'}</span>
+              </div>
+              <div class="flex gap-2">
+                <div class="flex-1">
+                  <AddToCart product={product} />
+                </div>
+                <a
+                  href={`/quote?product=${product.id}`}
+                  class="inline-flex h-9 items-center justify-center rounded-lg border border-gray-300 bg-white px-3 text-xs font-bold text-ink hover:border-ink transition-colors"
+                >
+                  Quote
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Products by Category (JSW One style) -->
+  <section id="shop-by-category" class="bg-white py-10 border-b border-gray-100">
+    <div class="container-bme space-y-10">
+      {categoryRows.map((cat) => (
+        <div>
+          <!-- Category Header -->
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg sm:text-xl font-bold text-ink">{cat.title}</h2>
+            <a
+              href={getCategoryHref(cat.slug)}
+              class="text-xs font-bold text-ink hover:text-primary-deep flex items-center gap-1 shrink-0"
+            >
+              <span>View all</span>
+              <Icon name="chevron-right" size={14} />
+            </a>
+          </div>
+
+          <!-- Horizontally scrollable product cards -->
+          <div class="relative">
+            <div class="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" style="-ms-overflow-style: none; scrollbar-width: thin;">
+              {cat.products.map((p) => (
+                <a
+                  href={'href' in p && p.href ? p.href : getCategoryHref(cat.slug)}
+                  class="group flex-none w-[160px] sm:w-[180px] rounded-xl border border-gray-200 bg-[#f7f8fa] hover:bg-white hover:border-gray-400 hover:shadow-md transition-all duration-200 overflow-hidden snap-start"
+                >
+                  <!-- Product Image -->
+                  <div class="flex h-[120px] sm:h-[132px] w-full items-center justify-center bg-[#f0f1f4] p-4">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      loading="lazy"
+                      class="max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-105"
+                    />
+                  </div>
+                  <!-- Product Info -->
+                  <div class="p-3">
+                    <p class="text-[11px] sm:text-xs font-semibold text-ink leading-snug line-clamp-2">{p.name}</p>
+                    <p class="mt-1 text-[10px] text-muted font-medium">{p.brand}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+
+  <!-- Brand Partners Showcase (Clean strip - first row only) -->
+  <section id="brands" class="bg-white py-10 border-b border-gray-100">
+    <div class="container-bme">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-ink">Browse by Brand</h2>
+          <p class="text-xs text-muted">Direct supply partnerships with India's primary manufacturers</p>
+        </div>
+        <a href="/brands" class="text-xs font-bold text-ink hover:text-primary-deep flex items-center gap-1">
+          <span>All brands</span>
+          <Icon name="chevron-right" size={14} />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+        {brands.slice(0, 6).map((brand) => (
+          <a
+            href={`/products?brand=${brand.slug}`}
+            class="flex flex-col items-center gap-2.5 text-center group"
+          >
+            <div class="flex h-[72px] w-[72px] sm:h-20 sm:w-20 items-center justify-center rounded-full border border-gray-200 bg-white p-3 shadow-xs transition-all group-hover:border-gray-400 group-hover:shadow-md overflow-hidden">
+              <img
+                src={brand.logo}
+                alt={brand.imageAlt}
+                loading="lazy"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <span class="text-xs font-semibold text-ink group-hover:text-primary-deep transition-colors leading-tight">{brand.name}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries & Solutions -->
+  <section id="industries" class="bg-white py-12 border-b border-gray-100">
+    <div class="container-bme">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-ink">Industries We Serve</h2>
+          <p class="text-xs text-muted mt-0.5">Custom supply solutions across key engineering sectors</p>
+        </div>
+        <a href="/industries" class="text-xs font-bold text-ink hover:text-primary-deep flex items-center gap-1">
+          <span>View all</span>
+          <Icon name="chevron-right" size={14} />
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {industries.map((ind) => (
+          <div class="flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-gray-400 hover:shadow-xs">
+            <div>
+              <div class="mb-3 flex items-center justify-between">
+                <span class="rounded bg-surface-soft border border-gray-200 px-2 py-0.5 text-[10px] font-bold text-muted uppercase tracking-wider">
+                  {ind.tag}
+                </span>
+                <span class="text-xs font-mono font-bold text-muted/60">{ind.num}</span>
+              </div>
+              <h3 class="text-sm font-bold text-ink">{ind.title}</h3>
+              <p class="mt-1.5 text-xs text-muted leading-relaxed">{ind.text}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100">
+              <a href="/products" class="text-xs font-semibold text-ink hover:text-primary-deep flex items-center gap-1 transition-colors">
+                <span>View materials</span>
+                <Icon name="arrow-right" size={13} />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works (4 Steps) -->
+  <section class="bg-surface-soft/40 py-12 border-b border-gray-100">
+    <div class="container-bme">
+      <div class="text-center max-w-xl mx-auto mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-ink">How to Order on BME</h2>
+        <p class="text-xs text-muted mt-1">Simple, transparent procurement from specification to dispatch</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {processSteps.map((step) => (
+          <div class="rounded-xl border border-gray-200 bg-white p-5">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-xs font-black text-white mb-3">
+              {step.step}
+            </span>
+            <h3 class="text-sm font-bold text-ink">{step.title}</h3>
+            <p class="mt-1 text-xs text-muted leading-relaxed">{step.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Buyer Reviews -->
+  <section class="bg-white py-12 border-b border-gray-100">
+    <div class="container-bme">
+      <div class="text-center max-w-xl mx-auto mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-ink">Customer Testimonials</h2>
+        <p class="text-xs text-muted mt-1">What procurement heads and fabricators say about our service</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {testimonials.map((t) => (
+          <div class="flex flex-col justify-between rounded-xl border border-gray-200 bg-surface-soft p-5">
+            <p class="text-xs leading-relaxed text-ink/90 italic">“{t.quote}”</p>
+            <div class="mt-5 border-t border-gray-200 pt-3">
+              <p class="text-xs font-bold text-ink">{t.author}</p>
+              <p class="text-[11px] text-muted">{t.role}</p>
+              <span class="mt-2 inline-block rounded bg-primary/20 px-2 py-0.5 text-[9px] font-bold text-ink">
+                {t.badge}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Questions Accordion -->
+  <section class="bg-surface-soft/40 py-12 border-b border-gray-100">
+    <div class="container-bme max-w-3xl">
+      <div class="text-center mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-ink">Frequently Asked Questions</h2>
+        <p class="text-xs text-muted mt-1">Common questions about material orders, MTC certificates, and delivery</p>
+      </div>
+
+      <div class="space-y-3" id="faq-accordion-container">
+        {faqList.map((faq, idx) => (
+          <div class="faq-item rounded-xl border border-gray-200 bg-white overflow-hidden">
+            <button
+              type="button"
+              class="faq-toggle-btn flex w-full items-center justify-between p-4 text-left font-semibold text-ink text-sm focus:outline-none cursor-pointer"
+              aria-expanded={idx === 0 ? 'true' : 'false'}
+            >
+              <span>{faq.q}</span>
+              <Icon name="chevron-down" size={15} class="text-muted shrink-0 transition-transform duration-200 faq-icon" />
+            </button>
+            <div class={`faq-content px-4 pb-4 text-xs leading-relaxed text-muted ${idx === 0 ? '' : 'hidden'}`}>
+              <p>{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-primary py-10 text-ink">
+    <div class="container-bme flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-ink">Ready to procure steel for your next project?</h2>
+        <p class="text-xs font-semibold text-ink/80 mt-1">Get an instant commercial quote with freight and GST breakdown.</p>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a
+          href="/quote"
+          class="inline-flex h-11 items-center justify-center rounded-lg bg-ink px-5 text-xs font-bold uppercase tracking-wider text-white hover:bg-black transition-colors"
+        >
+          Submit Quote Request
+        </a>
+        <a
+          href="tel:+9118001234567"
+          class="inline-flex h-11 items-center justify-center rounded-lg border-2 border-ink px-4 text-xs font-bold text-ink hover:bg-ink hover:text-white transition-colors"
+        >
+          Call Helpline
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  function setupFaqAccordion() {
+    const container = document.getElementById('faq-accordion-container');
+    if (!container) return;
+
+    const items = container.querySelectorAll('.faq-item');
+    items.forEach((item) => {
+      const btn = item.querySelector('.faq-toggle-btn');
+      const content = item.querySelector('.faq-content');
+      const icon = item.querySelector('.faq-icon');
+
+      btn?.addEventListener('click', () => {
+        const isHidden = content?.classList.contains('hidden');
+        items.forEach((other) => {
+          other.querySelector('.faq-content')?.classList.add('hidden');
+          other.querySelector('.faq-icon')?.classList.remove('rotate-180');
+          other.querySelector('.faq-toggle-btn')?.setAttribute('aria-expanded', 'false');
+        });
+
+        if (isHidden) {
+          content?.classList.remove('hidden');
+          icon?.classList.add('rotate-180');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  }
+
+  function setupHeroSlider() {
+    const carousel = document.getElementById('hero-carousel');
+    const track = document.getElementById('hero-slider-track') as HTMLElement | null;
+    if (!carousel || !track) return;
+
+    const slides = carousel.querySelectorAll<HTMLElement>('.hero-slide');
+    const dots = carousel.querySelectorAll<HTMLElement>('.hero-dot');
+    const prevBtn = document.getElementById('hero-prev-btn');
+    const nextBtn = document.getElementById('hero-next-btn');
+
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    let timer: number | null = null;
+    const intervalMs = 5000;
+
+    function goToSlide(index: number) {
+      if (!track) return;
+      currentIndex = (index + slides.length) % slides.length;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      dots.forEach((dot, idx) => {
+        if (idx === currentIndex) {
+          dot.className = 'hero-dot h-2 w-6 bg-primary rounded-full transition-all duration-300 cursor-pointer';
+        } else {
+          dot.className = 'hero-dot h-2 w-2 bg-white/40 hover:bg-white/70 rounded-full transition-all duration-300 cursor-pointer';
+        }
+      });
+    }
+
+    function startAutoPlay() {
+      stopAutoPlay();
+      timer = window.setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, intervalMs);
+    }
+
+    function stopAutoPlay() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      goToSlide(currentIndex - 1);
+      startAutoPlay();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      goToSlide(currentIndex + 1);
+      startAutoPlay();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const target = Number(dot.getAttribute('data-target-index') || '0');
+        goToSlide(target);
+        startAutoPlay();
+      });
+    });
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+
+    startAutoPlay();
+  }
+
+  function initPage() {
+    setupFaqAccordion();
+    setupHeroSlider();
+  }
+
+  initPage();
+  document.addEventListener('astro:page-load', initPage);
+</script>
