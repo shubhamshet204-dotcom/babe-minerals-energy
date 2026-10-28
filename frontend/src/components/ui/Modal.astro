@@ -13,14 +13,14 @@ const { id, title, description, class: className = '' } = Astro.props;
 
 <div
   id={id}
-  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-neutral-2/50 backdrop-blur-xs transition-opacity duration-200"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-surface-dark/50 backdrop-blur-xs transition-opacity duration-200"
   role="dialog"
   aria-modal="true"
   aria-labelledby={title ? `${id}-title` : undefined}
   aria-describedby={description ? `${id}-desc` : undefined}
 >
   <div
-    class={`relative w-full max-w-lg bg-canvas rounded-lg border border-hairline shadow-lg overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 ${className}`}
+    class={`relative w-full max-w-lg bg-canvas rounded-none border border-hairline overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200 ${className}`}
   >
     {/* Header */}
     <div class="flex items-center justify-between px-6 py-4 border-b border-hairline">
@@ -43,7 +43,7 @@ const { id, title, description, class: className = '' } = Astro.props;
       <button
         type="button"
         data-modal-close={id}
-        class="w-8 h-8 rounded-full inline-flex items-center justify-center text-muted hover:text-ink hover:bg-neutral-1 transition-colors"
+        class="w-8 h-8 rounded-xs inline-flex items-center justify-center text-muted hover:text-ink hover:bg-surface-soft transition-colors"
         aria-label="Close modal"
       >
         <Icon name="x" size={18} />
@@ -58,7 +58,7 @@ const { id, title, description, class: className = '' } = Astro.props;
     {/* Footer */}
     {
       Astro.slots.has('footer') && (
-        <div class="px-6 py-3.5 bg-neutral-1/50 border-t border-hairline flex items-center justify-end gap-3">
+        <div class="px-6 py-3.5 bg-surface-soft/50 border-t border-hairline flex items-center justify-end gap-3">
           <slot name="footer" />
         </div>
       )

@@ -24,7 +24,7 @@ const {
 
 const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
-const radiusClass = variant === 'search' ? 'rounded-md' : 'rounded-sm';
+const radiusClass = 'rounded-none';
 const heightClass = variant === 'search' ? 'h-[44px]' : 'h-[40px]';
 ---
 
@@ -37,7 +37,7 @@ const heightClass = variant === 'search' ? 'h-[44px]' : 'h-[40px]';
       >
         <span>
           {label}
-          {required && <span class="text-accent-4 ml-0.5">*</span>}
+          {required && <span class="text-error ml-0.5">*</span>}
         </span>
       </label>
     )
@@ -57,7 +57,7 @@ const heightClass = variant === 'search' ? 'h-[44px]' : 'h-[40px]';
         error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
       }
       class={`
-        w-full bg-canvas text-body placeholder:text-faint font-sans text-[16px] leading-[1.5]
+        w-full bg-canvas text-body placeholder:text-ash font-sans text-[16px] leading-[1.5]
         border transition-colors duration-150 outline-none
         ${heightClass} ${radiusClass}
         px-3.5 py-2
@@ -65,10 +65,10 @@ const heightClass = variant === 'search' ? 'h-[44px]' : 'h-[40px]';
         ${Astro.slots.has('trailing-icon') ? 'pr-10' : ''}
         ${
           error
-            ? 'border-accent-4 focus:border-accent-4 focus:ring-2 focus:ring-accent-4/20'
-            : 'border-hairline hover:border-[#BDBDBD] focus:border-primary focus:ring-2 focus:ring-primary/20'
+            ? 'border-error focus:border-error focus:ring-2 focus:ring-error/20'
+            : 'border-hairline hover:border-stone focus:border-primary focus:ring-2 focus:ring-primary/20'
         }
-        disabled:opacity-70 disabled:bg-neutral-1 disabled:cursor-not-allowed
+        disabled:opacity-70 disabled:bg-surface-soft disabled:cursor-not-allowed
       `}
       {...rest}
     />
@@ -80,7 +80,7 @@ const heightClass = variant === 'search' ? 'h-[44px]' : 'h-[40px]';
 
   {
     error ? (
-      <p id={`${inputId}-error`} class="text-[12px] font-medium text-accent-4 flex items-center gap-1">
+      <p id={`${inputId}-error`} class="text-[12px] font-medium text-error flex items-center gap-1">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="10" />
           <line x1="12" x2="12" y1="8" y2="12" />

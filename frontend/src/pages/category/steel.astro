@@ -28,7 +28,7 @@ const allSteelTypes = [
   'Rail Steel',
 ];
 
-const allBrands = ['Tata Steel', 'SAIL', 'JSW Steel', 'Jindal Steel', 'AM/NS India'];
+const allBrands = ['Tata Steel', 'SAIL', 'Jindal Steel', 'AM/NS India'];
 const allStandards = [
   'IS 2062:2011',
   'IS 5517:1993',
@@ -49,7 +49,7 @@ const allStandards = [
   description="Explore primary mill certified carbon steel, alloy steel, tool steel, stainless, high-tensile, and specialty engineering steel grades at Bable Minerals and Energy."
 >
   <!-- Breadcrumbs -->
-  <section class="border-b border-gray-200 bg-white py-4">
+  <section class="border-b border-hairline bg-canvas py-4">
     <div class="container-bme">
       <nav aria-label="Breadcrumbs" class="flex items-center gap-2 text-xs text-muted">
         <a href="/" class="hover:text-ink transition-colors">Home</a>
@@ -62,13 +62,13 @@ const allStandards = [
   </section>
 
   <!-- Category Title & Quick Filter Chips Strip -->
-  <section class="border-b border-gray-100 bg-[#f8f9fb] py-6">
+  <section class="border-b border-hairline bg-surface-soft py-6">
     <div class="container-bme">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">Steel</h1>
-            <span id="total-count-badge" class="rounded-full bg-primary/20 px-3 py-0.5 text-xs font-bold text-ink border border-primary/40">
+            <span id="total-count-badge" class="rounded-xs bg-primary/20 px-3 py-0.5 text-xs font-bold text-ink border border-primary/40">
               {steelProducts.length} Product Grades
             </span>
           </div>
@@ -84,7 +84,7 @@ const allStandards = [
               id="category-search"
               type="search"
               placeholder="Search grade, standard or brand..."
-              class="h-10 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-xs text-ink placeholder-gray-400 focus:border-ink focus:outline-none shadow-xs"
+              class="h-10 w-full rounded-none border border-stone bg-canvas pl-9 pr-3 text-xs text-ink placeholder-ash focus:border-ink focus:outline-none"
             />
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -95,7 +95,7 @@ const allStandards = [
             <label for="sort-select" class="text-xs font-semibold text-muted shrink-0 hidden sm:inline">Sort by:</label>
             <select
               id="sort-select"
-              class="h-10 rounded-lg border border-gray-300 bg-white px-3 text-xs font-medium text-ink focus:border-ink focus:outline-none shadow-xs"
+              class="h-10 rounded-none border border-stone bg-canvas px-3 text-xs font-medium text-ink focus:border-ink focus:outline-none"
             >
               <option value="featured">Featured / Category Order</option>
               <option value="price-asc">Price: Low to High</option>
@@ -107,11 +107,11 @@ const allStandards = [
             <button
               id="mobile-filter-btn"
               type="button"
-              class="lg:hidden flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-xs font-bold text-ink shadow-xs"
+              class="lg:hidden flex h-10 items-center gap-2 rounded-xs border border-stone bg-canvas px-4 text-xs font-bold text-ink"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
               <span>Filters</span>
-              <span id="active-filter-badge" class="hidden h-4 w-4 rounded-full bg-ink text-[10px] text-white flex items-center justify-center">0</span>
+              <span id="active-filter-badge" class="hidden h-4 w-4 rounded-xs bg-ink text-[10px] text-on-dark flex items-center justify-center">0</span>
             </button>
           </div>
         </div>
@@ -122,7 +122,7 @@ const allStandards = [
         <button
           type="button"
           data-type-pill="ALL"
-          class="type-pill shrink-0 rounded-full border border-ink bg-ink px-3.5 py-1.5 text-xs font-bold text-white transition-all shadow-xs cursor-pointer"
+          class="type-pill shrink-0 rounded-pill border border-ink bg-ink px-3.5 py-1.5 text-xs font-bold text-on-dark transition-all cursor-pointer"
         >
           All Steel Grades ({steelProducts.length})
         </button>
@@ -132,7 +132,7 @@ const allStandards = [
             <button
               type="button"
               data-type-pill={st}
-              class="type-pill shrink-0 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-medium text-ink hover:border-ink hover:bg-gray-50 transition-all shadow-xs cursor-pointer"
+              class="type-pill shrink-0 rounded-pill border border-stone bg-canvas px-3.5 py-1.5 text-xs font-medium text-ink hover:border-ink hover:bg-surface-soft transition-all cursor-pointer"
             >
               {st} ({count})
             </button>
@@ -143,25 +143,25 @@ const allStandards = [
   </section>
 
   <!-- Main Category Content -->
-  <section class="bg-[#f4f5f8] py-8">
+  <section class="bg-surface-soft py-8">
     <div class="container-bme">
       <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 items-start">
         
         <!-- Left Sidebar Filter Accordion -->
         <aside
           id="filter-sidebar"
-          class="fixed inset-y-0 left-0 z-50 w-80 bg-white p-6 shadow-2xl transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:z-auto lg:w-full lg:p-0 lg:shadow-none lg:bg-transparent"
+          class="fixed inset-y-0 left-0 z-50 w-80 bg-canvas p-6 transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:z-auto lg:w-full lg:p-0 lg:bg-transparent"
         >
           <!-- Mobile Drawer Header -->
-          <div class="flex items-center justify-between pb-4 border-b border-gray-200 lg:hidden">
+          <div class="flex items-center justify-between pb-4 border-b border-hairline lg:hidden">
             <h2 class="text-base font-bold text-ink">Filter Steel Products</h2>
             <button id="close-filter-btn" class="p-2 text-muted hover:text-ink cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
           </div>
 
-          <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-xs space-y-6 max-h-[calc(100vh-100px)] overflow-y-auto lg:max-h-none lg:overflow-visible">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+          <div class="rounded-none border border-hairline bg-canvas p-5 space-y-6 max-h-[calc(100vh-100px)] overflow-y-auto lg:max-h-none lg:overflow-visible">
+            <div class="flex items-center justify-between border-b border-hairline pb-3">
               <span class="text-sm font-bold text-ink">Filters</span>
               <button id="clear-all-filters" type="button" class="text-xs font-semibold text-primary-deep hover:underline cursor-pointer">
                 Clear all
@@ -181,7 +181,7 @@ const allStandards = [
                           type="checkbox"
                           name="filter-type"
                           value={st}
-                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                          class="h-4 w-4 rounded-none border-stone text-ink focus:ring-ink"
                         />
                         <span>{st}</span>
                       </div>
@@ -193,7 +193,7 @@ const allStandards = [
             </div>
 
             <!-- Filter: Brand / Primary Mill -->
-            <div class="filter-section border-t border-gray-100 pt-5">
+            <div class="filter-section border-t border-hairline pt-5">
               <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Primary Mill / Brand</p>
               <div class="space-y-2">
                 {allBrands.map((brandName) => {
@@ -205,7 +205,7 @@ const allStandards = [
                           type="checkbox"
                           name="filter-brand"
                           value={brandName}
-                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                          class="h-4 w-4 rounded-none border-stone text-ink focus:ring-ink"
                         />
                         <span>{brandName}</span>
                       </div>
@@ -217,7 +217,7 @@ const allStandards = [
             </div>
 
             <!-- Filter: Standards & BIS Codes -->
-            <div class="filter-section border-t border-gray-100 pt-5">
+            <div class="filter-section border-t border-hairline pt-5">
               <p class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Material Standards</p>
               <div class="space-y-2 max-h-48 overflow-y-auto pr-1 scrollbar-thin">
                 {allStandards.map((std) => {
@@ -230,7 +230,7 @@ const allStandards = [
                           type="checkbox"
                           name="filter-standard"
                           value={std}
-                          class="h-4 w-4 rounded border-gray-300 text-ink focus:ring-ink"
+                          class="h-4 w-4 rounded-none border-stone text-ink focus:ring-ink"
                         />
                         <span class="truncate max-w-[170px]">{std}</span>
                       </div>
@@ -242,7 +242,7 @@ const allStandards = [
             </div>
 
             <!-- Trust badge inside sidebar -->
-            <div class="rounded-lg bg-[#fffbe6] border border-[#ffe58f] p-3 text-[11px] leading-relaxed text-[#595959]">
+            <div class="rounded-none bg-surface-soft border border-hairline p-3 text-[11px] leading-relaxed text-muted">
               <span class="font-bold text-ink block mb-0.5">Primary Mill Authenticity</span>
               All steel consignments include original manufacturer heat numbers, chemical analysis and mechanical Mill Test Certificates (MTC).
             </div>
@@ -253,7 +253,7 @@ const allStandards = [
         <main class="space-y-6">
           
           <!-- Active Filter Tags Bar -->
-          <div id="active-tags-container" class="hidden flex-wrap items-center gap-2 rounded-lg bg-white p-3 border border-gray-200">
+          <div id="active-tags-container" class="hidden flex-wrap items-center gap-2 rounded-none bg-canvas p-3 border border-hairline">
             <span class="text-xs font-semibold text-muted">Active Filters:</span>
             <div id="active-tags-list" class="flex flex-wrap items-center gap-1.5"></div>
             <button id="clear-tags-btn" class="ml-auto text-xs font-bold text-primary-deep hover:underline cursor-pointer">Clear all</button>
@@ -285,11 +285,11 @@ const allStandards = [
                 data-grade={p.grade}
                 data-standard={p.bisCode || p.standards || ''}
                 data-price={p.priceValue}
-                class="group flex flex-col justify-between overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xs hover:border-gray-400 hover:shadow-md transition-all duration-200"
+                class="group flex flex-col justify-between overflow-hidden rounded-none border border-hairline bg-canvas hover:border-stone transition-all duration-200"
               >
                 <div>
                   <!-- Image Container with Clean Light Gray Fill -->
-                  <div class="relative flex h-[160px] sm:h-[180px] w-full items-center justify-center bg-[#f0f2f5] p-3 overflow-hidden">
+                  <div class="relative flex h-[160px] sm:h-[180px] w-full items-center justify-center bg-surface-soft p-3 overflow-hidden">
                     <img
                       src={p.image}
                       alt={p.imageAlt}
@@ -297,11 +297,11 @@ const allStandards = [
                       class="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                     />
                     <!-- Brand Badge -->
-                    <span class="absolute left-2.5 top-2.5 rounded bg-white/95 px-2 py-0.5 text-[10px] font-bold text-ink shadow-xs backdrop-blur-xs">
+                    <span class="absolute left-2.5 top-2.5 rounded-xs bg-canvas/95 px-2 py-0.5 text-[10px] font-bold text-ink backdrop-blur-xs">
                       {p.brand}
                     </span>
                     <!-- Grade Badge -->
-                    <span class="absolute right-2.5 top-2.5 rounded bg-ink px-2 py-0.5 text-[10px] font-bold text-white">
+                    <span class="absolute right-2.5 top-2.5 rounded-xs bg-ink px-2 py-0.5 text-[10px] font-bold text-on-dark">
                       {p.grade}
                     </span>
                   </div>
@@ -321,7 +321,7 @@ const allStandards = [
                     </p>
 
                     <!-- Spec Strip -->
-                    <div class="mt-3.5 rounded-md bg-gray-50 p-2.5 text-[11px] text-muted space-y-1 border border-gray-100">
+                    <div class="mt-3.5 rounded-none bg-surface-soft p-2.5 text-[11px] text-muted space-y-1 border border-hairline">
                       <div class="flex justify-between">
                         <span>Range / Size:</span>
                         <span class="font-semibold text-ink text-right truncate max-w-[200px]">{p.size}</span>
@@ -339,23 +339,23 @@ const allStandards = [
                 </div>
 
                 <!-- Card Footer & CTAs -->
-                <div class="border-t border-gray-100 p-4 bg-gray-50/50">
+                <div class="border-t border-hairline p-4 bg-surface-soft/50">
                   <div class="flex items-baseline justify-between mb-3">
                     <div>
                       <span class="text-base sm:text-lg font-extrabold text-ink">{p.price}</span>
                       <span class="block text-[10px] text-muted font-medium">Ex-yard + GST • Mill Certified</span>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                    <span class="text-[10px] font-bold text-success bg-success/15 px-2 py-0.5 rounded-xs">
                       In Stock
                     </span>
                   </div>
 
                   <!-- Action Buttons matching DESIGN.md rounded.xs (2px) -->
                   <div class="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2">
-                    <AddToCart product={p} class="w-full text-xs rounded-[2px]" />
+                    <AddToCart product={p} class="w-full text-xs rounded-xs" />
                     <a
                       href={`/quote?product=${p.id}`}
-                      class="inline-flex h-10 items-center justify-center rounded-[2px] border border-gray-300 bg-white px-4 text-xs font-bold text-ink hover:border-ink hover:bg-gray-50 transition-colors shadow-xs"
+                      class="inline-flex h-10 items-center justify-center rounded-xs border border-stone bg-canvas px-4 text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft transition-colors"
                     >
                       RFQ
                     </a>
@@ -366,13 +366,13 @@ const allStandards = [
           </div>
 
           <!-- Empty State -->
-          <div id="no-products-msg" class="hidden rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center">
+          <div id="no-products-msg" class="hidden rounded-none border border-dashed border-stone bg-canvas p-12 text-center">
             <p class="text-sm font-bold text-ink">No steel products match your filter criteria.</p>
             <p class="mt-1 text-xs text-muted">Try adjusting your search terms or clearing selected filters.</p>
             <button
               id="reset-empty-btn"
               type="button"
-              class="mt-4 inline-flex h-9 items-center justify-center rounded-[2px] bg-primary px-4 text-xs font-bold text-ink hover:bg-primary-deep transition-colors"
+              class="mt-4 inline-flex h-9 items-center justify-center rounded-xs bg-primary px-4 text-xs font-bold text-ink hover:bg-primary-deep transition-colors"
             >
               Reset All Filters
             </button>
@@ -383,7 +383,7 @@ const allStandards = [
   </section>
 
   <!-- Technical Standards & Compliance Guide (DESIGN.md strict styling) -->
-  <section class="border-t border-gray-200 bg-white py-12">
+  <section class="border-t border-hairline bg-canvas py-12">
     <div class="container-bme">
       <div class="max-w-3xl mb-8">
         <span class="text-[11px] font-bold uppercase tracking-widest text-primary-deep">Quality Assurance & Compliance</span>
@@ -394,19 +394,19 @@ const allStandards = [
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+        <div class="border border-hairline p-5 bg-surface-soft">
           <h3 class="text-sm font-bold text-ink">100% Primary Mill Direct</h3>
           <p class="mt-2 text-xs text-muted leading-relaxed">
-            Consignments sourced exclusively from Tata Steel, SAIL, JSW Steel, and Jindal Steel with original Mill Test Certificates (MTC).
+            Consignments sourced exclusively from Tata Steel, SAIL, Jindal Steel, and AM/NS India with original Mill Test Certificates (MTC).
           </p>
         </div>
-        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+        <div class="border border-hairline p-5 bg-surface-soft">
           <h3 class="text-sm font-bold text-ink">Full BIS & International Codes</h3>
           <p class="mt-2 text-xs text-muted leading-relaxed">
             Compliant with IS 2062, IS 5517, IS 3749, ASTM A240, ASTM A516, and EN 10025 with complete chemical & mechanical test documentation.
           </p>
         </div>
-        <div class="border border-gray-200 p-5 bg-[#fafafa]">
+        <div class="border border-hairline p-5 bg-surface-soft">
           <h3 class="text-sm font-bold text-ink">Transparent Index Pricing</h3>
           <p class="mt-2 text-xs text-muted leading-relaxed">
             Direct ex-yard pricing per MT with digital weighbridge receipts and flexible credit terms for verified GST-registered MSMEs.
@@ -536,7 +536,7 @@ const allStandards = [
 
     const appendTag = (text: string, onRemove: () => void) => {
       const tag = document.createElement('span');
-      tag.className = 'inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-ink';
+      tag.className = 'inline-flex items-center gap-1 rounded-xs bg-surface-soft border border-hairline px-2 py-0.5 text-[11px] font-medium text-ink';
       tag.innerHTML = `<span>${text}</span><button type="button" class="ml-1 text-muted hover:text-ink cursor-pointer">&times;</button>`;
       tag.querySelector('button')?.addEventListener('click', onRemove);
       activeTagsList?.appendChild(tag);
@@ -546,11 +546,11 @@ const allStandards = [
       selectedPillType = val;
       typePills.forEach(p => {
         if (p.dataset.typePill === val) {
-          p.classList.remove('border-gray-300', 'bg-white', 'text-ink');
-          p.classList.add('border-ink', 'bg-ink', 'text-white');
+          p.classList.remove('border-stone', 'bg-canvas', 'text-ink');
+          p.classList.add('border-ink', 'bg-ink', 'text-on-dark');
         } else {
-          p.classList.remove('border-ink', 'bg-ink', 'text-white');
-          p.classList.add('border-gray-300', 'bg-white', 'text-ink');
+          p.classList.remove('border-ink', 'bg-ink', 'text-on-dark');
+          p.classList.add('border-stone', 'bg-canvas', 'text-ink');
         }
       });
     };

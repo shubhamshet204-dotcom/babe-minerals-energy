@@ -33,7 +33,7 @@ const category = categories.find((item) => item.slug === product.categorySlug);
           <div class="flex flex-wrap items-center gap-2">
             <span class="bg-primary px-2.5 py-1 text-[11px] font-bold uppercase text-ink">{product.batch}</span>
             <span class="border border-hairline px-2.5 py-1 text-[11px] font-semibold uppercase text-muted">{product.grade}</span>
-            {product.moq && <span class="bg-gray-100 border border-gray-200 px-2.5 py-1 text-[11px] font-semibold text-ink">MOQ: {product.moq}</span>}
+            {product.moq && <span class="bg-surface-soft border border-hairline px-2.5 py-1 text-[11px] font-semibold text-ink">MOQ: {product.moq}</span>}
           </div>
           <p class="mt-6 text-sm font-semibold text-muted">{product.brand}</p>
           <h1 class="mt-2 max-w-3xl text-4xl font-black tracking-tight text-ink">{product.name}</h1>

@@ -6,11 +6,11 @@ import Layout from '../layouts/Layout.astro';
   <section class="bg-surface-soft py-14 lg:py-20">
     <div class="container-bme">
       <div class="mx-auto grid max-w-5xl overflow-hidden border border-hairline bg-canvas lg:grid-cols-[0.85fr_1.15fr]">
-        <div class="bg-[#111111] p-8 text-white lg:p-10">
+        <div class="bg-surface-deep p-8 text-on-dark lg:p-10">
           <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">BME buyer account</p>
-          <h1 class="mt-4 text-4xl font-black tracking-tight text-white">Procurement starts here.</h1>
-          <p class="mt-4 text-base leading-7 text-white/75">Keep your quote requests and business details together for a smoother sourcing process.</p>
-          <div class="mt-8 space-y-4 border-t border-white/15 pt-6 text-sm text-white/75">
+          <h1 class="mt-4 text-4xl font-black tracking-tight text-on-dark">Procurement starts here.</h1>
+          <p class="mt-4 text-base leading-7 text-on-dark-mute">Keep your quote requests and business details together for a smoother sourcing process.</p>
+          <div class="mt-8 space-y-4 border-t border-divider-dark pt-6 text-sm text-on-dark-mute">
             <p>Manage your company profile</p>
             <p>Review submitted quote requests</p>
             <p>Build a cart before signing in</p>
@@ -33,16 +33,16 @@ import Layout from '../layouts/Layout.astro';
 
           <form id="auth-form" class="space-y-4">
             <label data-register-only hidden class="block text-sm font-semibold text-ink">Full name
-              <input name="name" autocomplete="name" minlength="2" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="name" autocomplete="name" minlength="2" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label data-register-only hidden class="block text-sm font-semibold text-ink">Company name
-              <input name="company" autocomplete="organization" minlength="2" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="company" autocomplete="organization" minlength="2" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label class="block text-sm font-semibold text-ink">Business email
-              <input name="email" type="email" autocomplete="email" required class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="email" type="email" autocomplete="email" required class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label class="block text-sm font-semibold text-ink">Password
-              <input name="password" type="password" autocomplete="current-password" minlength="10" required class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="password" type="password" autocomplete="current-password" minlength="10" required class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
               <span data-password-hint hidden class="mt-1 block text-xs font-normal text-muted">Use at least 10 characters.</span>
             </label>
             <button id="auth-submit" type="submit" class="inline-flex h-12 w-full items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink transition-colors hover:bg-primary-deep">Sign in</button>

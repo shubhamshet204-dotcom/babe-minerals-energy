@@ -7,29 +7,29 @@ import Button from '../components/ui/Button.astro';
   title="Request a Steel Quote | BME Steels"
   description="Request pricing and procurement support for steel materials, TMT bars, HR sheet, CR coil and structural sections."
 >
-  <section class="bg-[#f5f5f5] py-20">
+  <section class="bg-surface-soft py-20">
     <div class="container-bme">
-      <div class="mx-auto max-w-5xl overflow-hidden rounded-md border border-hairline bg-canvas shadow-[0_20px_60px_rgba(0,0,0,0.05)]">
+      <div class="mx-auto max-w-5xl overflow-hidden rounded-none border border-hairline bg-canvas">
         <div class="grid lg:grid-cols-[0.9fr_1.1fr]">
-          <div class="bg-[#111111] p-8 text-white">
+          <div class="bg-surface-deep p-8 text-on-dark">
             <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Request a quote</p>
-            <h1 class="mt-3 text-4xl font-black tracking-[-0.05em] text-white">Get material pricing in minutes</h1>
-            <p class="mt-4 text-base leading-7 text-white/75">
+            <h1 class="mt-3 text-4xl font-black text-on-dark">Get material pricing in minutes</h1>
+            <p class="mt-4 text-base leading-7 text-on-dark-mute">
               Share your requirement and we will get back with the right grade, quantity suggestion, and dispatch support.
             </p>
 
-            <div class="mt-8 space-y-3 text-sm text-white/70">
-              <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="mt-8 space-y-3 text-sm text-on-dark-mute">
+              <div class="flex items-center justify-between border-b border-divider-dark pb-3">
                 <span>Typical callback</span>
-                <span class="font-bold text-white">Within 30 min</span>
+                <span class="font-bold text-on-dark">Within 30 min</span>
               </div>
-              <div class="flex items-center justify-between border-b border-white/10 pb-3">
+              <div class="flex items-center justify-between border-b border-divider-dark pb-3">
                 <span>Support desk</span>
-                <span class="font-bold text-white">Procurement team</span>
+                <span class="font-bold text-on-dark">Procurement team</span>
               </div>
               <div class="flex items-center justify-between">
                 <span>Minimum order</span>
-                <span class="font-bold text-white">5 MT</span>
+                <span class="font-bold text-on-dark">5 MT</span>
               </div>
             </div>
           </div>
@@ -39,22 +39,22 @@ import Button from '../components/ui/Button.astro';
               <div class="grid gap-5 md:grid-cols-2">
                 <label class="block text-sm font-medium text-ink">
                   Full name
-                  <input name="name" type="text" required class="mt-2 block w-full rounded-xl border border-hairline bg-neutral-1 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Your name" />
+                  <input name="name" type="text" required class="mt-2 block w-full rounded-none border border-hairline bg-surface-soft px-4 py-3 text-sm outline-none transition focus:border-ink" placeholder="Your name" />
                 </label>
                 <label class="block text-sm font-medium text-ink">
                   Business email
-                  <input name="email" type="email" required class="mt-2 block w-full rounded-xl border border-hairline bg-neutral-1 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="you@company.com" />
+                  <input name="email" type="email" required class="mt-2 block w-full rounded-none border border-hairline bg-surface-soft px-4 py-3 text-sm outline-none transition focus:border-ink" placeholder="you@company.com" />
                 </label>
               </div>
 
               <div class="grid gap-5 md:grid-cols-2">
                 <label class="block text-sm font-medium text-ink">
                   Phone number
-                  <input name="phone" type="tel" class="mt-2 block w-full rounded-xl border border-hairline bg-neutral-1 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="+91 98xxxxxx" />
+                  <input name="phone" type="tel" class="mt-2 block w-full rounded-none border border-hairline bg-surface-soft px-4 py-3 text-sm outline-none transition focus:border-ink" placeholder="+91 98xxxxxx" />
                 </label>
                 <label class="block text-sm font-medium text-ink">
                   Company name
-                  <input name="company" type="text" required class="mt-2 block w-full rounded-xl border border-hairline bg-neutral-1 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Your company" />
+                  <input name="company" type="text" required class="mt-2 block w-full rounded-none border border-hairline bg-surface-soft px-4 py-3 text-sm outline-none transition focus:border-ink" placeholder="Your company" />
                 </label>
               </div>
 
@@ -62,7 +62,7 @@ import Button from '../components/ui/Button.astro';
 
               <label class="block text-sm font-medium text-ink">
                 Requirement details
-                <textarea name="requirement" rows="5" required class="mt-2 block w-full rounded-xl border border-hairline bg-neutral-1 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Tell us the steel grade, quantity, required dispatch date and project location."></textarea>
+                <textarea name="requirement" rows="5" required class="mt-2 block w-full rounded-none border border-hairline bg-surface-soft px-4 py-3 text-sm outline-none transition focus:border-ink" placeholder="Tell us the steel grade, quantity, required dispatch date and project location."></textarea>
               </label>
 
               <div class="flex flex-wrap items-center gap-3 pt-2">
@@ -108,11 +108,11 @@ import Button from '../components/ui/Button.astro';
           }
 
           status.textContent = 'Your request has been submitted successfully. Our team will contact you shortly.';
-          status.className = 'min-h-[24px] text-sm text-green-600';
+          status.className = 'min-h-[24px] text-sm text-success';
           form.reset();
         } catch (error) {
           status.textContent = error instanceof Error ? error.message : 'Unable to submit your requirement right now.';
-          status.className = 'min-h-[24px] text-sm text-red-600';
+          status.className = 'min-h-[24px] text-sm text-error';
         }
       });
     }

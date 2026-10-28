@@ -1,18 +1,18 @@
 ---
-// Clean & Minimal Steel Weight & Price Estimator (Matching JSW One MSME)
+// Clean & Minimal Steel Weight & Price Estimator
 ---
 
-<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8" id="steel-calculator-root">
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-100 pb-5">
+<div class="rounded-none border border-hairline bg-canvas p-6 sm:p-8" id="steel-calculator-root">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-hairline pb-5">
     <div>
       <h3 class="text-xl font-bold text-ink">Steel Weight & Price Estimator</h3>
-      <p class="text-xs text-muted mt-0.5">Calculate theoretical weights and estimated cost as per standard IS codes</p>
+      <p class="text-xs text-ash mt-0.5">Calculate theoretical weights and estimated cost as per standard IS codes</p>
     </div>
-    <div class="flex items-center gap-1.5 rounded-lg bg-surface-soft p-1 border border-gray-200 self-start sm:self-auto">
-      <button type="button" data-calc-tab="tmt" class="calc-tab-btn rounded-md px-3 py-1.5 text-xs font-bold transition-all bg-ink text-white shadow-xs">TMT Rebar</button>
-      <button type="button" data-calc-tab="plate" class="calc-tab-btn rounded-md px-3 py-1.5 text-xs font-medium transition-all text-muted hover:text-ink">MS Plate</button>
-      <button type="button" data-calc-tab="structural" class="calc-tab-btn rounded-md px-3 py-1.5 text-xs font-medium transition-all text-muted hover:text-ink">Beams & Angles</button>
-      <button type="button" data-calc-tab="pipe" class="calc-tab-btn rounded-md px-3 py-1.5 text-xs font-medium transition-all text-muted hover:text-ink">Pipes</button>
+    <div class="flex items-center gap-1.5 rounded-none bg-surface-soft p-1 border border-hairline self-start sm:self-auto">
+      <button type="button" data-calc-tab="tmt" class="calc-tab-btn rounded-xs px-3 py-1.5 text-xs font-bold transition-all bg-ink text-on-dark">TMT Rebar</button>
+      <button type="button" data-calc-tab="plate" class="calc-tab-btn rounded-xs px-3 py-1.5 text-xs font-medium transition-all text-ash hover:text-ink">MS Plate</button>
+      <button type="button" data-calc-tab="structural" class="calc-tab-btn rounded-xs px-3 py-1.5 text-xs font-medium transition-all text-ash hover:text-ink">Beams & Angles</button>
+      <button type="button" data-calc-tab="pipe" class="calc-tab-btn rounded-xs px-3 py-1.5 text-xs font-medium transition-all text-ash hover:text-ink">Pipes</button>
     </div>
   </div>
 
@@ -24,7 +24,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="tmt-dia" class="block text-xs font-semibold text-ink mb-1.5">Bar Diameter (mm)</label>
-            <select id="tmt-dia" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="tmt-dia" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="8" data-wt="0.395">8 mm (0.395 kg/m)</option>
               <option value="10" data-wt="0.617">10 mm (0.617 kg/m)</option>
               <option value="12" data-wt="0.888" selected>12 mm (0.888 kg/m)</option>
@@ -36,7 +36,7 @@
           </div>
           <div>
             <label for="tmt-grade" class="block text-xs font-semibold text-ink mb-1.5">Grade</label>
-            <select id="tmt-grade" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="tmt-grade" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="84400" selected>Fe 550D (₹84,400 / MT)</option>
               <option value="82200">Fe 500D (₹82,200 / MT)</option>
               <option value="86500">Fe 550D CRS (₹86,500 / MT)</option>
@@ -47,11 +47,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="tmt-length" class="block text-xs font-semibold text-ink mb-1.5">Length (Meters)</label>
-            <input type="number" id="tmt-length" value="12" min="1" max="18" step="0.5" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="tmt-length" value="12" min="1" max="18" step="0.5" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
           <div>
             <label for="tmt-pieces" class="block text-xs font-semibold text-ink mb-1.5">Quantity (Pieces)</label>
-            <input type="number" id="tmt-pieces" value="100" min="1" step="1" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="tmt-pieces" value="100" min="1" step="1" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
         </div>
       </div>
@@ -61,28 +61,28 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label for="plate-thick" class="block text-xs font-semibold text-ink mb-1.5">Thickness (mm)</label>
-            <input type="number" id="plate-thick" value="10" min="1" max="120" step="0.5" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="plate-thick" value="10" min="1" max="120" step="0.5" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
           <div>
             <label for="plate-width" class="block text-xs font-semibold text-ink mb-1.5">Width (mm)</label>
-            <input type="number" id="plate-width" value="1500" min="100" max="3000" step="50" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="plate-width" value="1500" min="100" max="3000" step="50" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
           <div>
             <label for="plate-length" class="block text-xs font-semibold text-ink mb-1.5">Length (mm)</label>
-            <input type="number" id="plate-length" value="6000" min="500" max="12000" step="100" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="plate-length" value="6000" min="500" max="12000" step="100" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="plate-grade" class="block text-xs font-semibold text-ink mb-1.5">Material Grade</label>
-            <select id="plate-grade" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="plate-grade" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="76200" selected>IS 2062 E250 (₹76,200 / MT)</option>
               <option value="79800">IS 2062 E350 (₹79,800 / MT)</option>
             </select>
           </div>
           <div>
             <label for="plate-qty" class="block text-xs font-semibold text-ink mb-1.5">Quantity (Plates)</label>
-            <input type="number" id="plate-qty" value="5" min="1" step="1" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="plate-qty" value="5" min="1" step="1" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="struct-type" class="block text-xs font-semibold text-ink mb-1.5">Section Type</label>
-            <select id="struct-type" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="struct-type" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="ISMB 150" data-wt="15.0">ISMB 150 (15.0 kg/m)</option>
               <option value="ISMB 200" data-wt="25.4" selected>ISMB 200 (25.4 kg/m)</option>
               <option value="ISMB 250" data-wt="37.3">ISMB 250 (37.3 kg/m)</option>
@@ -102,7 +102,7 @@
           </div>
           <div>
             <label for="struct-grade" class="block text-xs font-semibold text-ink mb-1.5">Rate (₹ / MT)</label>
-            <select id="struct-grade" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="struct-grade" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="82900" selected>IS 2062 E250 (₹82,900 / MT)</option>
               <option value="85400">IS 2062 E350 (₹85,400 / MT)</option>
             </select>
@@ -111,11 +111,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="struct-length" class="block text-xs font-semibold text-ink mb-1.5">Length (Meters)</label>
-            <input type="number" id="struct-length" value="12" min="1" max="14" step="0.5" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="struct-length" value="12" min="1" max="14" step="0.5" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
           <div>
             <label for="struct-qty" class="block text-xs font-semibold text-ink mb-1.5">Quantity (Pieces)</label>
-            <input type="number" id="struct-qty" value="10" min="1" step="1" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="struct-qty" value="10" min="1" step="1" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="pipe-size" class="block text-xs font-semibold text-ink mb-1.5">Pipe / Section</label>
-            <select id="pipe-size" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="pipe-size" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="SHS 50x50x3.2" data-wt="4.55" selected>SHS 50x50x3.2mm (4.55 kg/m)</option>
               <option value="RHS 100x50x4.0" data-wt="8.86">RHS 100x50x4.0mm (8.86 kg/m)</option>
               <option value="CHS 2 Inch" data-wt="4.10">Round Pipe 2" (4.10 kg/m)</option>
@@ -133,7 +133,7 @@
           </div>
           <div>
             <label for="pipe-grade" class="block text-xs font-semibold text-ink mb-1.5">Rate (₹ / MT)</label>
-            <select id="pipe-grade" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none">
+            <select id="pipe-grade" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none">
               <option value="81000" selected>IS 4923 YSt 210 (₹81,000 / MT)</option>
               <option value="83500">IS 1161 YSt 310 (₹83,500 / MT)</option>
             </select>
@@ -142,45 +142,45 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="pipe-length" class="block text-xs font-semibold text-ink mb-1.5">Length (Meters)</label>
-            <input type="number" id="pipe-length" value="6" min="1" max="12" step="0.5" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-white focus:outline-none" />
+            <input type="number" id="pipe-length" value="6" min="1" max="12" step="0.5" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:bg-canvas focus:outline-none" />
           </div>
           <div>
             <label for="pipe-qty" class="block text-xs font-semibold text-ink mb-1.5">Quantity (Pieces)</label>
-            <input type="number" id="pipe-qty" value="20" min="1" step="1" class="w-full h-10 rounded-lg border border-gray-200 bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:outline-none" />
+            <input type="number" id="pipe-qty" value="20" min="1" step="1" class="w-full h-10 rounded-none border border-hairline bg-surface-soft px-3 text-sm text-ink focus:border-ink focus:outline-none" />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Output Box (5 cols) -->
-    <div class="lg:col-span-5 rounded-xl border border-gray-200 bg-surface-soft p-5 flex flex-col justify-between">
+    <div class="lg:col-span-5 rounded-none border border-hairline bg-surface-soft p-5 flex flex-col justify-between">
       <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-muted">Summary</span>
+        <span class="text-xs font-bold uppercase tracking-wider text-ash">Summary</span>
         <div class="mt-4 space-y-3 text-sm">
           <div class="flex items-center justify-between">
-            <span class="text-muted">Unit Weight:</span>
+            <span class="text-ash">Unit Weight:</span>
             <span id="res-single-wt" class="font-semibold text-ink">10.66 kg / rod</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-muted">Total Weight:</span>
+            <span class="text-ash">Total Weight:</span>
             <span id="res-total-wt" class="font-bold text-ink">1.066 MT</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-muted">Base Rate:</span>
+            <span class="text-ash">Base Rate:</span>
             <span id="res-rate" class="font-semibold text-ink">₹84,400 / MT</span>
           </div>
-          <div class="border-t border-gray-200 pt-3 flex items-baseline justify-between">
+          <div class="border-t border-hairline pt-3 flex items-baseline justify-between">
             <span class="font-bold text-ink">Est. Value:</span>
             <span id="res-total-cost" class="text-xl font-extrabold text-ink">₹89,970</span>
           </div>
         </div>
       </div>
 
-      <div class="mt-5 pt-4 border-t border-gray-200 flex gap-2">
-        <a href="/quote" class="flex-1 inline-flex h-10 items-center justify-center rounded-lg bg-primary px-3 text-xs font-bold text-ink hover:bg-primary-deep transition-colors">
+      <div class="mt-5 pt-4 border-t border-hairline flex gap-2">
+        <a href="/quote" class="flex-1 inline-flex h-10 items-center justify-center rounded-xs bg-primary px-3 text-xs font-bold text-ink hover:bg-primary-deep transition-colors">
           Get Formal Quote
         </a>
-        <button type="button" id="calc-add-cart-btn" class="flex-1 inline-flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-3 text-xs font-bold text-ink hover:border-ink transition-colors">
+        <button type="button" id="calc-add-cart-btn" class="flex-1 inline-flex h-10 items-center justify-center rounded-xs border border-stone bg-canvas px-3 text-xs font-bold text-ink hover:border-ink transition-colors">
           Add to Cart
         </button>
       </div>
@@ -210,11 +210,11 @@
         activeTab = tab;
 
         tabButtons.forEach((b) => {
-          b.classList.remove('bg-ink', 'text-white', 'shadow-xs', 'font-bold');
-          b.classList.add('text-muted', 'font-medium');
+          b.classList.remove('bg-ink', 'text-on-dark', 'font-bold');
+          b.classList.add('text-ash', 'font-medium');
         });
-        btn.classList.remove('text-muted', 'font-medium');
-        btn.classList.add('bg-ink', 'text-white', 'shadow-xs', 'font-bold');
+        btn.classList.remove('text-ash', 'font-medium');
+        btn.classList.add('bg-ink', 'text-on-dark', 'font-bold');
 
         Object.keys(panes).forEach((k) => {
           if (k === tab) {

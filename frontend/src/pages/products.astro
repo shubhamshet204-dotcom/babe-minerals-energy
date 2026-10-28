@@ -9,7 +9,7 @@ import { categories, brands, allProducts } from '../data/catalog';
   title="Steel Products | BME Steels"
   description="Explore hot rolled steel, structural steel, TMT bars, cold rolled coils and industrial steel materials from BME Steels."
 >
-  <section class="bg-[linear-gradient(180deg,#f3f6fb_0%,#ffffff_100%)] py-20">
+  <section class="bg-surface-soft py-20">
     <div class="container-bme">
       <div class="mb-8 max-w-2xl">
         <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Steel products</p>
@@ -20,7 +20,7 @@ import { categories, brands, allProducts } from '../data/catalog';
         {categories.map((category) => (
           <a
             href={category.slug === 'steel' ? '/category/steel' : category.slug === 'hot-rolled-steel' ? '/category/mild-steel/hot-rolled-steel' : `/products?category=${category.slug}`}
-            class="overflow-hidden rounded-md border border-hairline bg-canvas shadow-sm transition-colors hover:border-ink"
+            class="overflow-hidden rounded-none border border-hairline bg-canvas transition-colors hover:border-ink"
           >
             <img src={category.image} alt={category.imageAlt} loading="lazy" class="h-36 w-full object-cover" />
             <div class="p-5">
@@ -37,7 +37,7 @@ import { categories, brands, allProducts } from '../data/catalog';
     </div>
   </section>
 
-  <section class="bg-neutral-1 py-20">
+  <section class="bg-surface-soft py-20">
     <div class="container-bme">
       <div class="mb-10 flex items-end justify-between">
         <div>
@@ -46,16 +46,16 @@ import { categories, brands, allProducts } from '../data/catalog';
         </div>
       </div>
 
-      <form id="catalog-filters" class="mb-8 grid gap-3 rounded-md border border-hairline bg-canvas p-4 sm:grid-cols-[1fr_220px_220px]">
+      <form id="catalog-filters" class="mb-8 grid gap-3 rounded-none border border-hairline bg-canvas p-4 sm:grid-cols-[1fr_220px_220px]">
         <label class="sr-only" for="catalog-search">Search products</label>
-        <input id="catalog-search" type="search" placeholder="Search products, grades or sizes" class="h-11 rounded-sm border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink" />
+        <input id="catalog-search" type="search" placeholder="Search products, grades or sizes" class="h-11 rounded-none border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink" />
         <label class="sr-only" for="brand-filter">Filter by brand</label>
-        <select id="brand-filter" class="h-11 rounded-sm border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink">
+        <select id="brand-filter" class="h-11 rounded-none border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink">
           <option value="">All brands</option>
           {brands.map((brand) => <option value={brand.slug}>{brand.name}</option>)}
         </select>
         <label class="sr-only" for="category-filter">Filter by category</label>
-        <select id="category-filter" class="h-11 rounded-sm border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink">
+        <select id="category-filter" class="h-11 rounded-none border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink">
           <option value="">All categories</option>
           {categories.map((category) => <option value={category.slug}>{category.title}</option>)}
         </select>
@@ -65,7 +65,7 @@ import { categories, brands, allProducts } from '../data/catalog';
       <div class="grid gap-6 lg:grid-cols-2">
         {allProducts.map((product) => (
 
-          <article data-product-card data-search={`${product.name} ${product.brand} ${product.size} ${product.grade}`} data-brand={product.brandSlug} data-category={product.categorySlug} class="overflow-hidden rounded-md border border-hairline bg-canvas shadow-sm">
+          <article data-product-card data-search={`${product.name} ${product.brand} ${product.size} ${product.grade}`} data-brand={product.brandSlug} data-category={product.categorySlug} class="overflow-hidden rounded-none border border-hairline bg-canvas">
             <img src={product.image} alt={product.imageAlt} loading="lazy" class="h-52 w-full object-cover" />
             <div class="p-5">
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -74,7 +74,7 @@ import { categories, brands, allProducts } from '../data/catalog';
                 <h3 class="mt-2 text-2xl font-bold text-ink"><a href={`/product/${product.id}`} class="hover:underline">{product.name}</a></h3>
                 <p class="mt-1 text-sm text-muted">{product.brand}</p>
               </div>
-              <span class="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">{product.grade}</span>
+              <span class="rounded-xs bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">{product.grade}</span>
             </div>
 
             <div class="mt-5 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">

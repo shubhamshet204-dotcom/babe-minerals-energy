@@ -7,7 +7,7 @@ import { industries } from '../data/catalog';
   title="Industries Served | BME Steels"
   description="BME Steels supports infrastructure, construction, industrial sheds and manufacturing sectors with reliable steel procurement."
 >
-  <section class="bg-[linear-gradient(180deg,#f7f9fc_0%,#ffffff_100%)] py-20">
+  <section class="bg-surface-soft py-20">
     <div class="container-bme">
       <div class="mb-10 max-w-2xl">
         <p class="text-[12px] font-semibold uppercase tracking-[0.16em] text-primary">Industries</p>
@@ -16,7 +16,7 @@ import { industries } from '../data/catalog';
 
       <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {industries.map((industry) => (
-          <article class="overflow-hidden rounded-md border border-hairline bg-canvas shadow-sm">
+          <article class="overflow-hidden rounded-none border border-hairline bg-canvas">
             <img src={industry.image} alt={industry.imageAlt} loading="lazy" class="h-44 w-full object-cover" />
             <div class="p-6">
               <h2 class="text-xl font-bold text-ink">{industry.title}</h2>

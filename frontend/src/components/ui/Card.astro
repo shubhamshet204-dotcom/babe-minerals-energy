@@ -20,15 +20,15 @@ const Tag = href ? 'a' : Component;
 
 // Variants strictly adhering to DESIGN.md
 const variantClasses: Record<string, string> = {
-  default: 'bg-canvas border border-hairline rounded-lg p-4 text-body',
-  category: 'bg-surface-soft border border-hairline rounded-md p-4 text-body hover:bg-[#f1f1f1]',
-  elevated: 'bg-canvas border border-hairline rounded-lg p-4 shadow-sm text-body',
-  featured: 'bg-canvas border border-hairline rounded-lg p-6 shadow-md text-body',
+  default: 'bg-canvas border border-hairline rounded-none p-4 text-body',
+  category: 'bg-surface-soft border border-hairline rounded-none p-4 text-body hover:bg-surface-soft',
+  elevated: 'bg-canvas border border-hairline rounded-none p-4 text-body',
+  featured: 'bg-canvas border border-hairline rounded-none p-6 text-body',
 };
 
 const hoverClass =
   hoverable || href
-    ? 'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm cursor-pointer'
+    ? 'transition-colors duration-200 hover:border-stone cursor-pointer'
     : '';
 ---
 

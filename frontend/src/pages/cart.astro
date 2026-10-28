@@ -31,16 +31,16 @@ import Layout from '../layouts/Layout.astro';
           <form id="cart-checkout" class="mt-5 space-y-4">
             <input type="hidden" name="deliveryLocation" data-delivery-location-field />
             <label class="block text-sm font-medium text-ink">Full name
-              <input name="name" type="text" required autocomplete="name" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="name" type="text" required autocomplete="name" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label class="block text-sm font-medium text-ink">Business email
-              <input name="email" type="email" required autocomplete="email" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="email" type="email" required autocomplete="email" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label class="block text-sm font-medium text-ink">Company
-              <input name="company" type="text" required autocomplete="organization" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="company" type="text" required autocomplete="organization" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <label class="block text-sm font-medium text-ink">Phone (optional)
-              <input name="phone" type="tel" autocomplete="tel" class="mt-1.5 h-11 w-full rounded-sm border border-hairline px-3 text-sm outline-none focus:border-ink" />
+              <input name="phone" type="tel" autocomplete="tel" class="mt-1.5 h-11 w-full rounded-none border border-hairline px-3 text-sm outline-none focus:border-ink" />
             </label>
             <button id="cart-submit" type="submit" class="inline-flex h-12 w-full items-center justify-center rounded-xs bg-primary px-5 text-sm font-bold text-ink transition-colors hover:bg-primary-deep disabled:cursor-not-allowed disabled:opacity-50">Send quote request</button>
             <p id="cart-status" class="min-h-5 text-sm text-muted" aria-live="polite"></p>

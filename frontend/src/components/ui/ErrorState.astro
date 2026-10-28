@@ -46,15 +46,15 @@ const {
   variant === 'card' && (
     <div
       role="alert"
-      class={`flex flex-col items-center justify-center text-center p-8 sm:p-10 border border-hairline rounded-lg bg-canvas shadow-xs ${className}`}
+      class={`flex flex-col items-center justify-center text-center p-8 sm:p-10 border border-hairline rounded-none bg-canvas ${className}`}
     >
-      <div class="w-12 h-12 rounded-full bg-accent-4/10 text-accent-4 flex items-center justify-center mb-4">
+      <div class="w-12 h-12 rounded-full bg-error/10 text-error flex items-center justify-center mb-4">
         <Icon name="alert-triangle" size={24} />
       </div>
       <h3 class="text-[18px] font-semibold text-ink leading-[1.33] max-w-md">
         {title}
       </h3>
-      <p class="text-[14px] text-muted leading-[1.45] max-w-sm mt-1.5 mb-6">
+      <p class="text-[14px] text-ash leading-[1.45] max-w-sm mt-1.5 mb-6">
         {message}
       </p>
       {Astro.slots.has('default') && (

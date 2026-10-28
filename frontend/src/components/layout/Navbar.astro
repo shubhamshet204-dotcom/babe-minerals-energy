@@ -57,13 +57,13 @@ const megaCategories: CategoryMenu[] = [
 ];
 ---
 
-<header class="sticky top-0 z-40 w-full border-b border-hairline bg-canvas/98 shadow-sm backdrop-blur-md" id="bme-header">
+<header class="sticky top-0 z-40 w-full border-b border-hairline bg-canvas/98 backdrop-blur-md" id="bme-header">
   <!-- Main Navigation Row -->
   <div class="container-bme">
     <div class="flex h-[74px] items-center justify-between gap-4 lg:gap-6">
       <!-- Brand Logo -->
       <a href="/" class="flex shrink-0 items-center gap-3 group">
-        <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-[19px] font-black text-ink shadow-sm transition-transform group-hover:scale-105">
+        <div class="flex h-11 w-11 items-center justify-center rounded-none bg-primary text-[19px] font-black text-ink transition-transform group-hover:scale-105">
           BME
         </div>
         <div class="leading-none">
@@ -83,7 +83,7 @@ const megaCategories: CategoryMenu[] = [
       <button
         type="button"
         id="location-picker-btn"
-        class="hidden sm:inline-flex items-center gap-2 rounded-lg border border-hairline bg-surface-soft px-3 py-1.5 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer shrink-0"
+        class="hidden sm:inline-flex items-center gap-2 rounded-xs border border-hairline bg-surface-soft px-3 py-1.5 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer shrink-0"
         aria-haspopup="dialog"
         aria-expanded="false"
       >
@@ -109,33 +109,33 @@ const megaCategories: CategoryMenu[] = [
             name="q"
             autocomplete="off"
             placeholder="Search 'TMT Fe 550D', 'IS 2062 HR Plates', 'MS Beams'..."
-            class="h-11 w-full rounded-lg border border-hairline bg-surface-soft pl-10 pr-24 text-sm font-medium text-ink placeholder:text-muted/80 transition-all focus:border-ink focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-primary/40"
+            class="h-11 w-full rounded-none border border-hairline bg-surface-soft pl-10 pr-24 text-sm font-medium text-ink placeholder:text-muted/80 transition-all focus:border-ink focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
           <button
             type="submit"
-            class="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 rounded-md bg-ink px-3 text-xs font-bold text-white transition-colors hover:bg-primary hover:text-ink cursor-pointer"
+            class="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 rounded-xs bg-ink px-3 text-xs font-bold text-white transition-colors hover:bg-primary hover:text-ink cursor-pointer"
           >
             Search
           </button>
         </form>
 
         <!-- Quick Search Dropdown Suggestions (hidden by default) -->
-        <div id="search-suggestions-box" class="absolute left-0 top-full mt-1.5 w-full rounded-xl border border-hairline bg-canvas p-3 shadow-xl hidden z-50">
+        <div id="search-suggestions-box" class="absolute left-0 top-full mt-1.5 w-full rounded-none border border-hairline bg-canvas p-3 hidden z-50">
           <div class="text-[11px] font-bold uppercase tracking-wider text-muted px-2 pb-1.5 border-b border-hairline">Popular Steel Searches</div>
           <div class="mt-2 space-y-1 text-sm">
-            <a href="/products?q=Fe+550D" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+            <a href="/products?q=Fe+550D" class="flex items-center justify-between rounded-none px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
               <span>Fe 550D TMT Bars (IS 1786)</span>
               <span class="text-xs text-muted">TMT Rebars</span>
             </a>
-            <a href="/products?q=IS+2062" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+            <a href="/products?q=IS+2062" class="flex items-center justify-between rounded-none px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
               <span>IS 2062 E250 HR Plates & Coils</span>
               <span class="text-xs text-muted">Hot Rolled</span>
             </a>
-            <a href="/products?q=ISMB" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+            <a href="/products?q=ISMB" class="flex items-center justify-between rounded-none px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
               <span>MS Structural Beams (ISMB 150-500)</span>
               <span class="text-xs text-muted">Structural</span>
             </a>
-            <a href="/products?q=CRCA" class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
+            <a href="/products?q=CRCA" class="flex items-center justify-between rounded-none px-2 py-1.5 hover:bg-surface-soft font-semibold text-ink">
               <span>CRCA Precision Sheets (IS 513)</span>
               <span class="text-xs text-muted">Cold Rolled</span>
             </a>
@@ -148,7 +148,7 @@ const megaCategories: CategoryMenu[] = [
         <!-- Cart Link -->
         <a
           href="/cart"
-          class="relative inline-flex h-11 items-center gap-2 rounded-lg border border-hairline bg-surface-soft px-3.5 text-sm font-bold text-ink transition-all hover:border-ink hover:bg-canvas"
+          class="relative inline-flex h-11 items-center gap-2 rounded-xs border border-hairline bg-surface-soft px-3.5 text-sm font-bold text-ink transition-all hover:border-ink hover:bg-canvas"
           aria-label="Procurement cart"
         >
           <Icon name="box" size={18} class="text-ink" />
@@ -162,7 +162,7 @@ const megaCategories: CategoryMenu[] = [
         <a
           href="/login"
           data-auth-link
-          class="hidden sm:inline-flex h-11 items-center rounded-lg border border-hairline bg-canvas px-4 text-sm font-bold text-ink transition-colors hover:border-ink hover:bg-surface-soft"
+          class="hidden sm:inline-flex h-11 items-center rounded-xs border border-hairline bg-canvas px-4 text-sm font-bold text-ink transition-colors hover:border-ink hover:bg-surface-soft"
         >
           Sign In
         </a>
@@ -170,7 +170,7 @@ const megaCategories: CategoryMenu[] = [
         <!-- Quote Action -->
         <a
           href="/quote"
-          class="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-4 text-sm font-black text-ink shadow-sm transition-all hover:bg-primary-deep hover:shadow-md cursor-pointer"
+          class="inline-flex h-11 items-center justify-center rounded-xs bg-primary px-4 text-sm font-black text-ink transition-all hover:bg-primary-deep cursor-pointer"
         >
           Request Quote
         </a>
@@ -179,7 +179,7 @@ const megaCategories: CategoryMenu[] = [
         <button
           type="button"
           id="bme-mobile-menu-toggle"
-          class="flex h-11 w-11 items-center justify-center rounded-lg border border-hairline bg-surface-soft text-ink lg:hidden cursor-pointer"
+          class="flex h-11 w-11 items-center justify-center rounded-xs border border-hairline bg-surface-soft text-ink lg:hidden cursor-pointer"
           aria-label="Toggle navigation menu"
           aria-expanded="false"
         >
@@ -208,17 +208,17 @@ const megaCategories: CategoryMenu[] = [
 
             <!-- Mega Dropdown Panel -->
             <div class="invisible absolute left-0 top-full z-50 pt-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-              <div class="w-80 overflow-hidden rounded-xl border border-hairline bg-canvas p-2 shadow-2xl">
+              <div class="w-80 overflow-hidden rounded-none border border-hairline bg-canvas p-2">
                 <div class="space-y-1">
                   {cat.items.map((item) => (
                     <a
                       href={item.href}
-                      class="flex flex-col rounded-lg p-2.5 transition-colors hover:bg-surface-soft group/item"
+                      class="flex flex-col rounded-none p-2.5 transition-colors hover:bg-surface-soft group/item"
                     >
                       <div class="flex items-center justify-between">
                         <span class="text-sm font-bold text-ink group-hover/item:text-primary-deep">{item.title}</span>
                         {item.badge && (
-                          <span class="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-black uppercase text-ink">
+                          <span class="rounded-xs bg-primary/20 px-1.5 py-0.5 text-[10px] font-black uppercase text-ink">
                             {item.badge}
                           </span>
                         )}
@@ -248,10 +248,10 @@ const megaCategories: CategoryMenu[] = [
 
   <!-- Delivery Location Modal / Drawer -->
   <div id="location-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-    <div class="w-full max-w-md rounded-2xl border border-hairline bg-canvas p-6 shadow-2xl">
+    <div class="w-full max-w-md rounded-none border border-hairline bg-canvas p-6">
       <div class="flex items-center justify-between border-b border-hairline pb-4">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-ink">
+          <div class="flex h-9 w-9 items-center justify-center rounded-none bg-primary text-ink">
             <Icon name="map-pin" size={18} />
           </div>
           <div>
@@ -273,12 +273,12 @@ const megaCategories: CategoryMenu[] = [
               id="pincode-input"
               maxlength="6"
               placeholder="e.g. 400001, 560001, 110001"
-              class="h-11 flex-1 rounded-lg border border-hairline bg-surface-soft px-3.5 text-sm font-semibold text-ink focus:border-ink focus:outline-none"
+              class="h-11 flex-1 rounded-none border border-hairline bg-surface-soft px-3.5 text-sm font-semibold text-ink focus:border-ink focus:outline-none"
             />
             <button
               type="button"
               id="apply-pincode-btn"
-              class="h-11 rounded-lg bg-primary px-4 text-xs font-black uppercase tracking-wider text-ink hover:bg-primary-deep cursor-pointer"
+              class="h-11 rounded-xs bg-primary px-4 text-xs font-black uppercase tracking-wider text-ink hover:bg-primary-deep cursor-pointer"
             >
               Apply
             </button>
@@ -288,22 +288,22 @@ const megaCategories: CategoryMenu[] = [
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-muted mb-2">Or Select Major Industrial Hub</label>
           <div class="grid grid-cols-2 gap-2" id="city-pills-container">
-            <button type="button" data-city="Belagavi, Karnataka" data-pin="590001" class="city-pill rounded-lg border border-primary bg-primary/10 p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Belagavi, Karnataka" data-pin="590001" class="city-pill rounded-xs border border-primary bg-primary/10 p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Belagavi (590001)
             </button>
-            <button type="button" data-city="Bengaluru" data-pin="560001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Bengaluru" data-pin="560001" class="city-pill rounded-xs border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Bengaluru (560001)
             </button>
-            <button type="button" data-city="Mumbai" data-pin="400001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Mumbai" data-pin="400001" class="city-pill rounded-xs border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Mumbai (400001)
             </button>
-            <button type="button" data-city="Pune" data-pin="411001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Pune" data-pin="411001" class="city-pill rounded-xs border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Pune (411001)
             </button>
-            <button type="button" data-city="Hyderabad" data-pin="500001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Hyderabad" data-pin="500001" class="city-pill rounded-xs border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Hyderabad (500001)
             </button>
-            <button type="button" data-city="Chennai" data-pin="600001" class="city-pill rounded-lg border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
+            <button type="button" data-city="Chennai" data-pin="600001" class="city-pill rounded-xs border border-hairline p-2.5 text-left text-xs font-bold text-ink hover:border-ink hover:bg-surface-soft">
               Chennai (600001)
             </button>
           </div>
@@ -324,7 +324,7 @@ const megaCategories: CategoryMenu[] = [
       <button
         type="button"
         id="mobile-location-picker-btn"
-        class="flex w-full items-center justify-between rounded-lg border border-hairline bg-surface-soft p-3 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer"
+        class="flex w-full items-center justify-between rounded-xs border border-hairline bg-surface-soft p-3 text-left transition-colors hover:border-ink hover:bg-canvas cursor-pointer"
       >
         <div class="flex items-center gap-2.5">
           <Icon name="map-pin" size={18} class="text-primary-deep shrink-0" />
@@ -348,14 +348,14 @@ const megaCategories: CategoryMenu[] = [
           type="search"
           name="q"
           placeholder="Search grades, TMT, Plates..."
-          class="h-11 w-full rounded-lg border border-hairline bg-surface-soft pl-10 pr-4 text-sm font-medium text-ink focus:border-ink focus:outline-none"
+          class="h-11 w-full rounded-none border border-hairline bg-surface-soft pl-10 pr-4 text-sm font-medium text-ink focus:border-ink focus:outline-none"
         />
       </form>
 
       <div class="space-y-3">
         <div class="text-xs font-bold uppercase tracking-wider text-muted">Catalog Categories</div>
         {megaCategories.map((cat) => (
-          <div class="rounded-xl border border-hairline bg-surface-soft p-3">
+          <div class="rounded-none border border-hairline bg-surface-soft p-3">
             <p class="font-bold text-ink text-sm mb-2">{cat.title}</p>
             <div class="space-y-1.5 pl-2 border-l-2 border-primary">
               {cat.items.map((sub) => (

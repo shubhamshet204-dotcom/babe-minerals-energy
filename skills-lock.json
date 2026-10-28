@@ -7,6 +7,12 @@
       "skillPath": "plugins/developer-essentials/skills/auth-implementation-patterns/SKILL.md",
       "computedHash": "43b53312c6bbc9ca6d4a7f1ae97804cb2520a9aec7d7903004eed3b622d7e0d9"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "08c1403e2daff28509af4ca7fc5915cb748b1a6b72181b6142ba35fb2c258d89"
+    },
     "nodejs-backend-patterns": {
       "source": "wshobson/agents",
       "sourceType": "github",

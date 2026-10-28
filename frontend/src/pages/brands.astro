@@ -18,15 +18,15 @@ import { brands } from '../data/catalog';
       <p class="text-sm text-muted mt-1">Trusted manufacturers we source directly from</p>
     </div>
 
-    <!-- Brands Grid (Matching Exact JSW One MSME Layout) -->
+    <!-- Brands Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {brands.map((brand) => (
         <a
           href={`/products?brand=${brand.slug}`}
-          class="flex items-center gap-5 rounded-xl border border-gray-200 bg-white p-5 shadow-xs transition-all duration-200 hover:border-gray-300 hover:shadow-md group"
+          class="flex items-center gap-5 rounded-none border border-hairline bg-canvas p-5 transition-all duration-200 hover:border-stone group"
         >
           <!-- Circular Logo Container -->
-          <div class="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full border border-gray-100 bg-[#f8f9fa] p-3 overflow-hidden group-hover:border-gray-300 transition-colors">
+          <div class="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full border border-hairline bg-surface-soft p-3 overflow-hidden group-hover:border-stone transition-colors">
             <img
               src={brand.logo}
               alt={brand.imageAlt}
