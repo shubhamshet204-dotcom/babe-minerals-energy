@@ -1,5 +1,6 @@
 ---
 import Icon from '../ui/Icon.astro';
+import { navGroups, categories30 } from '../../data/catalog';
 
 interface SubCategory {
   title: string;
@@ -9,52 +10,33 @@ interface SubCategory {
 }
 
 interface CategoryMenu {
+  id: number;
+  slug: string;
   title: string;
   href: string;
   items: SubCategory[];
 }
 
-const megaCategories: CategoryMenu[] = [
-  {
-    title: 'Steel',
-    href: '/category/steel',
-    items: [
-      { title: 'Carbon & Alloy Steel', href: '/category/steel', desc: 'AISI 1018/1045, EN19 & EN24 bars & plates', badge: 'High Stock' },
-      { title: 'Tool & Die Steel', href: '/category/steel', desc: 'AISI D2, H13, OHNS, M2 die blocks', badge: 'Tooling' },
-      { title: 'Stainless Steel', href: '/category/steel', desc: 'SS 304 & 316L coils, sheets & rounds' },
-      { title: 'HR Coils & Sheets', href: '/category/mild-steel/hot-rolled-steel', desc: 'IS 2062 E250 / E350 grade' },
-    ],
-  },
-  {
-    title: 'Structural Steel',
-    href: '/products?category=structural-steel',
-    items: [
-      { title: 'MS Beams & Columns', href: '/products?category=structural-steel', desc: 'ISMB 150 – 600, NPB sections', badge: 'Primary Mills' },
-      { title: 'MS Channels (ISMC)', href: '/products?category=structural-steel', desc: 'ISMC 75 – 400 for fabrication' },
-      { title: 'Equal & Unequal Angles', href: '/products?category=structural-steel', desc: 'ISA 25x25 to 200x200 mm' },
-      { title: 'Plates & Flats', href: '/products?category=hot-rolled-steel', desc: 'High tensile plate stock' },
-    ],
-  },
-  {
-    title: 'TMT & Construction',
-    href: '/products?category=tmt-bars',
-    items: [
-      { title: 'TMT Rebars Fe 550D', href: '/products?category=tmt-bars', desc: 'IS 1786 earthquake resistant', badge: 'BIS Certified' },
-      { title: 'TMT Rebars Fe 500D', href: '/products?category=tmt-bars', desc: 'High ductility construction bars' },
-      { title: 'Corrosion Resistant (CRS)', href: '/products?category=tmt-bars', desc: 'Coastal & industrial foundations' },
-      { title: 'OPC & PPC Cement', href: '/products?category=cement', desc: 'UltraTech, ACC, Ambuja bags' },
-    ],
-  },
-  {
-    title: 'Pipes & Tubes',
-    href: '/products?category=structural-steel',
-    items: [
-      { title: 'Square Hollow Sections (SHS)', href: '/products?category=structural-steel', desc: 'IS 4923 YSt 210/310' },
-      { title: 'Rectangular Hollow Sections (RHS)', href: '/products?category=structural-steel', desc: 'Heavy structural tube stock' },
-      { title: 'Round MS & GI Pipes', href: '/products?category=structural-steel', desc: 'Class A, B, C scaffolding & water' },
-    ],
-  },
-];
+const megaCategories: CategoryMenu[] = navGroups.map((group) => {
+  const items: SubCategory[] = group.categorySlugs.map((slug) => {
+    const cat = categories30.find((c) => c.slug === slug);
+    const href = slug === 'steel' ? '/category/steel' : `/category/${slug}`;
+    return {
+      title: cat ? cat.title : slug,
+      href,
+      desc: cat ? cat.description : undefined,
+      badge: cat ? cat.tag : undefined,
+    };
+  });
+
+  return {
+    id: group.id,
+    slug: group.slug,
+    title: group.title,
+    href: `/products?group=${group.slug}`,
+    items,
+  };
+});
 ---
 
 <header class="sticky top-0 z-40 w-full border-b border-hairline bg-canvas/98 backdrop-blur-md" id="bme-header">
@@ -192,56 +174,78 @@ const megaCategories: CategoryMenu[] = [
 
   <!-- Bottom Categories Mega-Menu Bar -->
   <div class="hidden border-t border-hairline bg-surface-soft lg:block">
-    <div class="container-bme flex h-11 items-center justify-between">
-      <nav class="flex items-center gap-6 xl:gap-7 text-sm font-bold text-body" aria-label="Mega Categories">
-        <a href="/products" class="inline-flex items-center gap-1.5 text-ink hover:text-primary-deep transition-colors py-2 whitespace-nowrap shrink-0">
-          <Icon name="layers" size={15} class="text-primary-deep" />
-          <span>All Products</span>
-        </a>
+    <div class="container-bme">
+      <div class="flex h-11 items-center w-full">
+        <nav class="flex w-full items-center justify-center gap-8 text-xs xl:text-sm font-bold text-body shrink-0" aria-label="Mega Categories">
+          <a href="/products" class="inline-flex items-center gap-1.5 text-ink hover:text-primary-deep transition-colors py-2 whitespace-nowrap shrink-0">
+            <Icon name="layers" size={15} class="text-primary-deep" />
+            <span>All Products</span>
+          </a>
 
-        {megaCategories.map((cat) => (
+          {megaCategories.slice(0, 3).map((cat) => (
+            <div class="group relative py-2 shrink-0">
+              <a href={cat.href} class="inline-flex items-center gap-1 hover:text-ink transition-colors whitespace-nowrap shrink-0">
+                <span>{cat.title}</span>
+                <Icon name="chevron-down" size={12} class="text-muted transition-transform group-hover:rotate-180" />
+              </a>
+
+              <!-- Mega Dropdown Panel -->
+              <div class="absolute left-0 top-full z-50 pt-1 opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 group-hover:pointer-events-auto">
+                <div class="w-72 overflow-hidden rounded-none border border-hairline-strong bg-canvas p-2 shadow-sm">
+                  <div class="space-y-0.5">
+                    {cat.items.map((item) => (
+                      <a
+                        href={item.href}
+                        class="flex flex-col rounded-none p-2 transition-colors hover:bg-surface-soft group/item"
+                      >
+                        <div class="flex items-center justify-between gap-2">
+                          <span class="text-xs font-bold text-ink group-hover/item:text-primary-deep leading-tight">{item.title}</span>
+                          {item.badge && (
+                            <span class="shrink-0 rounded-xs bg-primary/20 px-1.5 py-0.5 text-[9px] font-black uppercase text-ink">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                  <div class="mt-1 border-t border-hairline pt-1">
+                    <a href={cat.href} class="block px-2 py-1.5 text-[11px] font-bold text-primary-deep hover:underline">
+                      View all &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <!-- More ▾: remaining groups dropdown -->
           <div class="group relative py-2 shrink-0">
-            <a href={cat.href} class="inline-flex items-center gap-1 hover:text-ink transition-colors whitespace-nowrap">
-              <span>{cat.title}</span>
-              <Icon name="chevron-down" size={13} class="text-muted transition-transform group-hover:rotate-180" />
+            <a href="#" class="inline-flex items-center gap-1 hover:text-ink transition-colors whitespace-nowrap shrink-0 cursor-pointer" onclick="event.preventDefault()">
+              <span>More</span>
+              <Icon name="chevron-down" size={12} class="text-muted transition-transform group-hover:rotate-180" />
             </a>
 
-            <!-- Mega Dropdown Panel -->
-            <div class="invisible absolute left-0 top-full z-50 pt-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-              <div class="w-80 overflow-hidden rounded-none border border-hairline bg-canvas p-2">
-                <div class="space-y-1">
-                  {cat.items.map((item) => (
-                    <a
-                      href={item.href}
-                      class="flex flex-col rounded-none p-2.5 transition-colors hover:bg-surface-soft group/item"
-                    >
-                      <div class="flex items-center justify-between">
-                        <span class="text-sm font-bold text-ink group-hover/item:text-primary-deep">{item.title}</span>
-                        {item.badge && (
-                          <span class="rounded-xs bg-primary/20 px-1.5 py-0.5 text-[10px] font-black uppercase text-ink">
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                      {item.desc && <span class="text-xs text-muted mt-0.5">{item.desc}</span>}
+            <div class="absolute left-0 top-full z-50 pt-1 opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 group-hover:pointer-events-auto">
+              <div class="w-72 overflow-hidden rounded-none border border-hairline-strong bg-canvas p-2 shadow-sm">
+                <div class="space-y-0.5">
+                  {megaCategories.slice(3).map((cat) => (
+                    <a href={cat.href} class="block rounded-none px-2 py-2 transition-colors hover:bg-surface-soft text-sm font-bold text-ink">
+                      {cat.title}
                     </a>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-        ))}
 
-        <a href="/brands" class="hover:text-ink transition-colors py-2 whitespace-nowrap shrink-0">Brands Directory</a>
-        <a href="/industries" class="hover:text-ink transition-colors py-2 whitespace-nowrap shrink-0">Industries</a>
-      </nav>
-
-      <div class="flex items-center text-xs font-semibold shrink-0">
-        <!-- Helpline -->
-        <a href="tel:+9118001234567" class="inline-flex items-center gap-1.5 font-bold text-ink hover:text-primary-deep transition-colors whitespace-nowrap">
-          <Icon name="phone" size={13} class="text-primary-deep" />
-          <span>Helpline: 1800-BME-STEEL</span>
-        </a>
+          <a href="/brands" class="inline-flex items-center gap-1.5 text-ink hover:text-primary-deep transition-colors py-2 whitespace-nowrap shrink-0">Brands Directory</a>
+          <a href="/industries" class="inline-flex items-center gap-1.5 text-ink hover:text-primary-deep transition-colors py-2 whitespace-nowrap shrink-0">Industries</a>
+          <a href="tel:+918792087909" class="hidden xl:flex inline-flex items-center gap-1.5 font-bold text-ink hover:text-primary-deep transition-colors whitespace-nowrap shrink-0">
+            <Icon name="phone" size={13} class="text-primary-deep" />
+            <span>+91 8792087909</span>
+          </a>
+        </nav>
       </div>
     </div>
   </div>
@@ -352,20 +356,39 @@ const megaCategories: CategoryMenu[] = [
         />
       </form>
 
-      <div class="space-y-3">
-        <div class="text-xs font-bold uppercase tracking-wider text-muted">Catalog Categories</div>
-        {megaCategories.map((cat) => (
-          <div class="rounded-none border border-hairline bg-surface-soft p-3">
-            <p class="font-bold text-ink text-sm mb-2">{cat.title}</p>
-            <div class="space-y-1.5 pl-2 border-l-2 border-primary">
+      <div class="space-y-2">
+        <div class="text-xs font-bold uppercase tracking-wider text-muted">Catalog Categories (8 Groups)</div>
+        {megaCategories.map((cat, gIdx) => (
+          <div class="rounded-none border border-hairline bg-surface-soft overflow-hidden">
+            <button
+              type="button"
+              class="mobile-accordion-toggle flex w-full items-center justify-between p-3 text-left font-bold text-ink text-sm cursor-pointer"
+              data-group-id={`mobile-group-${gIdx}`}
+              aria-expanded="false"
+            >
+              <span>{cat.title}</span>
+              <span class="flex items-center gap-2">
+                <span class="text-[11px] text-muted font-normal">{cat.items.length} categories</span>
+                <Icon name="chevron-down" size={14} class="text-muted transition-transform duration-200 mobile-chevron" />
+              </span>
+            </button>
+            <div id={`mobile-group-${gIdx}`} class="mobile-accordion-content hidden border-t border-hairline bg-canvas p-2 space-y-1">
+              <a href={cat.href} class="block py-1.5 px-2 text-xs font-bold text-primary-deep hover:underline">
+                View all in {cat.title} &rarr;
+              </a>
               {cat.items.map((sub) => (
-                <a href={sub.href} class="block text-xs font-medium text-body hover:text-ink py-1">
+                <a href={sub.href} class="block py-1.5 px-2 text-xs font-medium text-body hover:bg-surface-soft hover:text-ink">
                   {sub.title}
                 </a>
               ))}
             </div>
           </div>
         ))}
+        <div class="pt-2 flex flex-col gap-1 border-t border-hairline">
+          <a href="/products" class="text-sm font-bold text-ink py-1">All Products</a>
+          <a href="/brands" class="text-sm font-bold text-ink py-1">Brands Directory</a>
+          <a href="/industries" class="text-sm font-bold text-ink py-1">Industries</a>
+        </div>
       </div>
 
       <div class="space-y-2 pt-2 border-t border-hairline">
@@ -414,6 +437,24 @@ const megaCategories: CategoryMenu[] = [
         }
       };
     }
+
+    // Mobile Accordion Logic
+    const mobileAccordions = document.querySelectorAll('.mobile-accordion-toggle');
+    mobileAccordions.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-group-id');
+        const content = targetId ? document.getElementById(targetId) : null;
+        const chevron = btn.querySelector('.mobile-chevron');
+        if (content) {
+          const isExpanded = !content.classList.contains('hidden');
+          content.classList.toggle('hidden', isExpanded);
+          btn.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+          if (chevron) {
+            chevron.classList.toggle('rotate-180', !isExpanded);
+          }
+        }
+      });
+    });
 
     // Location Modal Logic
     const locBtn = document.getElementById('location-picker-btn');

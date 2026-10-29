@@ -1,67 +1,33 @@
-## Development
+# BME Steels — AGENTS.md
 
-When starting the dev server, use background mode:
+## Repo layout
+- `frontend/` — Astro 7 + Tailwind CSS v4 + TypeScript. Pages/components/styles under `frontend/src`; starter catalog data in `frontend/src/data/catalog.ts`.
+- `backend/` — Express API + SQLite. Entry: `backend/index.js`. Database: `backend/data/bme.sqlite` (created on first start, gitignored).
+- Root npm workspaces: `@bme-steels/frontend` and `@bme-steels/backend`.
 
-```
-astro dev --background
-```
+## Commands (run from repo root, Node >= 22.12)
+- `npm install` — install both workspaces once.
+- `npm run server` — API on http://localhost:4000 (`node --env-file-if-exists=.env index.js`).
+- `npm run dev` — Astro dev on http://localhost:4321. Run API and frontend in separate terminals.
+- Kilo: `astro dev --background` runs the frontend server in the background; manage with `astro dev stop/status/logs`.
+- `npm run build` — frontend production build.
+- `npm run check` — `astro check` (TypeScript) then `node --check` on backend.
+- `npm run preview` — preview the built frontend.
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
-
-## Documentation
-
-Full documentation: https://docs.astro.build
-
-Consult these guides before working on related tasks:
-
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
-
-## Tech stack
-- Astro (SSR with Vercel adapter, planned), TypeScript, Tailwind CSS
-- Frontend code lives in /frontend/src
-- Current data: hardcoded files in /frontend/src/data (will be replaced
-  by Supabase later)
-- Planned backend: Supabase (PostgreSQL, Auth, Storage, RLS) via @supabase/ssr
-- Planned: Resend (email), Cloudflare Turnstile (spam protection)
-- Do not add libraries without asking first
-
-## Workflow rules
-- Build ONLY the phase I name. Never start later phases.
-- Show a short plan first and wait for my approval before editing files.
-- Never delete or rewrite working code outside the current phase.
-- At the end of every phase: list files changed, commands to run, how to
-  test, env variables needed. Then stop and wait.
-- Run npm run build before saying a phase is done.
+## Environment
+- Copy `backend/.env.example` → `backend/.env` and `frontend/.env.example` → `frontend/.env` before auth/email features work.
+- `.env` files and `backend/data/*.sqlite` are gitignored; never commit secrets.
+- `PUBLIC_API_URL` must match the API origin at Astro build time when not `http://localhost:4000`.
 
 ## Data rules
-- Structure: main category → sub-item → products
-- Never invent products, grades, prices, certifications, clients or stats
-- Use "[to confirm]" for any value the owner has not provided
-- Fuels, hazardous chemicals, industrial gases, waste, pharmaceuticals,
-  controlled minerals: show no prices, use "Request Quote" only
-- Remove or replace any JSW brand names, text or images found in the code
+- Catalog data (products, grades, prices) is starter data — verify against live BME inventory before publishing.
+- Never invent products, grades, prices, certifications, clients, or stats. Use "[to confirm]" for unknown values.
 
-## Security rules
-- RLS on every Supabase table, no exceptions
-- SUPABASE_SERVICE_ROLE_KEY is server-only, never prefixed with PUBLIC_
-  or imported in any client file
-- Protect /admin with Astro middleware AND server-side session checks
-- Validate all input with Zod on the server
-- Uploads: jpg, png, webp only, max 5 MB
-- Signups disabled in Supabase
-- Secrets only in .env files, which must be in .gitignore
+## Design (from DESIGN.md)
+- Palette: black `#000000`, canvas `#ffffff`, industrial yellow `#ffed00` (accent only, paired with black text).
+- NouvelR typography; square corners; no glassmorphism, gradients, or emoji icons; left-aligned, grid-based layouts.
+- Plain, trade-specific copy — no invented testimonials, stats, or lorem ipsum.
 
-## Anti-slop rules
-- No purple or pink gradients, glassmorphism, glowing blobs, emoji icons
-- Do not centre everything. Left-aligned text, clear grid, varied layouts
-- No animations except subtle hover and fade-in
-- Banned copy: "Elevate", "Unleash", "Seamless", "Revolutionize",
-  "Empower", "Cutting-edge", "Next-level", "Welcome to our website"
-- Copy is plain, specific and trade-focused
-- No lorem ipsum, no invented stats, clients, testimonials or awards
-- Use "[Add real content]" placeholders instead
+## Verification
+- `npm run build && npm run check` before finishing a change.
+- No test suite or CI exists in this repo.

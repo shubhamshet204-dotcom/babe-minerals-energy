@@ -1,0 +1,197 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/ui/Icon.astro';
+import AddToCart from '../../components/store/AddToCart.astro';
+import { categories30, allProducts, getGroupByCategorySlug, type CategoryItem } from '../../data/catalog';
+
+export function getStaticPaths() {
+  return categories30.map((cat) => ({
+    params: { slug: cat.slug },
+    props: { category: cat },
+  }));
+}
+
+interface Props {
+  category: CategoryItem;
+}
+
+const { category } = Astro.props;
+const group = getGroupByCategorySlug(category.slug);
+
+// Products matching this category
+const matchingProducts = allProducts.filter(
+  (p) => p.categorySlug === category.slug
+);
+---
+
+<Layout
+  title={`${category.title} | BME Steels & Industrial Supply`}
+  description={category.description}
+>
+  <!-- Breadcrumbs -->
+  <section class="border-b border-hairline bg-canvas py-4">
+    <div class="container-bme">
+      <nav aria-label="Breadcrumbs" class="flex items-center gap-2 text-xs text-muted">
+        <a href="/" class="hover:text-ink transition-colors">Home</a>
+        <Icon name="chevron-right" size={12} />
+        {group && (
+          <>
+            <a href={`/products?group=${group.slug}`} class="hover:text-ink transition-colors">{group.title}</a>
+            <Icon name="chevron-right" size={12} />
+          </>
+        )}
+        <span class="font-semibold text-ink">{category.title}</span>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Category Title & Meta Strip -->
+  <section class="border-b border-hairline bg-surface-soft py-6">
+    <div class="container-bme">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-3">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-ink">{category.title}</h1>
+            <span class="rounded-xs bg-primary/20 px-3 py-0.5 text-xs font-bold text-ink border border-primary/40">
+              {category.tag}
+            </span>
+            {category.restricted && (
+              <span class="rounded-xs bg-ink px-2.5 py-0.5 text-xs font-bold text-on-dark">
+                Quote Only
+              </span>
+            )}
+          </div>
+          <p class="mt-1 text-xs sm:text-sm text-muted max-w-2xl">
+            {category.description}
+          </p>
+          <div class="mt-2 flex items-center gap-3 text-xs text-muted">
+            <span class="font-semibold text-ink">Standard Spec:</span>
+            <span>{category.spec}</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a
+            href={`/quote?category=${category.slug}`}
+            class="inline-flex h-11 items-center justify-center rounded-xs bg-primary px-5 text-xs font-black uppercase tracking-wider text-ink transition-all hover:bg-primary-deep cursor-pointer"
+          >
+            Request Quote for this category
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {matchingProducts.length > 0 && (
+    <section class="bg-surface-soft py-8">
+      <div class="container-bme">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {matchingProducts.map((product) => (
+            <article class="flex flex-col justify-between overflow-hidden rounded-none border border-hairline bg-canvas transition-colors hover:border-stone">
+              <div>
+                <div class="relative aspect-[4/3] overflow-hidden bg-surface-soft">
+                  <img
+                    src={product.image}
+                    alt={product.imageAlt}
+                    loading="lazy"
+                    class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                  <span class="absolute left-3 top-3 rounded-xs bg-canvas/90 px-2 py-0.5 text-[10px] font-bold text-ink border border-hairline">
+                    {product.brand}
+                  </span>
+                  <span class="absolute right-3 top-3 rounded-xs bg-ink px-2 py-0.5 text-[10px] font-bold text-on-dark">
+                    {product.grade}
+                  </span>
+                </div>
+
+                <div class="p-4">
+                  <h3 class="text-sm font-bold text-ink line-clamp-1">
+                    <a href={`/product/${product.id}`} class="hover:underline">
+                      {product.name}
+                    </a>
+                  </h3>
+                  <p class="mt-1 text-xs text-ash line-clamp-2">
+                    {product.description}
+                  </p>
+                  <div class="mt-2 text-[11px] text-ash font-medium">
+                    Size: <span class="font-semibold text-ink">{product.size}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-hairline p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <span class="text-[10px] uppercase tracking-wider text-ash">Starting at</span>
+                    <p class="text-sm font-bold text-ink">
+                      {category.restricted ? 'Quote Only' : product.price}
+                    </p>
+                  </div>
+                  {product.moq && (
+                    <span class="text-[10px] font-medium text-ash">MOQ: {product.moq}</span>
+                  )}
+                </div>
+
+                <div class="flex gap-2">
+                  {!category.restricted && <AddToCart product={product} />}
+                  <a
+                    href={`/quote?product=${product.id}`}
+                    class="flex-1 inline-flex h-9 items-center justify-center rounded-xs bg-primary px-3 text-xs font-black uppercase tracking-wider text-ink hover:bg-primary-deep transition-colors"
+                  >
+                    Request Quote
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {matchingProducts.length === 0 && (
+    <section class="bg-canvas py-16">
+      <div class="container-bme">
+        <div class="mx-auto max-w-xl text-center border border-hairline bg-surface-soft p-8 sm:p-12 rounded-none">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-none bg-canvas border border-hairline text-ink">
+            <Icon name="box" size={28} class="text-primary-deep" />
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-ink tracking-tight">Products coming soon</h2>
+          <p class="mt-2 text-xs sm:text-sm text-muted leading-relaxed">
+            Catalog specifications and verified lots for {category.title} are currently being processed. Direct commercial procurement, bulk indent sourcing, and technical specifications are available immediately on request.
+          </p>
+
+          <div class="mt-5 rounded-none border border-hairline bg-canvas p-4 text-left space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-muted uppercase tracking-wider">Classification</span>
+              <span class="font-semibold text-ink">{category.title}</span>
+            </div>
+            <div class="flex items-center justify-between text-xs border-t border-hairline pt-2">
+              <span class="font-bold text-muted uppercase tracking-wider">Standard Specification</span>
+              <span class="font-semibold text-ink">{category.spec}</span>
+            </div>
+            <div class="flex items-center justify-between text-xs border-t border-hairline pt-2">
+              <span class="font-bold text-muted uppercase tracking-wider">Pricing Policy</span>
+              <span class="font-semibold text-ink">{category.restricted ? 'Direct Quote Only (Restricted / Controlled)' : 'Mill-Index / Custom Freight Quote'}</span>
+            </div>
+          </div>
+
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={`/quote?category=${category.slug}`}
+              class="w-full sm:w-auto inline-flex h-11 items-center justify-center rounded-xs bg-primary px-6 text-sm font-black text-ink transition-all hover:bg-primary-deep cursor-pointer"
+            >
+              Request Quote for this category
+            </a>
+            <a
+              href="/products"
+              class="w-full sm:w-auto inline-flex h-11 items-center justify-center rounded-xs border border-stone bg-canvas px-6 text-sm font-bold text-ink hover:border-ink hover:bg-surface-soft transition-colors cursor-pointer"
+            >
+              Browse All Products
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

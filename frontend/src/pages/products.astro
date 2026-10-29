@@ -2,12 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
 import AddToCart from '../components/store/AddToCart.astro';
-import { categories, brands, allProducts } from '../data/catalog';
+import { categories, categories30, navGroups, brands, allProducts } from '../data/catalog';
 ---
 
 <Layout
-  title="Steel Products | BME Steels"
-  description="Explore hot rolled steel, structural steel, TMT bars, cold rolled coils and industrial steel materials from BME Steels."
+  title="Industrial Catalog & Materials | BME Steels"
+  description="Explore hot rolled steel, structural steel, TMT bars, cold rolled coils and industrial supplies across 30 categories at BME."
 >
   <section class="bg-surface-soft py-20">
     <div class="container-bme">
@@ -17,9 +17,9 @@ import { categories, brands, allProducts } from '../data/catalog';
       </div>
 
       <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {categories.map((category) => (
+        {categories.slice(0, 8).map((category) => (
           <a
-            href={category.slug === 'steel' ? '/category/steel' : category.slug === 'hot-rolled-steel' ? '/category/mild-steel/hot-rolled-steel' : `/products?category=${category.slug}`}
+            href={category.slug === 'steel' ? '/category/steel' : category.slug === 'hot-rolled-steel' ? '/category/mild-steel/hot-rolled-steel' : `/category/${category.slug}`}
             class="overflow-hidden rounded-none border border-hairline bg-canvas transition-colors hover:border-ink"
           >
             <img src={category.image} alt={category.imageAlt} loading="lazy" class="h-36 w-full object-cover" />
@@ -56,45 +56,56 @@ import { categories, brands, allProducts } from '../data/catalog';
         </select>
         <label class="sr-only" for="category-filter">Filter by category</label>
         <select id="category-filter" class="h-11 rounded-none border border-hairline bg-canvas px-3 text-sm text-ink outline-none focus:border-ink">
-          <option value="">All categories</option>
-          {categories.map((category) => <option value={category.slug}>{category.title}</option>)}
+          <option value="">All categories (30 Groups)</option>
+          {navGroups.map((group) => {
+            const groupCats = categories30.filter((c) => group.categorySlugs.includes(c.slug));
+            return (
+              <optgroup label={group.title}>
+                {groupCats.map((cat) => (
+                  <option value={cat.slug}>{cat.title}</option>
+                ))}
+              </optgroup>
+            );
+          })}
         </select>
       </form>
       <p id="catalog-result-count" class="mb-4 text-sm text-muted" aria-live="polite"></p>
 
       <div class="grid gap-6 lg:grid-cols-2">
-        {allProducts.map((product) => (
-
-          <article data-product-card data-search={`${product.name} ${product.brand} ${product.size} ${product.grade}`} data-brand={product.brandSlug} data-category={product.categorySlug} class="overflow-hidden rounded-none border border-hairline bg-canvas">
-            <img src={product.image} alt={product.imageAlt} loading="lazy" class="h-52 w-full object-cover" />
-            <div class="p-5">
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">{product.batch}</p>
-                <h3 class="mt-2 text-2xl font-bold text-ink"><a href={`/product/${product.id}`} class="hover:underline">{product.name}</a></h3>
-                <p class="mt-1 text-sm text-muted">{product.brand}</p>
+        {allProducts.map((product) => {
+          const prodGroup = navGroups.find((g) => g.categorySlugs.includes(product.categorySlug) || (product.categorySlug.includes('steel') && g.slug === 'steel-and-metals') || (product.categorySlug === 'tmt-bars' && g.slug === 'steel-and-metals') || (product.categorySlug === 'wire-rods' && g.slug === 'steel-and-metals') || (product.categorySlug === 'cement' && g.slug === 'construction-and-industrial'));
+          return (
+            <article data-product-card data-search={`${product.name} ${product.brand} ${product.size} ${product.grade}`} data-brand={product.brandSlug} data-category={product.categorySlug} data-group={prodGroup ? prodGroup.slug : ''} class="overflow-hidden rounded-none border border-hairline bg-canvas">
+              <img src={product.image} alt={product.imageAlt} loading="lazy" class="h-52 w-full object-cover" />
+              <div class="p-5">
+              <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">{product.batch}</p>
+                  <h3 class="mt-2 text-2xl font-bold text-ink"><a href={`/product/${product.id}`} class="hover:underline">{product.name}</a></h3>
+                  <p class="mt-1 text-sm text-muted">{product.brand}</p>
+                </div>
+                <span class="rounded-xs bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">{product.grade}</span>
               </div>
-              <span class="rounded-xs bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">{product.grade}</span>
-            </div>
 
-            <div class="mt-5 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-              <div>
-                <p class="text-sm font-medium text-muted">Available sizes</p>
-                <p class="mt-2 text-xl font-black text-ink">{product.size}</p>
-                <p class="mt-3 text-sm leading-6 text-muted">{product.description}</p>
-              </div>
-              <div class="text-left md:text-right">
-                <p class="text-[10px] uppercase tracking-[0.12em] text-muted">Starting at</p>
-                <p class="mt-2 text-2xl font-black text-ink">{product.price}</p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <AddToCart product={product} />
-                  <Button variant="outline" size="sm" href="/quote">Request pricing</Button>
+              <div class="mt-5 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+                <div>
+                  <p class="text-sm font-medium text-muted">Available sizes</p>
+                  <p class="mt-2 text-xl font-black text-ink">{product.size}</p>
+                  <p class="mt-3 text-sm leading-6 text-muted">{product.description}</p>
+                </div>
+                <div class="text-left md:text-right">
+                  <p class="text-[10px] uppercase tracking-[0.12em] text-muted">Starting at</p>
+                  <p class="mt-2 text-2xl font-black text-ink">{product.price}</p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <AddToCart product={product} />
+                    <Button variant="outline" size="sm" href="/quote">Request pricing</Button>
+                  </div>
                 </div>
               </div>
-            </div>
-            </div>
-          </article>
-        ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -111,6 +122,7 @@ import { categories, brands, allProducts } from '../data/catalog';
       searchInput.value = params.get('q') || '';
       brandSelect.value = params.get('brand') || '';
       categorySelect.value = params.get('category') || '';
+      const groupParam = params.get('group') || '';
 
       const applyFilters = () => {
         const query = searchInput.value.trim().toLowerCase();
@@ -118,7 +130,8 @@ import { categories, brands, allProducts } from '../data/catalog';
         for (const card of cards) {
           const matches = (card.dataset.search || '').toLowerCase().includes(query)
             && (!brandSelect.value || card.dataset.brand === brandSelect.value)
-            && (!categorySelect.value || card.dataset.category === categorySelect.value);
+            && (!categorySelect.value || card.dataset.category === categorySelect.value)
+            && (!groupParam || categorySelect.value || card.dataset.group === groupParam);
           card.hidden = !matches;
           if (matches) visibleCount += 1;
         }

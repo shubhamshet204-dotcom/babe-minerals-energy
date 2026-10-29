@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import AddToCart from '../components/store/AddToCart.astro';
 import Icon from '../components/ui/Icon.astro';
 
-import { categories, brands, topProducts, industries, trustPoints, processSteps, faqList } from '../data/catalog';
+import { categories, brands, topProducts, industries, trustPoints, processSteps, faqList, navGroups } from '../data/catalog';
 
 // Category product rows
 const getCategoryHref = (slug: string) => {
@@ -340,22 +340,20 @@ const heroSlides = [
         <h2 class="text-xl sm:text-2xl font-bold text-ink">Browse by categories</h2>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
-        {categories.map((cat) => (
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4">
+        {navGroups.map((group) => (
           <a
-            href={getCategoryHref(cat.slug)}
-            class="flex flex-col items-center justify-center rounded-none bg-surface-soft p-4 text-center transition-colors border border-transparent hover:border-hairline group min-h-[120px] sm:min-h-[136px]"
+            href={`/products?group=${group.slug}`}
+            class="flex flex-col items-center justify-center rounded-none bg-surface-soft p-5 text-center transition-all border border-transparent hover:border-hairline hover:bg-canvas group min-h-[136px]"
           >
-            <div class="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center mb-2">
-              <img
-                src={cat.image}
-                alt={cat.imageAlt || cat.title}
-                loading="lazy"
-                class="max-h-full max-w-full object-contain transition-transform duration-200 group-hover:scale-105"
-              />
+            <div class="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center mb-3 rounded-none bg-canvas border border-hairline group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+              <Icon name={group.icon} size={24} class="text-ink group-hover:text-primary-deep transition-colors" />
             </div>
-            <span class="text-xs sm:text-sm font-semibold text-ink group-hover:text-primary-deep transition-colors">
-              {cat.title}
+            <span class="text-xs sm:text-sm font-bold text-ink group-hover:text-primary-deep transition-colors">
+              {group.title}
+            </span>
+            <span class="mt-1 text-[11px] font-medium text-muted">
+              {group.categorySlugs.length} categories
             </span>
           </a>
         ))}
